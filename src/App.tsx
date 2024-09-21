@@ -1,10 +1,7 @@
-function App() {
+import GreetingPage from "./pages/GreetingPage";
 
-  return (
-    <>
-      <h1 className="text-3xl font-bold underline text-red-600">MoKri's Multilingual Dictionary</h1>
-    </>
-  )
+function App() {
+  return <GreetingPage />;
 }
 
-export default App
+export default App;
