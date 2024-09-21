@@ -1,10 +1,19 @@
-function App() {
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import GreetingPage from "./pages/GreetingPage";
+import MainPage from "./pages/MainPage";
 
-  return (
-    <>
-      <h1>MoKri's Multilingual Dictionary</h1>
-    </>
-  )
+const router = createBrowserRouter([
+  {
+    path: "/",
+    children: [
+      { index: true, element: <GreetingPage /> },
+      { path: "main", element: <MainPage /> },
+    ],
+  },
+]);
+
+function App() {
+  return <RouterProvider router={router} />;
 }
 
-export default App
+export default App;
