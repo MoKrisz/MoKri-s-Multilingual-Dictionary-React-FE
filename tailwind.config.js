@@ -8,6 +8,8 @@ export default {
     extend: {
       colors: {
         celadon: "#ACE1AF",
+        lincolngreen: "#478778",
+        lincolngreenlighter: "#439985",
       }
     },
   },
