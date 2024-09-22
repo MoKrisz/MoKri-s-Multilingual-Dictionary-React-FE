@@ -5,5 +5,9 @@ interface ButtonProps {
 }
 
 export default function Button({ children }: ButtonProps) {
-  return <button className="bg-teal-600 font-bold p-2 rounded-lg">{children}</button>;
+  return (
+    <button className="bg-lincolngreen font-bold p-2 rounded-lg border border-black hover:bg-lincolngreenlighter">
+      {children}
+    </button>
+  );
 }
