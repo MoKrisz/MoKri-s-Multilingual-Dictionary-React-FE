@@ -10,7 +10,7 @@ export default function GreetingPage() {
           <br />
           Multilingual Dictionary
         </h1>
-        <Link to="main">
+        <Link to="menu">
           <Button>Get started!</Button>
         </Link>
       </section>

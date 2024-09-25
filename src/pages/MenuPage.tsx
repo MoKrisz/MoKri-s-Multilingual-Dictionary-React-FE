@@ -1,9 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import FeaturePick from "../components/FeaturePick";
-import Header from "../components/Header";
 import { fetchWords } from "../features/Words/api";
 
-export default function MainPage() {
+export default function MenuPage() {
   const { data, isPending, isError } = useQuery({
     queryKey: ["words"],
     queryFn: ({ signal }) => fetchWords({ signal }),
@@ -43,7 +42,6 @@ export default function MainPage() {
 
   return (
     <>
-      <Header />
       <section className="h-1/2 md:h-1/4 mt-10 flex flex-col md:flex-row gap-5 items-center justify-evenly">
         <FeaturePick>Add Word</FeaturePick>
         <FeaturePick>Other Feature</FeaturePick>
