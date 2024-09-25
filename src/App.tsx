@@ -3,6 +3,7 @@ import GreetingPage from "./pages/GreetingPage";
 import MenuPage from "./pages/MenuPage";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import RootLayout from "./pages/RootLayout";
+import NewWordPage from "./features/Words/pages/NewWordPage";
 
 const router = createBrowserRouter([
   {
@@ -14,7 +15,7 @@ const router = createBrowserRouter([
         element: <RootLayout />,
         children: [
           { index: true, element: <MenuPage /> },
-          { path: "new-word", element: <MenuPage /> },
+          { path: "new-word", element: <NewWordPage /> },
         ],
       },
     ],
