@@ -53,7 +53,7 @@ export default function FormInput({
       <select
         id={id}
         name={name}
-        className="rounded-lg border border-black bg-cream px-2 py-1"
+        className="rounded-lg border border-black bg-cream px-2 py-1 disabled:opacity-50"
         onChange={(event) => {
           handleSelectChange(event);
         }}
@@ -69,11 +69,11 @@ export default function FormInput({
   }
 
   return (
-    <>
-      <label htmlFor={id} className={className}>
+    <div className={`flex flex-col ${className}`}>
+      <label htmlFor={id}>
         {children}
       </label>
       {inputElement}
-    </>
+    </div>
   );
 }

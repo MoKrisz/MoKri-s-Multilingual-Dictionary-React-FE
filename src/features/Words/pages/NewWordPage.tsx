@@ -7,6 +7,7 @@ import {
   getWordTypeName,
   hasLanguageArticle,
 } from "../utils";
+import { Link } from "react-router-dom";
 
 interface ArticleState {
   hasArticle: boolean;
@@ -70,16 +71,17 @@ export default function NewWordPage() {
   }
 
   return (
-    <>
-      <h1 className="text-center">Create a new word!</h1>
-      <form className="p-4 px-12 flex flex-col gap-4">
+    <div className="lg:w-3/4 lg:mx-auto max-w-screen-lg">
+      <Link to="/menu" className="ml-4 mt-4 inline-block p-1 px-4 bg-lincolngreen hover:bg-lincolngreenlighter rounded-md border border-green-900"><button>Back</button></Link>
+      <h1 className="text-center font-bold text-3xl my-10">Create a new word</h1>
+      <form className="p-4 px-12 grid grid-cols-4 gap-4 md:grid-cols-5">
         <FormInput
           id="language"
           name="language"
           type="select"
           options={languageOptions}
           onChange={handleLanguageChange}
-          className="-mb-3"
+          className="w-32 md:col-start-2"
         >
           Language:
         </FormInput>
@@ -89,7 +91,7 @@ export default function NewWordPage() {
           name="type"
           type="select"
           options={typeOptions}
-          className="-mb-3"
+          className="w-32 col-start-3 md:col-start-3"
         >
           Type:
         </FormInput>
@@ -97,33 +99,45 @@ export default function NewWordPage() {
         <FormInput
           id="article"
           name="article"
-          className="-mb-3"
           type="select"
           options={articleOptions}
           disabled={!articleState.hasArticle}
+          className="row-start-2 w-16 md:justify-self-end"
         >
           Article:
         </FormInput>
 
-        <FormInput id="wordText" name="text" className="-mb-3">
+        <FormInput
+          id="wordText"
+          name="text"
+          className="row-start-3 col-span-4 md:row-start-2 md:col-span-2"
+        >
           Text:
         </FormInput>
 
-        <FormInput id="plural" name="plural" className="-mb-3">
+        <FormInput
+          id="plural"
+          name="plural"
+          className="row-start-4 col-span-4 md:row-start-2 md:col-span-2"
+        >
           Plural:
         </FormInput>
 
-        <FormInput id="conjugation" name="conjugation" className="-mb-3">
+        <FormInput
+          id="conjugation"
+          name="conjugation"
+          className=" row-start-5 col-span-4 md:row-start-3 md:col-start-2 md:col-span-3"
+        >
           Conjugation:
         </FormInput>
 
         <button
           type="submit"
-          className="w-1/4 p-1 mt-4 place-self-center bg-lincolngreen hover:bg-lincolngreenlighter rounded-md border border-green-900"
+          className="w-32 p-1 mt-4 place-self-center row-start-6 col-start-2 col-span-2 md:row-start-4 md:col-start-3 md:col-span-1 bg-lincolngreen hover:bg-lincolngreenlighter rounded-md border border-green-900"
         >
           Save
         </button>
       </form>
-    </>
+    </div>
   );
 }
