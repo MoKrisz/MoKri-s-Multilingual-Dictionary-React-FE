@@ -1,8 +1,24 @@
+import { useState } from "react";
 import FormInput, { Option } from "../components/FormInput";
 import { LanguageCodeEnum, WordTypeEnum } from "../models";
-import { getLanguageLongName, getWordTypeName } from "../utils";
+import {
+  getArticles,
+  getLanguageLongName,
+  getWordTypeName,
+  hasLanguageArticle,
+} from "../utils";
+
+interface ArticleState {
+  hasArticle: boolean;
+  articles: string[] | null;
+}
 
 export default function NewWordPage() {
+  const [articleState, setarticleState] = useState<ArticleState>({
+    hasArticle: false,
+    articles: null,
+  });
+
   const languageOptions = Object.values(LanguageCodeEnum)
     .filter(
       (enumValue) =>
@@ -27,6 +43,32 @@ export default function NewWordPage() {
       })
     );
 
+  function handleLanguageChange(language: number) {
+    const languageEnumValue = language as LanguageCodeEnum;
+
+    if (hasLanguageArticle(languageEnumValue)) {
+      setarticleState({
+        hasArticle: true,
+        articles: getArticles(languageEnumValue),
+      });
+    } else {
+      setarticleState({
+        hasArticle: false,
+        articles: null,
+      });
+    }
+  }
+
+  let articleOptions: Option[] = [];
+  if (articleState.hasArticle && articleState.articles) {
+    articleOptions = articleState.articles.map(
+      (article): Option => ({
+        value: article,
+        name: article,
+      })
+    );
+  }
+
   return (
     <>
       <h1 className="text-center">Create a new word!</h1>
@@ -35,8 +77,9 @@ export default function NewWordPage() {
           id="language"
           name="language"
           type="select"
-          className="-mb-3"
           options={languageOptions}
+          onChange={handleLanguageChange}
+          className="-mb-3"
         >
           Language:
         </FormInput>
@@ -51,7 +94,14 @@ export default function NewWordPage() {
           Type:
         </FormInput>
 
-        <FormInput id="article" name="article" className="-mb-3">
+        <FormInput
+          id="article"
+          name="article"
+          className="-mb-3"
+          type="select"
+          options={articleOptions}
+          disabled={!articleState.hasArticle}
+        >
           Article:
         </FormInput>
 

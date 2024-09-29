@@ -20,3 +20,21 @@ export function getLanguageName(languageEnum: LanguageCodeEnum): string {
 export function getWordTypeName(typeEnum: WordTypeEnum): string {
     return WordTypeEnum[typeEnum] || "Unknown value";
 }
+
+export function hasLanguageArticle(languageEnum: LanguageCodeEnum): boolean {
+    switch (languageEnum) {
+        case LanguageCodeEnum.DE:
+            return true;
+        default:
+            return false;
+    }
+}
+
+export function getArticles(language: LanguageCodeEnum): string[] | null {
+    switch (language) {
+        case LanguageCodeEnum.DE:
+            return ["der", "die", "das"];
+        default:
+            return null;
+    }
+}

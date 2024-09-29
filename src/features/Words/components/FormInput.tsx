@@ -1,7 +1,8 @@
-import React from "react";
+import React, { ChangeEvent } from "react";
+import { LanguageCodeEnum } from "../models";
 
 export interface Option {
-  value: number;
+  value: number | string;
   name: string;
 }
 
@@ -12,6 +13,8 @@ interface FormInputProps {
   className?: string;
   type?: string;
   options?: Option[];
+  disabled?: boolean;
+  onChange?: (language: number) => void;
 }
 
 export default function FormInput({
@@ -21,6 +24,8 @@ export default function FormInput({
   className = "",
   type = "text",
   options = [],
+  disabled = false,
+  onChange,
 }: FormInputProps) {
   let inputElement;
 
@@ -31,8 +36,16 @@ export default function FormInput({
         id={id}
         name={name}
         className="rounded-lg border border-black bg-cream px-3 py-1"
+        disabled={disabled}
       ></input>
     );
+  }
+
+  function handleSelectChange(event: ChangeEvent<HTMLSelectElement>) {
+    if (onChange) {
+      const selectedLanguageValue = Number(event.target.value);
+      onChange(selectedLanguageValue);
+    }
   }
 
   if (type === "select") {
@@ -41,6 +54,10 @@ export default function FormInput({
         id={id}
         name={name}
         className="rounded-lg border border-black bg-cream px-2 py-1"
+        onChange={(event) => {
+          handleSelectChange(event);
+        }}
+        disabled={disabled}
       >
         {options?.map((option) => (
           <option key={option.value} value={option.value} className="bg-cream">
