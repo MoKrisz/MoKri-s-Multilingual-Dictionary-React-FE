@@ -1,4 +1,4 @@
-import React, { ChangeEvent } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { LanguageCodeEnum } from "../models";
 
 export interface Option {
@@ -27,6 +27,15 @@ export default function FormInput({
   disabled = false,
   onChange,
 }: FormInputProps) {
+  const [text, setText] = useState<string>("");
+
+  useEffect(() => {
+    console.log("megfut a disable.");
+    if (disabled) {
+      setText("");
+    }
+  }, [disabled]);
+
   let inputElement;
 
   if (type === "text") {
@@ -35,7 +44,9 @@ export default function FormInput({
         type="text"
         id={id}
         name={name}
-        className="rounded-lg border border-black bg-cream px-3 py-1"
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+        className="rounded-lg border border-black bg-cream px-3 py-1 disabled:opacity-50"
         disabled={disabled}
       ></input>
     );
@@ -70,9 +81,7 @@ export default function FormInput({
 
   return (
     <div className={`flex flex-col ${className}`}>
-      <label htmlFor={id}>
-        {children}
-      </label>
+      <label htmlFor={id}>{children}</label>
       {inputElement}
     </div>
   );
