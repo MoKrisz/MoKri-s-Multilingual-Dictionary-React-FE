@@ -21,20 +21,31 @@ export function getWordTypeName(typeEnum: WordTypeEnum): string {
     return WordTypeEnum[typeEnum] || "Unknown value";
 }
 
-export function hasLanguageArticle(languageEnum: LanguageCodeEnum): boolean {
-    switch (languageEnum) {
-        case LanguageCodeEnum.DE:
-            return true;
-        default:
-            return false;
+export function getArticles(language: LanguageCodeEnum, wordType: WordTypeEnum): string[] | null {
+    if (wordType !== WordTypeEnum.Noun){
+        return null;
     }
-}
 
-export function getArticles(language: LanguageCodeEnum): string[] | null {
     switch (language) {
         case LanguageCodeEnum.DE:
             return ["der", "die", "das"];
         default:
             return null;
     }
+}
+
+export function hasPluralForm(wordType: WordTypeEnum) {
+    if (wordType === WordTypeEnum.Noun) {
+        return true;
+    }
+
+    return false;
+}
+
+export function hasConjugation(wordType: WordTypeEnum) {
+    if (wordType === WordTypeEnum.Verb) {
+        return true;
+    }
+
+    return false;
 }
