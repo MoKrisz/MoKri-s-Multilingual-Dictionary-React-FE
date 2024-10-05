@@ -1,5 +1,4 @@
-import React, { ChangeEvent, useEffect, useState } from "react";
-import { LanguageCodeEnum } from "../models";
+import React, { ChangeEvent, RefObject, useEffect, useState } from "react";
 
 export interface Option {
   value: number | string;
@@ -14,6 +13,7 @@ interface FormInputProps {
   type?: string;
   options?: Option[];
   disabled?: boolean;
+  reference?: RefObject<HTMLInputElement | HTMLSelectElement>;
   onChange?: (language: number) => void;
 }
 
@@ -25,6 +25,7 @@ export default function FormInput({
   type = "text",
   options = [],
   disabled = false,
+  reference,
   onChange,
 }: FormInputProps) {
   const [text, setText] = useState<string>("");
@@ -48,6 +49,7 @@ export default function FormInput({
         onChange={(e) => setText(e.target.value)}
         className="rounded-lg border border-black bg-cream px-3 py-1 disabled:opacity-50"
         disabled={disabled}
+        ref={reference as RefObject<HTMLInputElement>}
       ></input>
     );
   }
@@ -69,6 +71,7 @@ export default function FormInput({
           handleSelectChange(event);
         }}
         disabled={disabled}
+        ref={reference as RefObject<HTMLSelectElement>}
       >
         {options?.map((option) => (
           <option key={option.value} value={option.value} className="bg-cream">
