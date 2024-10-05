@@ -2,6 +2,8 @@ import { useQuery } from "@tanstack/react-query";
 import FeaturePick from "../components/FeaturePick";
 import { fetchWords } from "../features/Words/api";
 import { Link } from "react-router-dom";
+import { getLanguageName, getWordTypeName } from "../features/Words/utils";
+import { ReactNode } from "react";
 
 export default function MenuPage() {
   const { data, isPending, isError } = useQuery({
@@ -10,14 +12,14 @@ export default function MenuPage() {
     staleTime: 120000,
   });
 
-  let tableComponent;
+  let tableComponent: ReactNode;
 
   if (isPending) {
     tableComponent = <p>Getting the words...</p>;
   } else if (isError) {
     tableComponent = <p>Something went wrong...</p>;
   } else if (data) {
-    console.log(data);
+    console.log('data', data);
 
     tableComponent = (
       <table className="w-2/3 mt-10 border border-black">
@@ -26,6 +28,7 @@ export default function MenuPage() {
             <th className="border border-black">Article</th>
             <th className="border border-black">Word</th>
             <th className="border border-black">Type</th>
+            <th className="border border-black">Language</th>
           </tr>
         </thead>
         <tbody>
@@ -36,7 +39,8 @@ export default function MenuPage() {
             >
               <td className="border border-black">{word.article}</td>
               <td className="border border-black">{word.text}</td>
-              <td className="border border-black">{word.type}</td>
+              <td className="border border-black">{getWordTypeName(word.type)}</td>
+              <td className="border border-black">{getLanguageName(word.languageCode)}</td>
             </tr>
           ))}
         </tbody>
