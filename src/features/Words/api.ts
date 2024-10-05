@@ -1,14 +1,21 @@
+import { QueryClient } from "@tanstack/react-query";
 import { LanguageCodeEnum, Word, WordDto, WordTypeEnum } from "./models";
 
-export const fetchWords = async ({
-  signal,
-}: {
+export const queryClient = new QueryClient();
+
+interface FetchSignal {
   signal: AbortSignal;
-}): Promise<Word[]> => {
+}
+
+interface PostData {
+  data: string;
+}
+
+export const fetchWords = async ({ signal }: FetchSignal): Promise<Word[]> => {
   const response = await fetch("https://localhost:7113/words", { signal });
 
   if (!response.ok) {
-    throw new Error("Something went wrong...");
+    throw new Error("Something went wrong while getting the words...");
   }
 
   const jsonData = await response.json();
@@ -30,4 +37,22 @@ export const fetchWords = async ({
       languageCode: language,
     };
   });
+};
+
+export const postWord = async ({ data }: PostData): Promise<number> => {
+  const response = await fetch("https://localhost:7113/word", {
+    method: "POST",
+    body: data,
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error("Word creation failed.");
+  }
+
+  const resJson = await response.json();
+  
+  return resJson;
 };
