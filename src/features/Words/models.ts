@@ -13,6 +13,7 @@ export enum WordTypeEnum {
 }
 
 export interface WordDto {
+  wordId: number;
   article?: string;
   text: string;
   plural?: string;
@@ -22,10 +23,32 @@ export interface WordDto {
 }
 
 export interface Word {
+  wordId: number;
   article?: string;
   text: string;
   plural?: string;
   type: WordTypeEnum;
   conjugation?: string;
   languageCode: LanguageCodeEnum;
+}
+
+export interface WordRefs {
+  articleRef: React.RefObject<HTMLSelectElement>;
+  pluralRef: React.RefObject<HTMLInputElement>;
+  conjugationRef: React.RefObject<HTMLInputElement>;
+  wordTextRef: React.RefObject<HTMLInputElement>;
+  languageRef: React.RefObject<HTMLSelectElement>;
+  typeRef: React.RefObject<HTMLSelectElement>;
+}
+
+export interface WordState {
+hasPluralForm: boolean;
+hasConjugation: boolean;
+articles: string[] | null;
+errors: ErrorState[] | null;
+}
+
+export interface ErrorState {
+name: string;
+error: string;
 }

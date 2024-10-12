@@ -4,6 +4,7 @@ import { fetchWords } from "../features/Words/api";
 import { Link } from "react-router-dom";
 import { getLanguageName, getWordTypeName } from "../features/Words/utils";
 import { ReactNode } from "react";
+import { BsPencilFill } from "react-icons/bs";
 
 export default function MenuPage() {
   const { data, isPending, isError } = useQuery({
@@ -19,7 +20,7 @@ export default function MenuPage() {
   } else if (isError) {
     tableComponent = <p>Something went wrong...</p>;
   } else if (data) {
-    console.log('data', data);
+    console.log("data", data);
 
     tableComponent = (
       <table className="w-2/3 mt-10 border border-black">
@@ -29,18 +30,25 @@ export default function MenuPage() {
             <th className="border border-black">Word</th>
             <th className="border border-black">Type</th>
             <th className="border border-black">Language</th>
+            <th className="border border-black"></th>
           </tr>
         </thead>
         <tbody>
           {data.map((word) => (
-            <tr
-              key={`${word.article}_${word.text}`}
-              className="bg-lincolngreenlighter"
-            >
-              <td className="border border-black">{word.article}</td>
-              <td className="border border-black">{word.text}</td>
-              <td className="border border-black">{getWordTypeName(word.type)}</td>
-              <td className="border border-black">{getLanguageName(word.languageCode)}</td>
+            <tr key={word.wordId} className="bg-lincolngreenlighter">
+              <td className="border border-black text-center">{word.article}</td>
+              <td className="border border-black text-center">{word.text}</td>
+              <td className="border border-black text-center">
+                {getWordTypeName(word.type)}
+              </td>
+              <td className="border border-black text-center">
+                {getLanguageName(word.languageCode)}
+              </td>
+              <td className="border border-black p-1">
+                <Link to={`word/${word.wordId}`} className="inline-block align-middle">
+                  <BsPencilFill className="p-1 h-7 w-8 border border-black rounded-lg bg-green-900 fill-white hover:bg-green-600" />
+                </Link>
+              </td>
             </tr>
           ))}
         </tbody>

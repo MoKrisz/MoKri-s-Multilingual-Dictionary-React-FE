@@ -7,8 +7,12 @@ interface FetchSignal {
   signal: AbortSignal;
 }
 
-interface PostData {
+export interface PostData {
   data: string;
+}
+
+export interface PutData extends PostData {
+  wordId: number;
 }
 
 export const fetchWords = async ({ signal }: FetchSignal): Promise<Word[]> => {
@@ -55,4 +59,18 @@ export const postWord = async ({ data }: PostData): Promise<number> => {
   const resJson = await response.json();
   
   return resJson;
+};
+
+export const PutWord = async ({wordId, data}: PutData): Promise<void> => {
+  const response = await fetch("https://localhost:7113/word/"+wordId, {
+    method: "PUT",
+    body: data,
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error("Updating the word failed.");
+  }
 };
