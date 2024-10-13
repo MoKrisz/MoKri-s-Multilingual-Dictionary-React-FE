@@ -15,8 +15,10 @@ interface FormInputProps {
   disabled?: boolean;
   reference?: RefObject<HTMLInputElement | HTMLSelectElement>;
   onChange?: (language: number) => void;
+  defaultValue?: string;
 }
 
+//TODO: Optimization needed.
 export default function FormInput({
   id,
   name,
@@ -27,13 +29,16 @@ export default function FormInput({
   disabled = false,
   reference,
   onChange,
+  defaultValue,
 }: FormInputProps) {
-  const [text, setText] = useState<string>("");
+  const [value, setValue] = useState<string>(defaultValue || "");
 
   useEffect(() => {
-    console.log("megfut a disable.");
     if (disabled) {
-      setText("");
+      setValue("");
+    }
+    else if(defaultValue) {
+      setValue(defaultValue);
     }
   }, [disabled]);
 
@@ -45,8 +50,8 @@ export default function FormInput({
         type="text"
         id={id}
         name={name}
-        value={text}
-        onChange={(e) => setText(e.target.value)}
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
         className="rounded-lg border border-black bg-cream px-3 py-1 disabled:opacity-50"
         disabled={disabled}
         ref={reference as RefObject<HTMLInputElement>}
@@ -55,6 +60,8 @@ export default function FormInput({
   }
 
   function handleSelectChange(event: ChangeEvent<HTMLSelectElement>) {
+    setValue(event.target.value);
+
     if (onChange) {
       const selectedLanguageValue = Number(event.target.value);
       onChange(selectedLanguageValue);
@@ -72,6 +79,7 @@ export default function FormInput({
         }}
         disabled={disabled}
         ref={reference as RefObject<HTMLSelectElement>}
+        value={value}
       >
         {options?.map((option) => (
           <option key={option.value} value={option.value} className="bg-cream">

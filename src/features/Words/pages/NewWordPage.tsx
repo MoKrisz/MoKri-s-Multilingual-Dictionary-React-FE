@@ -4,10 +4,10 @@ import WordForm from "../components/WordForm";
 
 export default function NewWordPage() {
   const navigate = useNavigate();
-  
+
   function onSuccess() {
     queryClient.invalidateQueries({ queryKey: ["words"] });
-    navigate("/menu");
+      navigate("/menu");
   }
 
   return <WordForm mutationFunction={postWord} onSuccessFunction={onSuccess} />;
