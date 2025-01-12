@@ -14,7 +14,7 @@ export interface PostOrPutData {
 }
 
 export const fetchWords = async ({ signal }: FetchSignal): Promise<Word[]> => {
-  const response = await fetch("https://localhost:7113/words", { signal });
+  const response = await fetch("https://localhost:7113/odata/WordList?$orderby=article", { signal });
 
   if (!response.ok) {
     throw new Error("Something went wrong while getting the words...");
@@ -23,7 +23,7 @@ export const fetchWords = async ({ signal }: FetchSignal): Promise<Word[]> => {
   const jsonData = await response.json();
 
   //TODO: refact
-  return jsonData.map((wordData: WordDto): Word => {
+  return jsonData.value.map((wordData: WordDto): Word => {
     const type =
       wordData.type in WordTypeEnum
         ? (wordData.type as WordTypeEnum)
