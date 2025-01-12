@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import WordForm from "../components/WordForm";
-import { fetchWord, PutWord } from "../api";
+import { fetchWord, PutWord, queryClient } from "../api";
 import { useQuery } from "@tanstack/react-query";
 import { ReactNode } from "react";
 
@@ -21,6 +21,11 @@ export default function WordPage() {
     staleTime: 120000,
   });
 
+  function onSuccess() {
+      queryClient.invalidateQueries({ queryKey: ["words"] });
+      queryClient.invalidateQueries({ queryKey: [`word_${param.wordId}`] });
+  }
+
   let formComponent: ReactNode;
   if (isPending) {
     formComponent = <p>Getting the word...</p>;
@@ -28,7 +33,7 @@ export default function WordPage() {
     console.log(error);
     formComponent = <p>Something went wrong...</p>;
   } else if (data) {
-    formComponent = <WordForm mutationFunction={PutWord} wordData={data}/>
+    formComponent = <WordForm mutationFunction={PutWord} onSuccessFunction={onSuccess} wordData={data}/>
   }
 
   return formComponent;
