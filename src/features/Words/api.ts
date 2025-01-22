@@ -1,5 +1,5 @@
 import { QueryClient } from "@tanstack/react-query";
-import { LanguageCodeEnum, Word, WordDto, WordTypeEnum } from "./models";
+import { LanguageCodeEnum, Word, WordDto, WordOdataList, WordTypeEnum } from "./models";
 
 export const queryClient = new QueryClient();
 
@@ -13,8 +13,8 @@ export interface PostOrPutData {
   data: string;
 }
 
-export const fetchWords = async ({ signal }: FetchSignal): Promise<Word[]> => {
-  const response = await fetch("https://localhost:7113/odata/WordList?$orderby=article", { signal });
+export const fetchWords = async ({ signal }: FetchSignal): Promise<WordOdataList> => {
+  const response = await fetch("https://localhost:7113/odata/WordList?$count=true&orderby=article&top=5", { signal });
 
   if (!response.ok) {
     throw new Error("Something went wrong while getting the words...");
@@ -22,8 +22,13 @@ export const fetchWords = async ({ signal }: FetchSignal): Promise<Word[]> => {
 
   const jsonData = await response.json();
 
+  const odataList: WordOdataList = {
+    count: jsonData['@odata.count'],
+    words: []
+  };
+
   //TODO: refact
-  return jsonData.value.map((wordData: WordDto): Word => {
+  odataList.words = jsonData.value.map((wordData: WordDto): Word => {
     const type =
       wordData.type in WordTypeEnum
         ? (wordData.type as WordTypeEnum)
@@ -40,6 +45,8 @@ export const fetchWords = async ({ signal }: FetchSignal): Promise<Word[]> => {
       languageCode: language,
     };
   });
+
+  return odataList;
 };
 
 export const fetchWord = async ({ wordId, signal }: FetchSignal): Promise<Word> => {

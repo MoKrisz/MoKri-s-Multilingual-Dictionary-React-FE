@@ -32,6 +32,11 @@ export interface Word {
   languageCode: LanguageCodeEnum;
 }
 
+export interface WordOdataList {
+  count: number;
+  words: Word[];
+}
+
 export interface WordRefs {
   articleRef: React.RefObject<HTMLSelectElement>;
   pluralRef: React.RefObject<HTMLInputElement>;

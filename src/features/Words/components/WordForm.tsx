@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import FormInput, { Option } from "./FormInput";
-import { LanguageCodeEnum, Word, WordDto, WordRefs, WordState, WordTypeEnum } from "../models";
+import { LanguageCodeEnum, Word, WordRefs, WordState, WordTypeEnum } from "../models";
 import { ReactNode, useEffect, useRef, useState } from "react";
 import {
   getArticles,
