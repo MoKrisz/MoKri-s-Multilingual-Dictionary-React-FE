@@ -84,20 +84,27 @@ export default function Pagination({
   }
 
   return (
-    <nav className="flex flex-row gap-0.5">
-      <Icon onClick={() => {}}>
-        <MdKeyboardDoubleArrowLeft />
-      </Icon>
-      <Icon onClick={() => {}}>
-        <MdKeyboardArrowLeft />
-      </Icon>
-      {pages}
-      <Icon onClick={() => {}}>
-        <MdKeyboardArrowRight />
-      </Icon>
-      <Icon onClick={() => {}}>
-        <MdKeyboardDoubleArrowRight />
-      </Icon>
-    </nav>
+    <div className="flex justify-between border border-red-600 w-full m-1">
+      <nav className="flex flex-row gap-0.5 mx-auto">
+        <Icon onClick={() => {}} disabled={currentPage === 1}>
+          <MdKeyboardDoubleArrowLeft />
+        </Icon>
+        <Icon onClick={() => {}} disabled={currentPage === 1}>
+          <MdKeyboardArrowLeft />
+        </Icon>
+        {pages}
+        <Icon onClick={() => {}} disabled={currentPage === maxPages}>
+          <MdKeyboardArrowRight />
+        </Icon>
+        <Icon onClick={() => {}} disabled={currentPage === maxPages}>
+          <MdKeyboardDoubleArrowRight />
+        </Icon>
+      </nav>
+      <select>
+        <option>20</option>
+        <option>50</option>
+        <option>100</option>
+      </select>
+    </div>
   );
 }

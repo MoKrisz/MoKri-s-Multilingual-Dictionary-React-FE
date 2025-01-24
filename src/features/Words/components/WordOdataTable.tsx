@@ -10,7 +10,7 @@ interface WordOdataTableParams {
 
 export default function WordOdataTable({words}: WordOdataTableParams) {
   return (
-    <table className="w-2/3 mt-10 border border-black">
+    <table className="w-full mt-10 border border-black">
       <thead className="bg-lincolngreen">
         <tr>
           <th className="border border-black">
