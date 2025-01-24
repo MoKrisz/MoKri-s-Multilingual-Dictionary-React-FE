@@ -3,6 +3,7 @@ import { FaSortAmountDownAlt } from "react-icons/fa";
 import { FaSortAmountDown } from "react-icons/fa";
 import { useState } from "react";
 import { ColumnOrderIconEnum } from "../models/ColumnOrderIconEnum";
+import Icon from "./Icon";
 
 export default function ColumnOrderIcon() {
   const [sortState, setSortState] = useState<ColumnOrderIconEnum>(
@@ -23,19 +24,14 @@ export default function ColumnOrderIcon() {
     });
   }
 
-  const iconProps = {
-    className: "p-1 h-7 w-8 border border-black rounded-lg bg-green-900 fill-white hover:bg-green-600",
-    onClick: clickHandler
-  };
-
   function renderIcon() {
     switch(sortState){
         case ColumnOrderIconEnum.NoSort:
-            return <TbArrowsSort {...iconProps}/>;
+            return <Icon onClick={clickHandler}><TbArrowsSort/></Icon>;
         case ColumnOrderIconEnum.Ascending:
-            return <FaSortAmountDownAlt {...iconProps}/>;
+            return <Icon onClick={clickHandler}><FaSortAmountDownAlt/></Icon>;
         case ColumnOrderIconEnum.Descending:
-            return <FaSortAmountDown {...iconProps}/>;
+            return <Icon onClick={clickHandler}><FaSortAmountDown/></Icon>;
     }
   }
 
