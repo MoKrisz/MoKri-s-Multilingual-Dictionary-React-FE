@@ -5,11 +5,13 @@ import { Link } from "react-router-dom";
 import { ReactNode } from "react";
 import WordOdataTable from "../features/Words/components/WordOdataTable";
 import Pagination from "../components/Pagination";
+import { usePagination } from "../hooks/usePagination";
 
 export default function MenuPage() {
+  const {paginationData, onPaginationChange} = usePagination();
   const { data, isPending, isError } = useQuery({
-    queryKey: ["words"],
-    queryFn: ({ signal }) => fetchWords({ top:10, skip:0, orderby:undefined, signal }),
+    queryKey: ["words", paginationData],
+    queryFn: ({ signal }) => fetchWords({ pagination: paginationData, orderby:undefined, signal }),
     staleTime: 120000,
   });
 
@@ -22,7 +24,10 @@ export default function MenuPage() {
   } else if (data) {
     console.log("data", data);
 
-    tableComponent = <WordOdataTable words={data.words}/>
+    tableComponent = <>
+      <WordOdataTable words={data.words}/>
+      <Pagination dataCount={data.count} paginationData={paginationData} onChange={onPaginationChange} />
+    </>
   }
 
   return (
@@ -38,7 +43,6 @@ export default function MenuPage() {
       <section className="w-2/3 flex flex-col justify-self-center border border-slate-900">
         <p className="text-center mt-10 md:mt-20">Search bar...</p>
         {tableComponent}
-        <Pagination dataCount={100} dataPerPage={10} currentPage={10} />
       </section>
     </>
   );

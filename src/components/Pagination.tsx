@@ -4,23 +4,28 @@ import { MdKeyboardDoubleArrowRight } from "react-icons/md";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import Icon from "./Icon";
 
-interface PaginationProps {
-  dataCount: number;
+export interface PaginationData {
   dataPerPage: number;
   currentPage: number;
 }
 
+export interface PaginationProps {
+  dataCount: number;
+  paginationData: PaginationData;
+  onChange: (paginationData: PaginationData) => void;
+}
+
 export default function Pagination({
   dataCount,
-  dataPerPage,
-  currentPage,
+  paginationData,
+  onChange
 }: PaginationProps) {
   const maxPageIcons = 5;
-  const maxPages = Math.ceil(dataCount / dataPerPage);
+  const maxPages = Math.ceil(dataCount / paginationData.dataPerPage);
 
   let pages;
 
-  if (currentPage < maxPageIcons - 1) {
+  if (paginationData.currentPage < maxPageIcons - 1) {
     const maxPaginationPage = Math.min(maxPages, maxPageIcons);
 
     const helper: number[] = [];
@@ -31,7 +36,7 @@ export default function Pagination({
       <>
         {helper.map((pageCnt) => {
           return (
-            <Icon onClick={() => {}}>
+            <Icon onClick={() => onChange({dataPerPage: paginationData.dataPerPage, currentPage: pageCnt})}>
               <p>{pageCnt}</p>
             </Icon>
           );
@@ -39,9 +44,9 @@ export default function Pagination({
         {maxPaginationPage !== maxPages ? <p>...</p> : null}
       </>
     );
-  } else if (currentPage + maxPageIcons > maxPages) {
+  } else if (paginationData.currentPage + maxPageIcons > maxPages) {
     const minPaginationPage = Math.min(
-      currentPage,
+      paginationData.currentPage,
       Math.max(maxPages - maxPageIcons + 1, 1)
     );
 
@@ -55,7 +60,7 @@ export default function Pagination({
         {minPaginationPage !== 1 ? <p>...</p> : null}
         {helper.map((pageCnt) => {
           return (
-            <Icon onClick={() => {}}>
+            <Icon onClick={() => onChange({dataPerPage: paginationData.dataPerPage, currentPage: pageCnt})}>
               <p>{pageCnt}</p>
             </Icon>
           );
@@ -64,7 +69,7 @@ export default function Pagination({
     );
   } else {
     const helper: number[] = [];
-    for (let index = currentPage - 2; index <= currentPage + 2; index++) {
+    for (let index = paginationData.currentPage - 2; index <= paginationData.currentPage + 2; index++) {
       helper.push(index);
     }
 
@@ -73,7 +78,7 @@ export default function Pagination({
         <p>...</p>
         {helper.map((pageCnt) => {
           return (
-            <Icon onClick={() => {}}>
+            <Icon onClick={() => onChange({dataPerPage: paginationData.dataPerPage, currentPage: pageCnt})}>
               <p>{pageCnt}</p>
             </Icon>
           );
@@ -86,17 +91,18 @@ export default function Pagination({
   return (
     <div className="flex justify-between border border-red-600 w-full m-1">
       <nav className="flex flex-row gap-0.5 mx-auto">
-        <Icon onClick={() => {}} disabled={currentPage === 1}>
+        {/* TODO: EZ ITT NO GO! MINDENKÉPP JAVÍTSD HOGY NE STATE-1-EL LEGYEN MÓDOSÍTVA */}
+        <Icon key={'first'} onClick={() => onChange({dataPerPage: paginationData.dataPerPage, currentPage: 1})} disabled={paginationData.currentPage === 1}>
           <MdKeyboardDoubleArrowLeft />
         </Icon>
-        <Icon onClick={() => {}} disabled={currentPage === 1}>
+        <Icon key={'prev'} onClick={() => onChange({dataPerPage: paginationData.dataPerPage, currentPage: paginationData.currentPage-1})} disabled={paginationData.currentPage === 1}>
           <MdKeyboardArrowLeft />
         </Icon>
         {pages}
-        <Icon onClick={() => {}} disabled={currentPage === maxPages}>
+        <Icon key={'next'} onClick={() => onChange({dataPerPage: paginationData.dataPerPage, currentPage: paginationData.currentPage+1})} disabled={paginationData.currentPage === maxPages}>
           <MdKeyboardArrowRight />
         </Icon>
-        <Icon onClick={() => {}} disabled={currentPage === maxPages}>
+        <Icon key={'last'} onClick={() => onChange({dataPerPage: paginationData.dataPerPage, currentPage: maxPages})} disabled={paginationData.currentPage === maxPages}>
           <MdKeyboardDoubleArrowRight />
         </Icon>
       </nav>

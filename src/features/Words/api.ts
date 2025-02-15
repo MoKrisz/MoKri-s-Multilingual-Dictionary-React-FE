@@ -1,10 +1,17 @@
 import { QueryClient } from "@tanstack/react-query";
 import { LanguageCodeEnum, Word, WordDto, WordOdataList, WordTypeEnum } from "./models";
+import { PaginationData } from "../../components/Pagination";
 
 export const queryClient = new QueryClient();
 
 interface FetchSignal {
-  wordId?: number;
+  wordId: number;
+  signal: AbortSignal;
+}
+
+interface OdataFetchSignal {
+  pagination: PaginationData;
+  orderby?: string;
   signal: AbortSignal;
 }
 
@@ -13,8 +20,10 @@ export interface PostOrPutData {
   data: string;
 }
 
-export const fetchWords = async ({ signal }: FetchSignal): Promise<WordOdataList> => {
-  const response = await fetch("https://localhost:7113/odata/WordList?$count=true&orderby=article&top=5", { signal });
+export const fetchWords = async ({ pagination, orderby, signal }: OdataFetchSignal): Promise<WordOdataList> => {
+  const ordering = orderby ? `&orderby=${orderby}` : '';
+  const skipCount = (pagination.currentPage-1) * pagination.dataPerPage;
+  const response = await fetch(`https://localhost:7113/odata/WordList?$count=true&top=${pagination.dataPerPage}&skip=${skipCount}${ordering}`, { signal });
 
   if (!response.ok) {
     throw new Error("Something went wrong while getting the words...");
