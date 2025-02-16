@@ -1,17 +1,22 @@
 interface IconProps {
     onClick: () => void;
-    disabled: boolean;
+    isDisabled?: boolean;
+    isSelected?: boolean;
     children: React.ReactElement;
 }
 
-export default function Icon({onClick, disabled = false, children}: IconProps) {
+export default function Icon({onClick, isDisabled = false, isSelected = false, children}: IconProps) {
+    const disabledStyle = isDisabled ? " opacity-75" : "";
+    const selectedStyle = isSelected ? " bg-green-600" : "";
+    const hoverStyle = isDisabled || isSelected ? "" : " hover:bg-green-600";
+
     const iconProps = {
-        className: `p-1 h-7 w-8 place-items-center border border-black rounded-lg bg-green-900 text-white ${disabled ? "opacity-75" : "hover:bg-green-600"}`,
-        disabled,
+        className: `p-1 h-7 w-8 place-items-center border border-black rounded-lg bg-green-900 text-white${disabledStyle + selectedStyle + hoverStyle}`,
+        disabled: isDisabled,
         onClick
       };
     
-    return <div {...iconProps}>
+    return <button {...iconProps}>
         {children}
-    </div>
+    </button>
 }
