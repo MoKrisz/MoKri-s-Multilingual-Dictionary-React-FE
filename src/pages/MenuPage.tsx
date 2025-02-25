@@ -8,7 +8,7 @@ import Pagination from "../components/Pagination";
 import { usePagination } from "../hooks/usePagination";
 
 export default function MenuPage() {
-  const {paginationData, onPaginationChange} = usePagination();
+  const {paginationData, paginationFunctions} = usePagination();
   const { data, isPending, isError } = useQuery({
     queryKey: ["words", paginationData],
     queryFn: ({ signal }) => fetchWords({ pagination: paginationData, orderby:undefined, signal }),
@@ -26,7 +26,7 @@ export default function MenuPage() {
 
     tableComponent = <>
       <WordOdataTable words={data.words}/>
-      <Pagination dataCount={data.count} paginationData={paginationData} onChange={onPaginationChange} />
+      <Pagination dataCount={data.count} paginationData={paginationData} paginationFunctions={paginationFunctions} />
     </>
   }
 

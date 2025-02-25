@@ -3,7 +3,11 @@ import { MdKeyboardArrowLeft } from "react-icons/md";
 import { MdKeyboardDoubleArrowRight } from "react-icons/md";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import Icon from "./Icon";
-import { DataAmountPerPage, DataAmountPerPageValues } from "../models/Pagination";
+import {
+  DataAmountPerPage,
+  DataAmountPerPageValues,
+} from "../models/Pagination";
+import { PaginationFunctions } from "../hooks/usePagination";
 
 export interface PaginationData {
   dataPerPage: DataAmountPerPage;
@@ -13,13 +17,13 @@ export interface PaginationData {
 export interface PaginationProps {
   dataCount: number;
   paginationData: PaginationData;
-  onChange: (paginationData: PaginationData) => void;
+  paginationFunctions: PaginationFunctions;
 }
 
 export default function Pagination({
   dataCount,
   paginationData,
-  onChange,
+  paginationFunctions,
 }: PaginationProps) {
   const maxPageIcons = 5;
   const maxPages = Math.ceil(dataCount / paginationData.dataPerPage);
@@ -39,12 +43,7 @@ export default function Pagination({
           return (
             <Icon
               key={"page_" + pageCnt}
-              onClick={() =>
-                onChange({
-                  dataPerPage: paginationData.dataPerPage,
-                  currentPage: pageCnt,
-                })
-              }
+              onClick={() => paginationFunctions.setPage(pageCnt)}
               isSelected={pageCnt === paginationData.currentPage}
             >
               <p>{pageCnt}</p>
@@ -72,12 +71,7 @@ export default function Pagination({
           return (
             <Icon
               key={"page_" + pageCnt}
-              onClick={() =>
-                onChange({
-                  dataPerPage: paginationData.dataPerPage,
-                  currentPage: pageCnt,
-                })
-              }
+              onClick={() => paginationFunctions.setPage(pageCnt)}
               isSelected={pageCnt === paginationData.currentPage}
             >
               <p>{pageCnt}</p>
@@ -103,12 +97,7 @@ export default function Pagination({
           return (
             <Icon
               key={"page_" + pageCnt}
-              onClick={() =>
-                onChange({
-                  dataPerPage: paginationData.dataPerPage,
-                  currentPage: pageCnt,
-                })
-              }
+              onClick={() => paginationFunctions.setPage(pageCnt)}
               isSelected={pageCnt === paginationData.currentPage}
             >
               <p>{pageCnt}</p>
@@ -122,60 +111,46 @@ export default function Pagination({
 
   return (
     <div className="flex justify-between border border-red-600 w-full m-1">
-      <p>∑: {dataCount} tesztnek oldalszám érték: {paginationData.dataPerPage}</p>
+      <p>∑: {dataCount}</p>
       <nav className="flex flex-row gap-0.5 mx-auto">
-        {/* TODO: EZ ITT NO GO! MINDENKÉPP JAVÍTSD HOGY NE STATE-1-EL LEGYEN MÓDOSÍTVA */}
         <Icon
-          key={"first"}
-          onClick={() =>
-            onChange({
-              dataPerPage: paginationData.dataPerPage,
-              currentPage: 1,
-            })
-          }
+          key={"page_first"}
+          onClick={() => paginationFunctions.setPage(1)}
           isDisabled={paginationData.currentPage === 1}
         >
           <MdKeyboardDoubleArrowLeft />
         </Icon>
         <Icon
-          key={"prev"}
-          onClick={() =>
-            onChange({
-              dataPerPage: paginationData.dataPerPage,
-              currentPage: paginationData.currentPage - 1,
-            })
-          }
+          key={"page_prev"}
+          onClick={() => paginationFunctions.prevPage()}
           isDisabled={paginationData.currentPage === 1}
         >
           <MdKeyboardArrowLeft />
         </Icon>
         {pages}
         <Icon
-          key={"next"}
-          onClick={() =>
-            onChange({
-              dataPerPage: paginationData.dataPerPage,
-              currentPage: paginationData.currentPage + 1,
-            })
-          }
+          key={"page_next"}
+          onClick={() => paginationFunctions.nextPage()}
           isDisabled={paginationData.currentPage === maxPages}
         >
           <MdKeyboardArrowRight />
         </Icon>
         <Icon
-          key={"last"}
-          onClick={() =>
-            onChange({
-              dataPerPage: paginationData.dataPerPage,
-              currentPage: maxPages,
-            })
-          }
+          key={"page_last"}
+          onClick={() => paginationFunctions.setPage(maxPages)}
           isDisabled={paginationData.currentPage === maxPages}
         >
           <MdKeyboardDoubleArrowRight />
         </Icon>
       </nav>
-      <select defaultValue={paginationData.dataPerPage} onChange={(event) => {onChange({currentPage: paginationData.currentPage, dataPerPage: Number(event.currentTarget.value) as DataAmountPerPage})}}>
+      <select
+        defaultValue={paginationData.dataPerPage}
+        onChange={(event) =>
+          paginationFunctions.setDataPerPage(
+            Number(event.currentTarget.value) as DataAmountPerPage
+          )
+        }
+      >
         {DataAmountPerPageValues.map((amount) => {
           return <option value={amount}>{amount}</option>;
         })}

@@ -1,5 +1,13 @@
 import { useState } from "react";
 import { PaginationData } from "../components/Pagination";
+import { DataAmountPerPage } from "../models/Pagination";
+
+export interface PaginationFunctions {
+    setPage: (page: number) => void;
+    nextPage: () => void;
+    prevPage: () => void;
+    setDataPerPage: (dataPerPage: number) => void;
+};
 
 export const usePagination = () => {
     const [paginationData, setPaginationData] = useState<PaginationData>({
@@ -7,9 +15,23 @@ export const usePagination = () => {
         dataPerPage: 5,
     });
 
-    const onPaginationChange = (paginationData: PaginationData) => {
-        setPaginationData(paginationData);
+    const setPage = (page: number) => {
+        setPaginationData((prev) => ({...prev, currentPage: page}));
     }
 
-    return {paginationData, onPaginationChange}
+    const nextPage = () => {
+        setPaginationData((prev) => ({...prev, currentPage: prev.currentPage+1}));
+    }
+
+    const prevPage = () => {
+        setPaginationData((prev) => ({...prev, currentPage: prev.currentPage-1}));
+    }
+
+    const setDataPerPage = (dataPerPage: DataAmountPerPage) => {
+        setPaginationData((prev) => ({...prev, dataPerPage: dataPerPage}));
+    }
+
+    return {
+        paginationData,
+        paginationFunctions: {setPage, nextPage, prevPage, setDataPerPage} as PaginationFunctions}
 }
