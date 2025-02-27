@@ -6,8 +6,11 @@ import { ReactNode } from "react";
 import WordOdataTable from "../features/Words/components/WordOdataTable";
 import Pagination from "../components/Pagination";
 import { usePagination } from "../hooks/usePagination";
+import { useSearchWordsReducer } from "../features/Words/state/searchWordsReducer";
+import WordsSearchBar from "../features/Words/components/WordsSearchBar";
 
 export default function MenuPage() {
+  const [searchWordsState, searchWordsDispatch] = useSearchWordsReducer();
   const {paginationData, paginationFunctions} = usePagination();
   const { data, isPending, isError } = useQuery({
     queryKey: ["words", paginationData],
@@ -25,6 +28,7 @@ export default function MenuPage() {
     console.log("data", data);
 
     tableComponent = <>
+      <WordsSearchBar state={searchWordsState} dispatch={searchWordsDispatch} />
       <WordOdataTable words={data.words}/>
       <Pagination dataCount={data.count} paginationData={paginationData} paginationFunctions={paginationFunctions} />
     </>
