@@ -14,7 +14,7 @@ export default function MenuPage() {
   const {paginationData, paginationFunctions} = usePagination();
   const { data, isPending, isError } = useQuery({
     queryKey: ["words", paginationData],
-    queryFn: ({ signal }) => fetchWords({ pagination: paginationData, orderby:undefined, signal }),
+    queryFn: ({ signal }) => fetchWords({ pagination: paginationData, orderby: searchWordsState, signal }),
     staleTime: 120000,
   });
 
@@ -27,11 +27,11 @@ export default function MenuPage() {
   } else if (data) {
     console.log("data", data);
 
-    tableComponent = <>
+    tableComponent = <div className="mt-5">
       <WordsSearchBar state={searchWordsState} dispatch={searchWordsDispatch} />
       <WordOdataTable words={data.words}/>
       <Pagination dataCount={data.count} paginationData={paginationData} paginationFunctions={paginationFunctions} />
-    </>
+    </div>
   }
 
   return (
@@ -45,7 +45,6 @@ export default function MenuPage() {
         </Link>
       </section>
       <section className="w-2/3 flex flex-col justify-self-center border border-slate-900">
-        <p className="text-center mt-10 md:mt-20">Search bar...</p>
         {tableComponent}
       </section>
     </>
