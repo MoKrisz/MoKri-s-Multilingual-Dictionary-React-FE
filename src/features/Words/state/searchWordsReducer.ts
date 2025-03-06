@@ -1,14 +1,20 @@
 import { useReducer } from "react";
 
 export type SearchWordsState = {
-    word: string;
-    filters: { [key: string]: number};
+    word?: string;
+    filters: { 
+        article?: string;
+        type?: number;
+        languageCode?: number;
+    };
     isAdvanced: boolean;
 };
 
+type FilterKey = keyof SearchWordsState["filters"];
+
 export type SearchWordsAction = 
     | { type: 'SET_WORD_SEARCH'; word: string }
-    | { type: 'SET_WORD_FILTERS'; column: string; value: number }
+    | { type: 'SET_WORD_FILTERS'; column: FilterKey; value: string | number }
     | { type: 'TOGGLE_ADVANCED' }
     | { type: 'RESET_FILTERS' }
 
@@ -29,5 +35,5 @@ const searchWordsReducer = (state: SearchWordsState, action: SearchWordsAction):
 };
 
 export const useSearchWordsReducer = () => {
-    return useReducer(searchWordsReducer, {word: "", filters: {}, isAdvanced: false});
+    return useReducer(searchWordsReducer, {word: undefined, filters: {}, isAdvanced: false});
 };

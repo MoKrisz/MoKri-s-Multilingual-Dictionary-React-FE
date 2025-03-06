@@ -1,6 +1,7 @@
 import { QueryClient } from "@tanstack/react-query";
 import { LanguageCodeEnum, Word, WordDto, WordOdataList, WordTypeEnum } from "./models";
 import { PaginationData } from "../../components/Pagination";
+import { SearchWordsState } from "./state/searchWordsReducer";
 
 export const queryClient = new QueryClient();
 
@@ -11,7 +12,7 @@ interface FetchSignal {
 
 interface OdataFetchSignal {
   pagination: PaginationData;
-  orderby?: string;
+  searchWordsState: SearchWordsState;
   signal: AbortSignal;
 }
 
@@ -20,10 +21,26 @@ export interface PostOrPutData {
   data: string;
 }
 
-export const fetchWords = async ({ pagination, orderby, signal }: OdataFetchSignal): Promise<WordOdataList> => {
-  const ordering = orderby ? `&orderby=${orderby}` : '';
+export const fetchWords = async ({ pagination, searchWordsState, signal }: OdataFetchSignal): Promise<WordOdataList> => {
+  const areFiltersPresent = searchWordsState.filters.article || searchWordsState.filters.type || searchWordsState.filters.type;
+  let odataFilter = searchWordsState.word || areFiltersPresent ? "&filter=" : "";
+  if (searchWordsState.word)
+  {
+    odataFilter += `contains(tolower(Text), tolower('${searchWordsState.word}'))${areFiltersPresent ? ' and ' : ''}`
+  }
+
+  if (areFiltersPresent)
+  {
+    odataFilter += Object.entries(searchWordsState.filters)
+                  .filter(([_, value]) => value !== undefined)
+                  .map(([key, value]) => typeof value === "string"
+                                      ? `contains(tolower(${key}), tolower('${value}'))` 
+                                      : `${key} eq ${value}`)
+                  .join(' and ');
+  }
+
   const skipCount = (pagination.currentPage-1) * pagination.dataPerPage;
-  const response = await fetch(`https://localhost:7113/odata/WordList?$count=true&top=${pagination.dataPerPage}&skip=${skipCount}${ordering}`, { signal });
+  const response = await fetch(`https://localhost:7113/odata/WordList?$count=true&top=${pagination.dataPerPage}&skip=${skipCount}${odataFilter}`, { signal });
 
   if (!response.ok) {
     throw new Error("Something went wrong while getting the words...");

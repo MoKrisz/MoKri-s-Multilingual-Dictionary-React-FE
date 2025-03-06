@@ -34,11 +34,33 @@ export default function WordsSearchBar({ state, dispatch }: SearchWordsProps) {
         <div className="flex justify-center gap-20 items-end">
           <div className="flex flex-col ">
             <label>Article</label>
-            <input className="px-2 py-1 bg-lincolngreen focus:bg-lincolngreenlighter rounded-md" />
+            <input
+              className="px-2 py-1 bg-lincolngreen focus:bg-lincolngreenlighter rounded-md"
+              type="text"
+              value={state.filters?.["article"]}
+              onChange={(e) =>
+                dispatch({
+                  type: "SET_WORD_FILTERS",
+                  column: "article",
+                  value: e.target.value,
+                })
+              }
+            />
           </div>
           <div className="flex flex-col">
             <label>Type</label>
-            <select className="px-2 py-1 bg-lincolngreen focus:bg-lincolngreenlighter rounded-md">
+            <select
+              className="px-2 py-1 bg-lincolngreen focus:bg-lincolngreenlighter rounded-md"
+              value={state.filters?.["type"]}
+              onChange={(e) =>
+                dispatch({
+                  type: "SET_WORD_FILTERS",
+                  column: "type",
+                  value: Number(e.target.value),
+                })
+              }
+            >
+              <option key="language_none" value={undefined}></option>
               {getFormWordTypeOptions().map((option) => (
                 <option key={option.value} value={option.value}>
                   {option.name}
@@ -48,7 +70,18 @@ export default function WordsSearchBar({ state, dispatch }: SearchWordsProps) {
           </div>
           <div className="flex flex-col">
             <label>Language</label>
-            <select className="px-2 py-1 bg-lincolngreen focus:bg-lincolngreenlighter rounded-md">
+            <select
+              className="px-2 py-1 bg-lincolngreen focus:bg-lincolngreenlighter rounded-md"
+              value={state.filters?.["languageCode"]}
+              onChange={(e) =>
+                dispatch({
+                  type: "SET_WORD_FILTERS",
+                  column: "languageCode",
+                  value: Number(e.target.value),
+                })
+              }
+            >
+              <option key="language_none" value={undefined}></option>
               {getFormLanguageOptions().map((option) => (
                 <option key={option.value} value={option.value}>
                   {option.name}
@@ -56,8 +89,10 @@ export default function WordsSearchBar({ state, dispatch }: SearchWordsProps) {
               ))}
             </select>
           </div>
-          
-          <button className="border border-black px-2 py-1 rounded-md bg-green-900 text-white hover:bg-green-600">Search</button>
+
+          <button className="border border-black px-2 py-1 rounded-md bg-green-900 text-white hover:bg-green-600">
+            Search
+          </button>
         </div>
       )}
     </div>

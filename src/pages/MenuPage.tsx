@@ -13,8 +13,8 @@ export default function MenuPage() {
   const [searchWordsState, searchWordsDispatch] = useSearchWordsReducer();
   const {paginationData, paginationFunctions} = usePagination();
   const { data, isPending, isError } = useQuery({
-    queryKey: ["words", paginationData],
-    queryFn: ({ signal }) => fetchWords({ pagination: paginationData, orderby: searchWordsState, signal }),
+    queryKey: ["words", paginationData, searchWordsState.word, searchWordsState.filters],
+    queryFn: ({ signal }) => fetchWords({ pagination: paginationData, searchWordsState, signal }),
     staleTime: 120000,
   });
 
@@ -25,8 +25,6 @@ export default function MenuPage() {
   } else if (isError) {
     tableComponent = <p>Something went wrong...</p>;
   } else if (data) {
-    console.log("data", data);
-
     tableComponent = <div className="mt-5">
       <WordsSearchBar state={searchWordsState} dispatch={searchWordsDispatch} />
       <WordOdataTable words={data.words}/>
