@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import FeaturePick from "../components/FeaturePick";
 import { fetchWords } from "../features/Words/api";
 import { Link } from "react-router-dom";
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 import WordOdataTable from "../features/Words/components/WordOdataTable";
 import Pagination from "../components/Pagination";
 import { usePagination } from "../hooks/usePagination";
@@ -11,12 +11,24 @@ import WordsSearchBar from "../features/Words/components/WordsSearchBar";
 
 export default function MenuPage() {
   const [searchWordsState, searchWordsDispatch] = useSearchWordsReducer();
-  const {paginationData, paginationFunctions} = usePagination();
+  const { paginationData, paginationFunctions } = usePagination();
   const { data, isPending, isError } = useQuery({
-    queryKey: ["words", paginationData, searchWordsState.word, searchWordsState.filters],
-    queryFn: ({ signal }) => fetchWords({ pagination: paginationData, searchWordsState, signal }),
+    queryKey: [
+      "words",
+      paginationData,
+      searchWordsState.word,
+      searchWordsState.filters,
+    ],
+    queryFn: ({ signal }) =>
+      fetchWords({ pagination: paginationData, searchWordsState, signal }),
     staleTime: 120000,
   });
+
+  useEffect(() => {
+    if (searchWordsState.word || searchWordsState.filters) {
+      paginationFunctions.setPage(1);
+    }
+  }, [searchWordsState.word, searchWordsState.filters]);
 
   let tableComponent: ReactNode;
 
@@ -25,11 +37,20 @@ export default function MenuPage() {
   } else if (isError) {
     tableComponent = <p>Something went wrong...</p>;
   } else if (data) {
-    tableComponent = <div className="mt-5">
-      <WordsSearchBar state={searchWordsState} dispatch={searchWordsDispatch} />
-      <WordOdataTable words={data.words}/>
-      <Pagination dataCount={data.count} paginationData={paginationData} paginationFunctions={paginationFunctions} />
-    </div>
+    tableComponent = (
+      <div className="mt-5">
+        <WordsSearchBar
+          state={searchWordsState}
+          dispatch={searchWordsDispatch}
+        />
+        <WordOdataTable words={data.words} />
+        <Pagination
+          dataCount={data.count}
+          paginationData={paginationData}
+          paginationFunctions={paginationFunctions}
+        />
+      </div>
+    );
   }
 
   return (

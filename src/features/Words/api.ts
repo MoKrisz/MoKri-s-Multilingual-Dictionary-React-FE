@@ -22,19 +22,19 @@ export interface PostOrPutData {
 }
 
 export const fetchWords = async ({ pagination, searchWordsState, signal }: OdataFetchSignal): Promise<WordOdataList> => {
-  const areFiltersPresent = searchWordsState.filters.article || searchWordsState.filters.type || searchWordsState.filters.type;
+  const areFiltersPresent = searchWordsState.filters.article || searchWordsState.filters.type || searchWordsState.filters.languageCode;
   let odataFilter = searchWordsState.word || areFiltersPresent ? "&filter=" : "";
   if (searchWordsState.word)
   {
-    odataFilter += `contains(tolower(Text), tolower('${searchWordsState.word}'))${areFiltersPresent ? ' and ' : ''}`
+    odataFilter += `contains(tolower(Text),tolower('${searchWordsState.word}'))${areFiltersPresent ? ' and ' : ''}`
   }
 
   if (areFiltersPresent)
   {
     odataFilter += Object.entries(searchWordsState.filters)
-                  .filter(([_, value]) => value !== undefined)
+                  .filter(([_, value]) => value)
                   .map(([key, value]) => typeof value === "string"
-                                      ? `contains(tolower(${key}), tolower('${value}'))` 
+                                      ? `contains(tolower(${key}),tolower('${value}'))` 
                                       : `${key} eq ${value}`)
                   .join(' and ');
   }

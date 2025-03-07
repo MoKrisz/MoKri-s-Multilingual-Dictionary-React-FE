@@ -60,7 +60,7 @@ export default function WordsSearchBar({ state, dispatch }: SearchWordsProps) {
                 })
               }
             >
-              <option key="language_none" value={undefined}></option>
+              <option key="language_none" value="0"></option>
               {getFormWordTypeOptions().map((option) => (
                 <option key={option.value} value={option.value}>
                   {option.name}
@@ -81,7 +81,7 @@ export default function WordsSearchBar({ state, dispatch }: SearchWordsProps) {
                 })
               }
             >
-              <option key="language_none" value={undefined}></option>
+              <option key="language_none" value="0"></option>
               {getFormLanguageOptions().map((option) => (
                 <option key={option.value} value={option.value}>
                   {option.name}
