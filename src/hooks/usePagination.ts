@@ -3,6 +3,7 @@ import { PaginationData } from "../components/Pagination";
 import { DataAmountPerPage } from "../models/Pagination";
 
 export interface PaginationFunctions {
+    setDataCount: (dataCount: number) => void;
     setPage: (page: number) => void;
     nextPage: () => void;
     prevPage: () => void;
@@ -11,9 +12,14 @@ export interface PaginationFunctions {
 
 export const usePagination = () => {
     const [paginationData, setPaginationData] = useState<PaginationData>({
+        dataCount: 0,
         currentPage: 1,
         dataPerPage: 5,
     });
+
+    const setDataCount = (dataCount: number) => {
+        setPaginationData((prev) => ({...prev, dataCount: dataCount}));
+    }
 
     const setPage = (page: number) => {
         setPaginationData((prev) => ({...prev, currentPage: page}));
@@ -33,5 +39,5 @@ export const usePagination = () => {
 
     return {
         paginationData,
-        paginationFunctions: {setPage, nextPage, prevPage, setDataPerPage} as PaginationFunctions}
+        paginationFunctions: {setDataCount, setPage, nextPage, prevPage, setDataPerPage} as PaginationFunctions}
 }

@@ -1,14 +1,46 @@
 import { Link } from "react-router-dom";
 import ColumnOrderIcon from "../../../components/ColumnOrderIcon";
-import { Word } from "../models";
 import { getLanguageName, getWordTypeName } from "../utils";
 import { BsPencilFill } from "react-icons/bs";
+import { useQuery } from "@tanstack/react-query";
+import { PaginationData } from "../../../components/Pagination";
+import { PaginationFunctions } from "../../../hooks/usePagination";
+import { SearchWordsState } from "../state/searchWordsReducer";
+import { fetchWords } from "../api";
+import { useEffect } from "react";
 
 interface WordOdataTableParams {
-  words: Word[]
+  paginationData: PaginationData;
+  paginationFunctions: PaginationFunctions;
+  searchWordsState: SearchWordsState;
 }
 
-export default function WordOdataTable({words}: WordOdataTableParams) {
+export default function WordOdataTable({
+  paginationData,
+  paginationFunctions,
+  searchWordsState,
+}: WordOdataTableParams) {
+  const { data, isPending, isError } = useQuery({
+    queryKey: [
+      "words",
+      paginationData,
+      searchWordsState.word,
+      searchWordsState.filters,
+    ],
+    queryFn: ({ signal }) =>
+      fetchWords({ pagination: paginationData, searchWordsState, signal }),
+    staleTime: 120000
+  });
+
+  useEffect(() => {
+    if (data?.count) {
+      paginationFunctions.setDataCount(data?.count);
+    }
+  }, [data]);
+
+  if (isPending) return <p>Getting the words...</p>;
+  if (isError) return <p>Something went wrong...</p>;
+
   return (
     <table className="w-full mt-5 border border-black">
       <thead className="bg-lincolngreen">
@@ -37,7 +69,7 @@ export default function WordOdataTable({words}: WordOdataTableParams) {
         </tr>
       </thead>
       <tbody>
-        {words.map((word) => (
+        {data.words.map((word) => (
           <tr key={word.wordId} className="bg-lincolngreenlighter">
             <td className="border border-black text-center">{word.article}</td>
             <td className="border border-black text-center">{word.text}</td>

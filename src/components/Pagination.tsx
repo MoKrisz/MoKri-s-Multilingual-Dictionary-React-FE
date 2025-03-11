@@ -10,23 +10,22 @@ import {
 import { PaginationFunctions } from "../hooks/usePagination";
 
 export interface PaginationData {
+  dataCount: number;
   dataPerPage: DataAmountPerPage;
   currentPage: number;
 }
 
 export interface PaginationProps {
-  dataCount: number;
   paginationData: PaginationData;
   paginationFunctions: PaginationFunctions;
 }
 
 export default function Pagination({
-  dataCount,
   paginationData,
   paginationFunctions,
 }: PaginationProps) {
   const maxPageIcons = 5;
-  const maxPages = Math.ceil(dataCount / paginationData.dataPerPage);
+  const maxPages = Math.ceil(paginationData.dataCount / paginationData.dataPerPage);
 
   let pages;
 
@@ -111,7 +110,7 @@ export default function Pagination({
 
   return (
     <div className="flex justify-between border border-red-600 w-full m-1">
-      <p>∑: {dataCount}</p>
+      <p>∑: {paginationData.dataCount}</p>
       <nav className="flex flex-row gap-0.5 mx-auto">
         <Icon
           key={"page_first"}

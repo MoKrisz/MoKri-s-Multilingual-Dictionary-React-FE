@@ -1,57 +1,21 @@
-import { useQuery } from "@tanstack/react-query";
 import FeaturePick from "../components/FeaturePick";
-import { fetchWords } from "../features/Words/api";
 import { Link } from "react-router-dom";
-import { ReactNode, useEffect } from "react";
 import WordOdataTable from "../features/Words/components/WordOdataTable";
 import Pagination from "../components/Pagination";
 import { usePagination } from "../hooks/usePagination";
 import { useSearchWordsReducer } from "../features/Words/state/searchWordsReducer";
 import WordsSearchBar from "../features/Words/components/WordsSearchBar";
+import { useEffect } from "react";
 
 export default function MenuPage() {
   const [searchWordsState, searchWordsDispatch] = useSearchWordsReducer();
   const { paginationData, paginationFunctions } = usePagination();
-  const { data, isPending, isError } = useQuery({
-    queryKey: [
-      "words",
-      paginationData,
-      searchWordsState.word,
-      searchWordsState.filters,
-    ],
-    queryFn: ({ signal }) =>
-      fetchWords({ pagination: paginationData, searchWordsState, signal }),
-    staleTime: 120000,
-  });
 
   useEffect(() => {
     if (searchWordsState.word || searchWordsState.filters) {
       paginationFunctions.setPage(1);
     }
   }, [searchWordsState.word, searchWordsState.filters]);
-
-  let tableComponent: ReactNode;
-
-  if (isPending) {
-    tableComponent = <p>Getting the words...</p>;
-  } else if (isError) {
-    tableComponent = <p>Something went wrong...</p>;
-  } else if (data) {
-    tableComponent = (
-      <div className="mt-5">
-        <WordsSearchBar
-          state={searchWordsState}
-          dispatch={searchWordsDispatch}
-        />
-        <WordOdataTable words={data.words} />
-        <Pagination
-          dataCount={data.count}
-          paginationData={paginationData}
-          paginationFunctions={paginationFunctions}
-        />
-      </div>
-    );
-  }
 
   return (
     <>
@@ -64,7 +28,22 @@ export default function MenuPage() {
         </Link>
       </section>
       <section className="w-2/3 flex flex-col justify-self-center border border-slate-900">
-        {tableComponent}
+        <div className="mt-5">
+          <WordsSearchBar
+            key="words-list-search-bar"
+            state={searchWordsState}
+            dispatch={searchWordsDispatch}
+          />
+          <WordOdataTable
+            paginationData={paginationData}
+            paginationFunctions={paginationFunctions}
+            searchWordsState={searchWordsState}
+          />
+          <Pagination
+            paginationData={paginationData}
+            paginationFunctions={paginationFunctions}
+          />
+        </div>
       </section>
     </>
   );
