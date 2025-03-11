@@ -1,5 +1,6 @@
-import { Dispatch } from "react";
+import { Dispatch, useEffect, useState } from "react";
 import {
+  Filters,
   SearchWordsAction,
   SearchWordsState,
 } from "../state/searchWordsReducer";
@@ -11,16 +12,27 @@ interface SearchWordsProps {
 }
 
 export default function WordsSearchBar({ state, dispatch }: SearchWordsProps) {
+  const [searchedWord, setSearchedWord] = useState<string>(state.word);
+  const [advancedFilters, setAdvancedFilters] = useState<Filters>(state.filters);
+
+  useEffect(() => {
+    if (!state.isAdvanced && searchedWord !== state.word) {
+      const handler = setTimeout(() => {
+        dispatch({ type: "SET_WORD_SEARCH", word: searchedWord });
+      }, 500);
+
+      return () => clearTimeout(handler);
+    }
+  }, [state.isAdvanced, searchedWord, state.word, dispatch]);
+
   return (
     <div className="flex-col">
       <div className="flex justify-center gap-4">
         <input
           className="w-1/3 px-2 bg-lincolngreen focus:bg-lincolngreenlighter rounded-md placeholder:text-black"
           type="text"
-          value={state.word}
-          onChange={(e) =>
-            dispatch({ type: "SET_WORD_SEARCH", word: e.target.value })
-          }
+          value={searchedWord}
+          onChange={(e) => setSearchedWord(e.target.value)}
           placeholder="Search word..."
         />
         <button
@@ -37,13 +49,12 @@ export default function WordsSearchBar({ state, dispatch }: SearchWordsProps) {
             <input
               className="px-2 py-1 bg-lincolngreen focus:bg-lincolngreenlighter rounded-md"
               type="text"
-              value={state.filters?.["article"]}
+              value={advancedFilters.article}
               onChange={(e) =>
-                dispatch({
-                  type: "SET_WORD_FILTERS",
-                  column: "article",
-                  value: e.target.value,
-                })
+                setAdvancedFilters((prevState) => ({
+                  ...prevState,
+                  article: e.target.value,
+                }))
               }
             />
           </div>
@@ -51,13 +62,12 @@ export default function WordsSearchBar({ state, dispatch }: SearchWordsProps) {
             <label>Type</label>
             <select
               className="px-2 py-1 bg-lincolngreen focus:bg-lincolngreenlighter rounded-md"
-              value={state.filters?.["type"]}
+              value={advancedFilters.type}
               onChange={(e) =>
-                dispatch({
-                  type: "SET_WORD_FILTERS",
-                  column: "type",
-                  value: Number(e.target.value),
-                })
+                setAdvancedFilters((prevstate) => ({
+                  ...prevstate,
+                  type: Number(e.target.value),
+                }))
               }
             >
               <option key="language_none" value="0"></option>
@@ -72,13 +82,12 @@ export default function WordsSearchBar({ state, dispatch }: SearchWordsProps) {
             <label>Language</label>
             <select
               className="px-2 py-1 bg-lincolngreen focus:bg-lincolngreenlighter rounded-md"
-              value={state.filters?.["languageCode"]}
+              value={advancedFilters.languageCode}
               onChange={(e) =>
-                dispatch({
-                  type: "SET_WORD_FILTERS",
-                  column: "languageCode",
-                  value: Number(e.target.value),
-                })
+                setAdvancedFilters((prevState) => ({
+                  ...prevState,
+                  languageCode: Number(e.target.value),
+                }))
               }
             >
               <option key="language_none" value="0"></option>
@@ -90,7 +99,10 @@ export default function WordsSearchBar({ state, dispatch }: SearchWordsProps) {
             </select>
           </div>
 
-          <button className="border border-black px-2 py-1 rounded-md bg-green-900 text-white hover:bg-green-600">
+          <button
+            className="border border-black px-2 py-1 rounded-md bg-green-900 text-white hover:bg-green-600"
+            onClick={() => dispatch({type: "SET_WORD_FILTERS", word: searchedWord, filters: advancedFilters})}
+          >
             Search
           </button>
         </div>

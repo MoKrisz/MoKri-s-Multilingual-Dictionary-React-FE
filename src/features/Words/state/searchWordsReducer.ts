@@ -1,13 +1,13 @@
 import { useReducer } from "react";
 
-type Filters = {
+export type Filters = {
     article: string;
     type: number;
     languageCode: number;
 }
 
 export type SearchWordsState = {
-    word?: string;
+    word: string;
     filters: Filters;
     isAdvanced: boolean;
 };
@@ -22,7 +22,8 @@ const defaultFilters: Filters = {
 
 export type SearchWordsAction = 
     | { type: 'SET_WORD_SEARCH'; word: string }
-    | { type: 'SET_WORD_FILTERS'; column: FilterKey; value: string | number }
+    | { type: 'SET_WORD_FILTER'; column: FilterKey; value: string | number }
+    | { type: 'SET_WORD_FILTERS'; word: string; filters: Filters}
     | { type: 'TOGGLE_ADVANCED' }
     | { type: 'RESET_FILTERS' }
 
@@ -31,8 +32,10 @@ const searchWordsReducer = (state: SearchWordsState, action: SearchWordsAction):
     switch (action.type){
         case 'SET_WORD_SEARCH':
             return {...state, word: action.word};
-        case 'SET_WORD_FILTERS':
+        case 'SET_WORD_FILTER':
             return {...state, filters: {...state.filters, [action.column]: action.value}};
+        case 'SET_WORD_FILTERS':
+            return {...state, word: action.word, filters: action.filters};
         case 'TOGGLE_ADVANCED':
             return {...state, isAdvanced: !state.isAdvanced};
         case 'RESET_FILTERS':
@@ -43,5 +46,5 @@ const searchWordsReducer = (state: SearchWordsState, action: SearchWordsAction):
 };
 
 export const useSearchWordsReducer = () => {
-    return useReducer(searchWordsReducer, {word: undefined, filters: defaultFilters, isAdvanced: false});
+    return useReducer(searchWordsReducer, {word: "", filters: defaultFilters, isAdvanced: false});
 };
