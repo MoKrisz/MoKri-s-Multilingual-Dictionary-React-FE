@@ -1,36 +1,22 @@
 import { TbArrowsSort } from "react-icons/tb";
 import { FaSortAmountDownAlt } from "react-icons/fa";
 import { FaSortAmountDown } from "react-icons/fa";
-import { useState } from "react";
-import { ColumnOrderIconEnum } from "../models/ColumnOrderIconEnum";
+import { ColumnOrderEnum } from "../models/ColumnOrderEnum";
 import Icon from "./Icon";
 
-export default function ColumnOrderIcon() {
-  const [sortState, setSortState] = useState<ColumnOrderIconEnum>(
-    ColumnOrderIconEnum.NoSort
-  );
+interface ColumnOrderIconProps {
+  sortingState: ColumnOrderEnum;
+  clickHandler: () => void;
+}
 
-  function clickHandler() {
-    setSortState(prevState => {
-        if (prevState == ColumnOrderIconEnum.NoSort) {
-            return ColumnOrderIconEnum.Ascending;
-        }
-        else if (prevState == ColumnOrderIconEnum.Ascending) {
-            return ColumnOrderIconEnum.Descending;
-        }
-        else {
-            return ColumnOrderIconEnum.NoSort;
-        }
-    });
-  }
-
-  function renderIcon() {
-    switch(sortState){
-        case ColumnOrderIconEnum.NoSort:
+export default function ColumnOrderIcon({sortingState, clickHandler}: ColumnOrderIconProps) {
+    function renderIcon() {
+    switch(sortingState){
+        case ColumnOrderEnum.NoSort:
             return <Icon onClick={clickHandler}><TbArrowsSort/></Icon>;
-        case ColumnOrderIconEnum.Ascending:
+        case ColumnOrderEnum.Ascending:
             return <Icon onClick={clickHandler}><FaSortAmountDownAlt/></Icon>;
-        case ColumnOrderIconEnum.Descending:
+        case ColumnOrderEnum.Descending:
             return <Icon onClick={clickHandler}><FaSortAmountDown/></Icon>;
     }
   }

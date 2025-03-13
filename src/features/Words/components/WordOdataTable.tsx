@@ -7,7 +7,8 @@ import { PaginationData } from "../../../components/Pagination";
 import { PaginationFunctions } from "../../../hooks/usePagination";
 import { SearchWordsState } from "../state/searchWordsReducer";
 import { fetchWords } from "../api";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { ColumnOrderEnum } from "../../../models/ColumnOrderEnum";
 
 interface WordOdataTableParams {
   paginationData: PaginationData;
@@ -15,20 +16,38 @@ interface WordOdataTableParams {
   searchWordsState: SearchWordsState;
 }
 
+export type WordSorting = {
+  article: ColumnOrderEnum;
+  text: ColumnOrderEnum;
+  type: ColumnOrderEnum;
+  languageCode: ColumnOrderEnum;
+}
+
+const initialSortingState: WordSorting = {
+  article: ColumnOrderEnum.NoSort,
+  text: ColumnOrderEnum.NoSort,
+  type: ColumnOrderEnum.NoSort,
+  languageCode: ColumnOrderEnum.NoSort
+} 
+
+export type WordSortingKeys = keyof WordSorting;
+
 export default function WordOdataTable({
   paginationData,
   paginationFunctions,
   searchWordsState,
 }: WordOdataTableParams) {
+  const [sorting, setSorting] = useState<WordSorting>(initialSortingState);
   const { data, isPending, isError } = useQuery({
     queryKey: [
       "words",
       paginationData,
       searchWordsState.word,
       searchWordsState.filters,
+      sorting
     ],
     queryFn: ({ signal }) =>
-      fetchWords({ pagination: paginationData, searchWordsState, signal }),
+      fetchWords({ pagination: paginationData, searchWordsState, sorting, signal }),
     staleTime: 120000
   });
 
@@ -41,28 +60,46 @@ export default function WordOdataTable({
   if (isPending) return <p>Getting the words...</p>;
   if (isError) return <p>Something went wrong...</p>;
 
+  const changeSorting = (column: WordSortingKeys) => {
+    setSorting(prevSort => {
+      const newSort = {...prevSort};
+
+      if (newSort[column] === ColumnOrderEnum.NoSort) {
+        newSort[column] = ColumnOrderEnum.Ascending;
+      }
+      else if (newSort[column] === ColumnOrderEnum.Ascending) {
+        newSort[column] = ColumnOrderEnum.Descending;
+      }
+      else {
+        newSort[column] = ColumnOrderEnum.NoSort;
+      }
+
+      return newSort;
+    });
+  }
+
   return (
     <table className="w-full mt-5 border border-black">
       <thead className="bg-lincolngreen">
         <tr>
           <th className="border border-black">
             <div className="flex items-center justify-between mx-4 my-2">
-              <span>Article</span> <ColumnOrderIcon />
+              <span>Article</span> <ColumnOrderIcon sortingState={sorting["article"]} clickHandler={() => changeSorting("article")} />
             </div>
           </th>
           <th className="border border-black">
             <div className="flex items-center justify-between mx-4 my-2">
-              <span>Word</span> <ColumnOrderIcon />
+              <span>Word</span> <ColumnOrderIcon sortingState={sorting["text"]} clickHandler={() => changeSorting("text")} />
             </div>
           </th>
           <th className="border border-black">
             <div className="flex items-center justify-between mx-4 my-2">
-              <span>Type</span> <ColumnOrderIcon />
+              <span>Type</span> <ColumnOrderIcon sortingState={sorting["type"]} clickHandler={() => changeSorting("type")} />
             </div>
           </th>
           <th className="border border-black">
             <div className="flex items-center justify-between mx-4 my-2">
-              <span>Language</span> <ColumnOrderIcon />
+              <span>Language</span> <ColumnOrderIcon sortingState={sorting["languageCode"]} clickHandler={() => changeSorting("languageCode")}/>
             </div>
           </th>
           <th className="border border-black"></th>

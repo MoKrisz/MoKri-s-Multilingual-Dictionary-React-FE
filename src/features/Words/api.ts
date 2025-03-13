@@ -2,6 +2,8 @@ import { QueryClient } from "@tanstack/react-query";
 import { LanguageCodeEnum, Word, WordDto, WordOdataList, WordTypeEnum } from "./models";
 import { PaginationData } from "../../components/Pagination";
 import { SearchWordsState } from "./state/searchWordsReducer";
+import { WordSorting } from "./components/WordOdataTable";
+import { ColumnOrderEnum } from "../../models/ColumnOrderEnum";
 
 export const queryClient = new QueryClient();
 
@@ -13,6 +15,7 @@ interface FetchSignal {
 interface OdataFetchSignal {
   pagination: PaginationData;
   searchWordsState: SearchWordsState;
+  sorting: WordSorting;
   signal: AbortSignal;
 }
 
@@ -21,7 +24,7 @@ export interface PostOrPutData {
   data: string;
 }
 
-export const fetchWords = async ({ pagination, searchWordsState, signal }: OdataFetchSignal): Promise<WordOdataList> => {
+export const fetchWords = async ({ pagination, searchWordsState, sorting, signal }: OdataFetchSignal): Promise<WordOdataList> => {
   const areFiltersPresent = searchWordsState.filters.article || searchWordsState.filters.type || searchWordsState.filters.languageCode;
   let odataFilter = searchWordsState.word || areFiltersPresent ? "&filter=" : "";
   if (searchWordsState.word)
@@ -37,6 +40,14 @@ export const fetchWords = async ({ pagination, searchWordsState, signal }: Odata
                                       ? `contains(tolower(${key}),tolower('${value}'))` 
                                       : `${key} eq ${value}`)
                   .join(' and ');
+  }
+
+  const sortingQuery = Object.entries(sorting)
+                        .filter(([_, value]) => value !== ColumnOrderEnum.NoSort)
+                        .map(([key, value]) => `${key} ${value === ColumnOrderEnum.Ascending ? "asc" : "desc"}`)
+                        .join(',');
+  if (sortingQuery) {
+    odataFilter += `&orderby=${sortingQuery}`;
   }
 
   const skipCount = (pagination.currentPage-1) * pagination.dataPerPage;

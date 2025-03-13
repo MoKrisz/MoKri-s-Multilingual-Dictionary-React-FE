@@ -1,4 +1,4 @@
-export enum ColumnOrderIconEnum {
+export enum ColumnOrderEnum {
     NoSort,
     Ascending,
     Descending
