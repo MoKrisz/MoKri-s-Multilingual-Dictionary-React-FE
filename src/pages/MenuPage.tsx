@@ -1,64 +1,25 @@
-import { useQuery } from "@tanstack/react-query";
 import FeaturePick from "../components/FeaturePick";
-import { fetchWords } from "../features/Words/api";
 import { Link } from "react-router-dom";
-import { getLanguageName, getWordTypeName } from "../features/Words/utils";
-import { ReactNode } from "react";
-import { BsPencilFill } from "react-icons/bs";
+import WordOdataTable from "../features/Words/components/WordOdataTable";
+import Pagination from "../components/Pagination";
+import { usePagination } from "../hooks/usePagination";
+import { useSearchWordsReducer } from "../features/Words/state/searchWordsReducer";
+import WordsSearchBar from "../features/Words/components/WordsSearchBar";
+import { useEffect } from "react";
 
 export default function MenuPage() {
-  const { data, isPending, isError } = useQuery({
-    queryKey: ["words"],
-    queryFn: ({ signal }) => fetchWords({ signal }),
-    staleTime: 120000,
-  });
+  const [searchWordsState, searchWordsDispatch] = useSearchWordsReducer();
+  const { paginationData, paginationFunctions } = usePagination();
 
-  let tableComponent: ReactNode;
-
-  if (isPending) {
-    tableComponent = <p>Getting the words...</p>;
-  } else if (isError) {
-    tableComponent = <p>Something went wrong...</p>;
-  } else if (data) {
-    console.log("data", data);
-
-    tableComponent = (
-      <table className="w-2/3 mt-10 border border-black">
-        <thead className="bg-lincolngreen">
-          <tr>
-            <th className="border border-black">Article</th>
-            <th className="border border-black">Word</th>
-            <th className="border border-black">Type</th>
-            <th className="border border-black">Language</th>
-            <th className="border border-black"></th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.map((word) => (
-            <tr key={word.wordId} className="bg-lincolngreenlighter">
-              <td className="border border-black text-center">{word.article}</td>
-              <td className="border border-black text-center">{word.text}</td>
-              <td className="border border-black text-center">
-                {getWordTypeName(word.type)}
-              </td>
-              <td className="border border-black text-center">
-                {getLanguageName(word.languageCode)}
-              </td>
-              <td className="border border-black p-1">
-                <Link to={`word/${word.wordId}`} className="inline-block align-middle">
-                  <BsPencilFill className="p-1 h-7 w-8 border border-black rounded-lg bg-green-900 fill-white hover:bg-green-600" />
-                </Link>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    );
-  }
+  useEffect(() => {
+    if (searchWordsState.word || searchWordsState.filters) {
+      paginationFunctions.setPage(1);
+    }
+  }, [searchWordsState.word, searchWordsState.filters]);
 
   return (
     <>
-      <section className="h-1/2 md:h-1/4 mt-10 flex flex-col md:flex-row gap-5 items-center justify-evenly">
+      <section className="h-1/2 md:h-1/4 mt-10 flex flex-col md:flex-row gap-5 items-center justify-evenly border border-blue-800">
         <Link to="new-word" className="w-2/3 h-1/2 md:w-1/6 md:h-full">
           <FeaturePick>Add Word</FeaturePick>
         </Link>
@@ -66,9 +27,23 @@ export default function MenuPage() {
           <FeaturePick>Other Feature</FeaturePick>
         </Link>
       </section>
-      <section className="flex flex-col items-center">
-        <p className="text-center mt-10 md:mt-20">Search bar...</p>
-        {tableComponent}
+      <section className="w-2/3 flex flex-col justify-self-center border border-slate-900">
+        <div className="mt-5">
+          <WordsSearchBar
+            key="words-list-search-bar"
+            state={searchWordsState}
+            dispatch={searchWordsDispatch}
+          />
+          <WordOdataTable
+            paginationData={paginationData}
+            paginationFunctions={paginationFunctions}
+            searchWordsState={searchWordsState}
+          />
+          <Pagination
+            paginationData={paginationData}
+            paginationFunctions={paginationFunctions}
+          />
+        </div>
       </section>
     </>
   );
