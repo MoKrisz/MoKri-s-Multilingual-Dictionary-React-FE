@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import FormInput, { Option } from "./FormInput";
 import { LanguageCodeEnum, Word, WordRefs, WordState, WordTypeEnum } from "../models";
 import { ReactNode, useEffect, useRef, useState } from "react";
@@ -145,14 +144,8 @@ export default function WordForm({
   console.log(wordState);
 
   return (
-    <div className="lg:w-3/4 lg:mx-auto max-w-screen-lg">
-      <Link
-        to="/menu"
-        className="ml-4 mt-4 inline-block p-1 px-4 bg-lincolngreen hover:bg-lincolngreenlighter rounded-md border border-green-900"
-      >
-        <button>Back</button>
-      </Link>
-      <h1 className="text-center font-bold text-3xl my-10">
+    <div>
+      <h1 className="text-center font-bold text-3xl pb-10 pt-5">
         Create a new word
       </h1>
       <form
