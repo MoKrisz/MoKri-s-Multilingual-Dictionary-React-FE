@@ -2,7 +2,7 @@ import { Link, useParams } from "react-router-dom";
 import WordForm from "../components/WordForm";
 import { fetchWord, PutWord, queryClient } from "../api";
 import { useQuery } from "@tanstack/react-query";
-import { ReactNode, useState } from "react";
+import { ReactNode } from "react";
 import Tabs from "../../../components/Tabs";
 
 type WordParams = {
@@ -10,7 +10,6 @@ type WordParams = {
 };
 
 export default function WordPage() {
-  const [activeTab, setActiveTab] = useState("word");
   const param = useParams<WordParams>();
 
   if (!param.wordId) {
