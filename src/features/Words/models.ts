@@ -47,13 +47,20 @@ export interface WordRefs {
 }
 
 export interface WordState {
-hasPluralForm: boolean;
-hasConjugation: boolean;
-articles: string[] | null;
-errors: ErrorState[] | null;
+  hasPluralForm: boolean;
+  hasConjugation: boolean;
+  articles: string[] | null;
+  errors: ErrorState[] | null;
 }
 
 export interface ErrorState {
-name: string;
-error: string;
+  name: string;
+  error: string;
+}
+
+export interface Tab {
+  key: string;
+  label: string;
+  content: React.ReactNode;
+  length: number;
 }
