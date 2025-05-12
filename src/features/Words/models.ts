@@ -62,5 +62,4 @@ export interface Tab {
   key: string;
   label: string;
   content: React.ReactNode;
-  length: number;
 }
