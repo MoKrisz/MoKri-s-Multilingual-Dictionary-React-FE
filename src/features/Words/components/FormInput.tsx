@@ -19,6 +19,7 @@ interface FormInputProps {
 }
 
 //TODO: Optimization needed.
+//Maybe it should be split into two components. InputComponent, and SelectComponent.
 export default function FormInput({
   id,
   name,

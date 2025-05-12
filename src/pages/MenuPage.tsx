@@ -23,8 +23,8 @@ export default function MenuPage() {
         <Link to="new-word" className="w-2/3 h-1/2 md:w-1/6 md:h-full">
           <FeaturePick>Add Word</FeaturePick>
         </Link>
-        <Link to="new-word" className="w-2/3 h-1/2 md:w-1/6 md:h-full">
-          <FeaturePick>Other Feature</FeaturePick>
+        <Link to="translation" className="w-2/3 h-1/2 md:w-1/6 md:h-full">
+          <FeaturePick>Add Translation</FeaturePick>
         </Link>
       </section>
       <section className="w-2/3 flex flex-col justify-self-center border border-slate-900">
