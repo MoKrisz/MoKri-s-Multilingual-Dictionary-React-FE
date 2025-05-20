@@ -3,25 +3,25 @@ import { getFormLanguageOptions } from "../utils";
 export interface LanguageDropdownProps {
   isDisabled?: boolean;
   hasEmptyElement?: boolean;
-  value: string;
-  onChange: (value: string) => void;
+  onChange: (value: number) => void;
+  extraStyle?: string;
 }
 
 export default function LanguageDropdown({
   isDisabled = false,
-  hasEmptyElement = false
+  hasEmptyElement = false,
+  onChange,
+  extraStyle
 }: LanguageDropdownProps) {
     const options = getFormLanguageOptions();
 
-    //Maybe I should use a ref here.
   return (
     <select
       id="language"
       name="languageCode"
-      className="rounded-lg border border-black bg-cream px-2 py-1 disabled:opacity-50"
+      className={`rounded-lg border border-black bg-cream px-2 py-1 disabled:opacity-50 ${extraStyle}`}
       disabled={isDisabled}
-      //value={value}
-      //onChange={(event) => onChange(event.target.value)}
+      onChange={(event) => onChange(+event.target.value)}
     >
       {hasEmptyElement && <option key="0" value="" className="bg-cream" />}
 
