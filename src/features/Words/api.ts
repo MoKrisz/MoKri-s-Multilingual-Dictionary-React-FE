@@ -24,6 +24,44 @@ export interface PostOrPutData {
   data: string;
 }
 
+interface WordAutoFillFetchSignal {
+  top: number;
+  languageCode: number;
+  input: string;
+  signal: AbortSignal;
+}
+
+export const fetchWordsAutofill = async({top, languageCode, input, signal}: WordAutoFillFetchSignal): Promise<Word[]> => {
+  const response = await fetch(`https://localhost:7113/odata/WordList?$top=${top}&filter=LanguageCode eq ${languageCode} and startswith(tolower(Text), tolower('${input}'))`, {signal});
+
+  if (!response.ok) {
+    throw new Error("Something went wrong while getting the words...");
+  }
+
+  const jsonData = await response.json();
+
+  //TODO: refact
+  const words = jsonData.value.map((wordData: WordDto): Word => {
+    const type =
+      wordData.type in WordTypeEnum
+        ? (wordData.type as WordTypeEnum)
+        : WordTypeEnum.None;
+
+    const language =
+      wordData.languageCode in LanguageCodeEnum
+        ? (wordData.languageCode as LanguageCodeEnum)
+        : LanguageCodeEnum.None;
+
+    return {
+      ...wordData,
+      type: type,
+      languageCode: language,
+    };
+  });
+
+  return words;
+}
+
 export const fetchWords = async ({ pagination, searchWordsState, sorting, signal }: OdataFetchSignal): Promise<WordOdataList> => {
   const areFiltersPresent = searchWordsState.filters.article || searchWordsState.filters.type || searchWordsState.filters.languageCode;
   let odataFilter = searchWordsState.word || areFiltersPresent ? "&filter=" : "";
