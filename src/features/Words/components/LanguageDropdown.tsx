@@ -7,13 +7,14 @@ export interface LanguageDropdownProps {
   extraStyle?: string;
 }
 
-export default function LanguageDropdown({
+//TODO: refact other components as well to use this format
+const LanguageDropdown: React.FC<LanguageDropdownProps> = ({
   isDisabled = false,
   hasEmptyElement = false,
   onChange,
-  extraStyle
-}: LanguageDropdownProps) {
-    const options = getFormLanguageOptions();
+  extraStyle,
+}) => {
+  const options = getFormLanguageOptions();
 
   return (
     <select
@@ -32,4 +33,6 @@ export default function LanguageDropdown({
       ))}
     </select>
   );
-}
+};
+
+export default LanguageDropdown;

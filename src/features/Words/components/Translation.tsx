@@ -4,7 +4,7 @@ import LanguageDropdown from "./LanguageDropdown";
 import AutofillSearchBar from "./AutofillSearchBar";
 import { Word } from "../models";
 
-export default function Translation() {
+const Translation: React.FC = () => {
     const [language1Id, setLanguage1Id] = useState<number>();
     const [language2Id, setLanguage2Id] = useState<number>();
     const [word1, setWord1Id] = useState<Word>();
@@ -34,3 +34,5 @@ export default function Translation() {
     </>
   );
 }
+
+export default Translation;

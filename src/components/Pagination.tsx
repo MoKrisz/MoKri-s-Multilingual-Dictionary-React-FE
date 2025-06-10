@@ -109,9 +109,9 @@ export default function Pagination({
   }
 
   return (
-    <div className="flex justify-between border border-red-600 w-full m-1">
+    <div className="flex justify-between border border-red-600 w-full p-2">
       <p>∑: {paginationData.dataCount}</p>
-      <nav className="flex flex-row gap-0.5 mx-auto">
+      <div className="flex flex-row gap-0.5 mx-auto">
         <Icon
           key={"page_first"}
           onClick={() => paginationFunctions.setPage(1)}
@@ -141,7 +141,7 @@ export default function Pagination({
         >
           <MdKeyboardDoubleArrowRight />
         </Icon>
-      </nav>
+      </div>
       <select
         defaultValue={paginationData.dataPerPage}
         onChange={(event) =>

@@ -21,14 +21,14 @@ export type WordSorting = {
   text: ColumnOrderEnum;
   type: ColumnOrderEnum;
   languageCode: ColumnOrderEnum;
-}
+};
 
 const initialSortingState: WordSorting = {
   article: ColumnOrderEnum.NoSort,
   text: ColumnOrderEnum.NoSort,
   type: ColumnOrderEnum.NoSort,
-  languageCode: ColumnOrderEnum.NoSort
-} 
+  languageCode: ColumnOrderEnum.NoSort,
+};
 
 export type WordSortingKeys = keyof WordSorting;
 
@@ -38,17 +38,24 @@ export default function WordOdataTable({
   searchWordsState,
 }: WordOdataTableParams) {
   const [sorting, setSorting] = useState<WordSorting>(initialSortingState);
+
+  //TODO: useQuery hooks could be outsourced to a hook folder.
   const { data, isPending, isError } = useQuery({
     queryKey: [
       "words",
       paginationData,
       searchWordsState.word,
       searchWordsState.filters,
-      sorting
+      sorting,
     ],
     queryFn: ({ signal }) =>
-      fetchWords({ pagination: paginationData, searchWordsState, sorting, signal }),
-    staleTime: 120000
+      fetchWords({
+        pagination: paginationData,
+        searchWordsState,
+        sorting,
+        signal,
+      }),
+    staleTime: 120000,
   });
 
   useEffect(() => {
@@ -61,22 +68,20 @@ export default function WordOdataTable({
   if (isError) return <p>Something went wrong...</p>;
 
   const changeSorting = (column: WordSortingKeys) => {
-    setSorting(prevSort => {
-      const newSort = {...prevSort};
+    setSorting((prevSort) => {
+      const newSort = { ...prevSort };
 
       if (newSort[column] === ColumnOrderEnum.NoSort) {
         newSort[column] = ColumnOrderEnum.Ascending;
-      }
-      else if (newSort[column] === ColumnOrderEnum.Ascending) {
+      } else if (newSort[column] === ColumnOrderEnum.Ascending) {
         newSort[column] = ColumnOrderEnum.Descending;
-      }
-      else {
+      } else {
         newSort[column] = ColumnOrderEnum.NoSort;
       }
 
       return newSort;
     });
-  }
+  };
 
   return (
     <table className="w-full mt-5 border border-black">
@@ -84,22 +89,38 @@ export default function WordOdataTable({
         <tr>
           <th className="border border-black">
             <div className="flex items-center justify-between mx-4 my-2">
-              <span>Article</span> <ColumnOrderIcon sortingState={sorting["article"]} clickHandler={() => changeSorting("article")} />
+              <span>Article</span>
+              <ColumnOrderIcon
+                sortingState={sorting["article"]}
+                clickHandler={() => changeSorting("article")}
+              />
             </div>
           </th>
           <th className="border border-black">
             <div className="flex items-center justify-between mx-4 my-2">
-              <span>Word</span> <ColumnOrderIcon sortingState={sorting["text"]} clickHandler={() => changeSorting("text")} />
+              <span>Word</span>
+              <ColumnOrderIcon
+                sortingState={sorting["text"]}
+                clickHandler={() => changeSorting("text")}
+              />
             </div>
           </th>
           <th className="border border-black">
             <div className="flex items-center justify-between mx-4 my-2">
-              <span>Type</span> <ColumnOrderIcon sortingState={sorting["type"]} clickHandler={() => changeSorting("type")} />
+              <span>Type</span>
+              <ColumnOrderIcon
+                sortingState={sorting["type"]}
+                clickHandler={() => changeSorting("type")}
+              />
             </div>
           </th>
           <th className="border border-black">
             <div className="flex items-center justify-between mx-4 my-2">
-              <span>Language</span> <ColumnOrderIcon sortingState={sorting["languageCode"]} clickHandler={() => changeSorting("languageCode")}/>
+              <span>Language</span>
+              <ColumnOrderIcon
+                sortingState={sorting["languageCode"]}
+                clickHandler={() => changeSorting("languageCode")}
+              />
             </div>
           </th>
           <th className="border border-black"></th>
