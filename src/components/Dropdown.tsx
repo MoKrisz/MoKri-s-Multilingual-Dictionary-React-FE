@@ -1,6 +1,7 @@
-import { getFormLanguageOptions } from "../utils";
+import { Option } from "../features/Words/components/FormInput";
 
-export interface LanguageDropdownProps {
+export interface DropdownProps {
+  options: Option[];
   isDisabled?: boolean;
   hasEmptyElement?: boolean;
   onChange: (value: number) => void;
@@ -8,14 +9,13 @@ export interface LanguageDropdownProps {
 }
 
 //TODO: refact other components as well to use this format
-const LanguageDropdown: React.FC<LanguageDropdownProps> = ({
+const Dropdown: React.FC<DropdownProps> = ({
+  options,
   isDisabled = false,
   hasEmptyElement = false,
   onChange,
   extraStyle,
 }) => {
-  const options = getFormLanguageOptions();
-
   return (
     <select
       id="language"
@@ -35,4 +35,4 @@ const LanguageDropdown: React.FC<LanguageDropdownProps> = ({
   );
 };
 
-export default LanguageDropdown;
+export default Dropdown;
