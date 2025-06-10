@@ -15,7 +15,7 @@ export default function AutofillSearchBar({
 }: AutofillSearchBarProps) {
   const [input, setInput] = useState("");
   const [freezeAutofill, setFreezeAutofill] = useState(false);
-  const debouncedInput = useDebounce(input, 300);
+  const debouncedInput = useDebounce(input, 250);
 
   const { data, isLoading } = useQuery({
     queryKey: ["autofill", debouncedInput, languageId],
