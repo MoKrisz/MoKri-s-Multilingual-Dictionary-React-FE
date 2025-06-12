@@ -2,11 +2,14 @@ import { useState } from "react";
 import Button from "../../../components/Button";
 import Dropdown from "../../../components/Dropdown";
 import AutofillSearchBar from "./AutofillSearchBar";
-import { Word } from "../models";
+import { LanguageCodeEnum, Word, WordTypeEnum } from "../models";
 import { getFormLanguageOptions } from "../utils";
 import { Option } from "./FormInput";
+import { FaPlus } from "react-icons/fa";
+import TranslationGroupPickerModal from "../../TranslationGroups/components/TranslationGroupPickerModal";
 
 const Translation: React.FC = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [language1Id, setLanguage1Id] = useState<number>(0);
   const [language2Id, setLanguage2Id] = useState<number>(0);
   const [word1, setWord1] = useState<Word>();
@@ -64,8 +67,26 @@ const Translation: React.FC = () => {
           <AutofillSearchBar languageId={language2Id} onFill={setWord2} />
         </div>
       </div>
+      <div className="flex flex-col border border-red-700 w-2/3 m-5 gap-4">
+        <h2 className="font-bold">Related translation groups:</h2>
+        <p>
+          Looks like there are no translation groups linked to these words yet.
+          <br />
+          You can add a new translation group with the button below.
+        </p>
+        <Button
+          extraStyle="flex items-center gap-2 justify-center w-2/4"
+          onClick={() => setIsModalOpen(true)}
+        >
+          <FaPlus /> Select other translation group
+        </Button>
+        <TranslationGroupPickerModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+        />
+      </div>
       <Button
-        className="block mx-auto my-5"
+        extraStyle="block mx-auto my-5"
         onClick={() => {
           console.log("L1: ", word1?.wordId);
           console.log("L2: ", word2?.wordId);
