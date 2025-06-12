@@ -1,21 +1,25 @@
 import React from "react";
+import { twMerge } from "tailwind-merge";
 
 interface ButtonProps {
   children: React.ReactNode;
   onClick?: () => void;
-  className?: string;
+  extraStyle?: string;
   isDisabled?: boolean;
 }
 
 export default function Button({
   children,
   onClick,
-  className,
+  extraStyle,
   isDisabled = false,
 }: ButtonProps) {
   return (
     <button
-      className={`bg-lincolngreen p-2 rounded-lg border border-black hover:bg-lincolngreenlighter disabled:opacity-50 disabled:hover:bg-lincolngreen ${className}`}
+      className={twMerge(
+        "bg-lincolngreen p-2 rounded-lg border border-black hover:bg-lincolngreenlighter disabled:opacity-50 disabled:hover:bg-lincolngreen",
+        extraStyle
+      )}
       onClick={onClick}
       disabled={isDisabled}
     >
