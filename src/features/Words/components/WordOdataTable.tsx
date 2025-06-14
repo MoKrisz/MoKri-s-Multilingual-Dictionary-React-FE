@@ -2,13 +2,14 @@ import { Link } from "react-router-dom";
 import ColumnOrderIcon from "../../../components/ColumnOrderIcon";
 import { getLanguageName, getWordTypeName } from "../utils";
 import { BsPencilFill } from "react-icons/bs";
-import { useQuery } from "@tanstack/react-query";
 import { PaginationData } from "../../../components/Pagination";
 import { PaginationFunctions } from "../../../hooks/usePagination";
 import { SearchWordsState } from "../state/searchWordsReducer";
 import { fetchWords } from "../api";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { ColumnOrderEnum } from "../../../models/ColumnOrderEnum";
+import { useODataQuery } from "../../../hooks/useODataQuery";
+import { Word } from "../models";
 
 interface WordOdataTableParams {
   paginationData: PaginationData;
@@ -39,30 +40,37 @@ export default function WordOdataTable({
 }: WordOdataTableParams) {
   const [sorting, setSorting] = useState<WordSorting>(initialSortingState);
 
-  //TODO: useQuery hooks could be outsourced to a hook folder.
-  const { data, isPending, isError } = useQuery({
-    queryKey: [
-      "words",
-      paginationData,
-      searchWordsState.word,
-      searchWordsState.filters,
-      sorting,
-    ],
-    queryFn: ({ signal }) =>
-      fetchWords({
-        pagination: paginationData,
-        searchWordsState,
-        sorting,
-        signal,
-      }),
-    staleTime: 120000,
+  const { data, isPending, isError } = useODataQuery<
+    Word,
+    SearchWordsState,
+    WordSorting
+  >({
+    queryKeyName: "words",
+    paginationData,
+    paginationFunctions,
+    searchState: searchWordsState,
+    sortingState: sorting,
+    fetchData: fetchWords,
   });
 
-  useEffect(() => {
-    if (data?.count) {
-      paginationFunctions.setDataCount(data?.count);
-    }
-  }, [data]);
+  //TODO: useQuery hooks could be outsourced to a hook folder.
+  // const { data, isPending, isError } = useQuery({
+  //   queryKey: ["words", paginationData, searchWordsState, sorting],
+  //   queryFn: ({ signal }) =>
+  //     fetchWords({
+  //       pagination: paginationData,
+  //       searchWordsState,
+  //       sorting,
+  //       signal,
+  //     }),
+  //   staleTime: 120000,
+  // });
+
+  // useEffect(() => {
+  //   if (data?.count) {
+  //     paginationFunctions.setDataCount(data?.count);
+  //   }
+  // }, [data]);
 
   if (isPending) return <p>Getting the words...</p>;
   if (isError) return <p>Something went wrong...</p>;
