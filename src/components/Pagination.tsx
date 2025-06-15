@@ -25,7 +25,9 @@ export default function Pagination({
   paginationFunctions,
 }: PaginationProps) {
   const maxPageIcons = 5;
-  const maxPages = Math.ceil(paginationData.dataCount / paginationData.dataPerPage);
+  const maxPages = Math.ceil(
+    paginationData.dataCount / paginationData.dataPerPage
+  );
 
   let pages;
 

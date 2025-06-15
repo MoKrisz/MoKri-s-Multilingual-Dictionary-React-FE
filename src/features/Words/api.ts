@@ -125,13 +125,13 @@ export const fetchWords = async ({
 
   const jsonData = await response.json();
 
-  const odataList: WordOdataList = {
+  const odataList: OdataResponse<Word> = {
     count: jsonData["@odata.count"],
-    words: [],
+    data: [],
   };
 
   //TODO: refact
-  odataList.words = jsonData.value.map((wordData: WordDto): Word => {
+  odataList.data = jsonData.value.map((wordData: WordDto): Word => {
     const type =
       wordData.type in WordTypeEnum
         ? (wordData.type as WordTypeEnum)

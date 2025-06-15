@@ -2,20 +2,9 @@ import { Link } from "react-router-dom";
 import ColumnOrderIcon from "../../../components/ColumnOrderIcon";
 import { getLanguageName, getWordTypeName } from "../utils";
 import { BsPencilFill } from "react-icons/bs";
-import { PaginationData } from "../../../components/Pagination";
-import { PaginationFunctions } from "../../../hooks/usePagination";
-import { SearchWordsState } from "../state/searchWordsReducer";
-import { fetchWords } from "../api";
-import { useState } from "react";
 import { ColumnOrderEnum } from "../../../models/ColumnOrderEnum";
-import { useODataQuery } from "../../../hooks/useODataQuery";
 import { Word } from "../models";
-
-interface WordOdataTableParams {
-  paginationData: PaginationData;
-  paginationFunctions: PaginationFunctions;
-  searchWordsState: SearchWordsState;
-}
+import { ODataDisplayComponentProps } from "../../../components/ODataContainer";
 
 export type WordSorting = {
   article: ColumnOrderEnum;
@@ -24,59 +13,16 @@ export type WordSorting = {
   languageCode: ColumnOrderEnum;
 };
 
-const initialSortingState: WordSorting = {
-  article: ColumnOrderEnum.NoSort,
-  text: ColumnOrderEnum.NoSort,
-  type: ColumnOrderEnum.NoSort,
-  languageCode: ColumnOrderEnum.NoSort,
-};
+type WordSortingKeys = keyof WordSorting;
 
-export type WordSortingKeys = keyof WordSorting;
-
-export default function WordOdataTable({
-  paginationData,
-  paginationFunctions,
-  searchWordsState,
-}: WordOdataTableParams) {
-  const [sorting, setSorting] = useState<WordSorting>(initialSortingState);
-
-  const { data, isPending, isError } = useODataQuery<
-    Word,
-    SearchWordsState,
-    WordSorting
-  >({
-    queryKeyName: "words",
-    paginationData,
-    paginationFunctions,
-    searchState: searchWordsState,
-    sortingState: sorting,
-    fetchData: fetchWords,
-  });
-
-  //TODO: useQuery hooks could be outsourced to a hook folder.
-  // const { data, isPending, isError } = useQuery({
-  //   queryKey: ["words", paginationData, searchWordsState, sorting],
-  //   queryFn: ({ signal }) =>
-  //     fetchWords({
-  //       pagination: paginationData,
-  //       searchWordsState,
-  //       sorting,
-  //       signal,
-  //     }),
-  //   staleTime: 120000,
-  // });
-
-  // useEffect(() => {
-  //   if (data?.count) {
-  //     paginationFunctions.setDataCount(data?.count);
-  //   }
-  // }, [data]);
-
+const WordOdataTable: React.FC<
+  ODataDisplayComponentProps<Word, WordSorting>
+> = ({ data: words, isPending, isError, sortingState, setSortingState }) => {
   if (isPending) return <p>Getting the words...</p>;
   if (isError) return <p>Something went wrong...</p>;
 
   const changeSorting = (column: WordSortingKeys) => {
-    setSorting((prevSort) => {
+    setSortingState((prevSort) => {
       const newSort = { ...prevSort };
 
       if (newSort[column] === ColumnOrderEnum.NoSort) {
@@ -99,7 +45,7 @@ export default function WordOdataTable({
             <div className="flex items-center justify-between mx-4 my-2">
               <span>Article</span>
               <ColumnOrderIcon
-                sortingState={sorting["article"]}
+                sortingState={sortingState["article"]}
                 clickHandler={() => changeSorting("article")}
               />
             </div>
@@ -108,7 +54,7 @@ export default function WordOdataTable({
             <div className="flex items-center justify-between mx-4 my-2">
               <span>Word</span>
               <ColumnOrderIcon
-                sortingState={sorting["text"]}
+                sortingState={sortingState["text"]}
                 clickHandler={() => changeSorting("text")}
               />
             </div>
@@ -117,7 +63,7 @@ export default function WordOdataTable({
             <div className="flex items-center justify-between mx-4 my-2">
               <span>Type</span>
               <ColumnOrderIcon
-                sortingState={sorting["type"]}
+                sortingState={sortingState["type"]}
                 clickHandler={() => changeSorting("type")}
               />
             </div>
@@ -126,7 +72,7 @@ export default function WordOdataTable({
             <div className="flex items-center justify-between mx-4 my-2">
               <span>Language</span>
               <ColumnOrderIcon
-                sortingState={sorting["languageCode"]}
+                sortingState={sortingState["languageCode"]}
                 clickHandler={() => changeSorting("languageCode")}
               />
             </div>
@@ -135,27 +81,32 @@ export default function WordOdataTable({
         </tr>
       </thead>
       <tbody>
-        {data.words.map((word) => (
-          <tr key={word.wordId} className="bg-lincolngreenlighter">
-            <td className="border border-black text-center">{word.article}</td>
-            <td className="border border-black text-center">{word.text}</td>
-            <td className="border border-black text-center">
-              {getWordTypeName(word.type)}
-            </td>
-            <td className="border border-black text-center">
-              {getLanguageName(word.languageCode)}
-            </td>
-            <td className="border border-black p-1">
-              <Link
-                to={`word/${word.wordId}`}
-                className="inline-block align-middle"
-              >
-                <BsPencilFill className="p-1 h-7 w-8 border border-black rounded-lg bg-green-900 fill-white hover:bg-green-600" />
-              </Link>
-            </td>
-          </tr>
-        ))}
+        {words &&
+          words.data.map((word) => (
+            <tr key={word.wordId} className="bg-lincolngreenlighter">
+              <td className="border border-black text-center">
+                {word.article}
+              </td>
+              <td className="border border-black text-center">{word.text}</td>
+              <td className="border border-black text-center">
+                {getWordTypeName(word.type)}
+              </td>
+              <td className="border border-black text-center">
+                {getLanguageName(word.languageCode)}
+              </td>
+              <td className="border border-black p-1">
+                <Link
+                  to={`word/${word.wordId}`}
+                  className="inline-block align-middle"
+                >
+                  <BsPencilFill className="p-1 h-7 w-8 border border-black rounded-lg bg-green-900 fill-white hover:bg-green-600" />
+                </Link>
+              </td>
+            </tr>
+          ))}
       </tbody>
     </table>
   );
-}
+};
+
+export default WordOdataTable;

@@ -15,27 +15,39 @@ export interface OdataResponse<TData> {
   data: TData[];
 }
 
-interface ODataQueryParams<TData, TSearchState, TSortingState> {
+interface ODataQueryParams<
+  TData,
+  TSearchState,
+  TSortingState,
+  TQuerySearchState
+> {
   queryKeyName: string;
   paginationData: PaginationData;
   paginationFunctions: PaginationFunctions;
   searchState: TSearchState;
-  sortingState: TSortingState;
+  querySearchState: TQuerySearchState;
+  sortingState?: TSortingState;
   fetchData: (
     params: ODataFetcherParams<TSearchState, TSortingState>
   ) => Promise<OdataResponse<TData>>;
 }
 
-export function useODataQuery<TData, TSearchState, TSortingState>({
+export function useODataQuery<
+  TData,
+  TSearchState,
+  TSortingState,
+  TQuerySearchState
+>({
   queryKeyName,
   paginationData,
   paginationFunctions,
   searchState,
+  querySearchState,
   sortingState,
   fetchData,
-}: ODataQueryParams<TData, TSearchState, TSortingState>) {
+}: ODataQueryParams<TData, TSearchState, TSortingState, TQuerySearchState>) {
   const { data, isPending, isError } = useQuery({
-    queryKey: [queryKeyName, paginationData, searchState, sortingState],
+    queryKey: [queryKeyName, paginationData, querySearchState, sortingState],
     queryFn: ({ signal }) =>
       fetchData({ paginationData, searchState, sortingState, signal }),
     staleTime: 120000,
