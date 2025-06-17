@@ -1,4 +1,4 @@
-import React, { ComponentType, Dispatch, useState } from "react";
+import React, { ComponentType, Dispatch, useEffect, useState } from "react";
 import Pagination from "./Pagination";
 import { usePagination } from "../hooks/usePagination";
 import {
@@ -64,26 +64,29 @@ const ODataContainer = <
   TSortingState
 >) => {
   const { paginationData, paginationFunctions } = usePagination();
-  const [sorting, setSorting] = useState(initialSortingState);
+  const [sortingState, setSortingState] = useState(initialSortingState);
   const [searchState, searchDispatch] = useSearchReducer();
 
-  //TODO: Maybe it should be handled with the searchStateReducer. Only an idea. Must look into it.
-  //   useEffect(() => {
-  //     if (searchWordsState.word || searchWordsState.filters) {
-  //       paginationFunctions.setPage(1);
-  //     }
-  //   }, [searchWordsState.word, searchWordsState.filters]);
+  const querySearchState = handleQuerySearch
+    ? handleQuerySearch(searchState)
+    : searchState;
+
+  const querySearchStateJson = JSON.stringify(querySearchState);
+
+  useEffect(() => {
+    if (paginationData.currentPage > 1) {
+      paginationFunctions.setPage(1);
+    }
+  }, [querySearchStateJson]);
 
   const { data, isPending, isError } = useODataQuery({
-    queryKeyName: queryKeyName,
+    queryKeyName,
     paginationData,
     paginationFunctions,
-    searchState: searchState,
-    querySearchState: handleQuerySearch
-      ? handleQuerySearch(searchState)
-      : searchState,
-    sortingState: sorting,
-    fetchData: fetchData,
+    searchState,
+    querySearchState,
+    sortingState,
+    fetchData,
   });
 
   return (
@@ -93,8 +96,8 @@ const ODataContainer = <
         data={data}
         isPending={isPending}
         isError={isError}
-        sortingState={sorting}
-        setSortingState={setSorting}
+        sortingState={sortingState}
+        setSortingState={setSortingState}
       />
       <Pagination
         paginationData={paginationData}
