@@ -7,10 +7,16 @@ export default function MenuPage() {
     <>
       <section className="h-1/2 md:h-1/4 mt-10 flex flex-col md:flex-row gap-5 items-center justify-evenly border border-blue-800">
         <Link to="new-word" className="w-2/3 h-1/2 md:w-1/6 md:h-full">
-          <FeaturePick>Add Word</FeaturePick>
+          <FeaturePick>Add word</FeaturePick>
+        </Link>
+        <Link
+          to="new-translation-group"
+          className="w-2/3 h-1/2 md:w-1/6 md:h-full"
+        >
+          <FeaturePick>Add translation group</FeaturePick>
         </Link>
         <Link to="translation" className="w-2/3 h-1/2 md:w-1/6 md:h-full">
-          <FeaturePick>Add Translation</FeaturePick>
+          <FeaturePick>Manage translations</FeaturePick>
         </Link>
       </section>
       <section className="w-2/3 flex flex-col justify-self-center border border-slate-900">
