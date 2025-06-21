@@ -28,7 +28,6 @@ export default function Pagination({
   const maxPages = Math.ceil(
     paginationData.dataCount / paginationData.dataPerPage
   );
-
   let pages;
 
   if (paginationData.currentPage < maxPageIcons - 1) {
@@ -132,14 +131,14 @@ export default function Pagination({
         <Icon
           key={"page_next"}
           onClick={() => paginationFunctions.nextPage()}
-          isDisabled={paginationData.currentPage === maxPages}
+          isDisabled={paginationData.currentPage === maxPages || maxPages === 0}
         >
           <MdKeyboardArrowRight />
         </Icon>
         <Icon
           key={"page_last"}
           onClick={() => paginationFunctions.setPage(maxPages)}
-          isDisabled={paginationData.currentPage === maxPages}
+          isDisabled={paginationData.currentPage === maxPages || maxPages === 0}
         >
           <MdKeyboardDoubleArrowRight />
         </Icon>
