@@ -7,6 +7,7 @@ import NewWordPage from "./features/Words/pages/NewWordPage";
 import { queryClient } from "./features/Words/api";
 import WordPage from "./features/Words/pages/WordPage";
 import TranslationPage from "./features/Words/pages/TranslationPage";
+import NewTranslationGroupPage from "./features/TranslationGroups/pages/NewTranslationGroupPage";
 
 const router = createBrowserRouter([
   {
@@ -21,6 +22,10 @@ const router = createBrowserRouter([
           { path: "new-word", element: <NewWordPage /> },
           { path: "word/:wordId", element: <WordPage /> },
           { path: "translation", element: <TranslationPage /> },
+          {
+            path: "new-translation-group",
+            element: <NewTranslationGroupPage />,
+          },
         ],
       },
     ],
