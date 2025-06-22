@@ -58,8 +58,3 @@ export interface Tab {
   label: string;
   content: React.ReactNode;
 }
-
-export interface Tag {
-  tagId: number;
-  text: string;
-}
