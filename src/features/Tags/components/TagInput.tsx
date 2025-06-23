@@ -1,6 +1,6 @@
 import React, { KeyboardEvent, useRef, useState } from "react";
-import { Tag } from "../../Words/models";
 import { CgClose } from "react-icons/cg";
+import { Tag } from "../models";
 
 export interface TagInputProps {
   tags: Tag[];
@@ -29,10 +29,7 @@ const TagInput: React.FC<TagInputProps> = ({ tags, onChange }) => {
       if (tags.some((tag) => tag.text.toLowerCase() === trimmedText)) {
         setInputState("");
       } else {
-        const tagsWithNewTag = [
-          ...tags,
-          { tagId: undefined, text: trimmedText },
-        ];
+        const tagsWithNewTag = [...tags, { tagId: null, text: trimmedText }];
         onChange(tagsWithNewTag);
 
         setInputState("");
