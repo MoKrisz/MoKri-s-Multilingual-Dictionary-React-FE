@@ -1,6 +1,9 @@
 import React, { KeyboardEvent, useRef, useState } from "react";
 import { CgClose } from "react-icons/cg";
 import { Tag } from "../models";
+import { useQuery } from "@tanstack/react-query";
+import { useDebounce } from "../../../hooks/useDebounce";
+import { getClosesMatchingTag } from "../api";
 
 export interface TagInputProps {
   tags: Tag[];
@@ -10,11 +13,26 @@ export interface TagInputProps {
 const TagInput: React.FC<TagInputProps> = ({ tags, onChange }) => {
   const [inputState, setInputState] = useState<string>("");
   const inputRef = useRef<HTMLInputElement>(null);
+  const debouncedInput = useDebounce(inputState, 100);
+
+  const { data } = useQuery({
+    queryKey: ["tag", "autofill", debouncedInput],
+    queryFn: ({ signal }) => getClosesMatchingTag(debouncedInput, signal),
+    staleTime: 120000,
+    enabled: !!debouncedInput,
+  });
 
   const handleDeleteTag = (tag: Tag) => {
     const modifiedTags = tags.filter((t) => t.text !== tag.text);
 
     onChange(modifiedTags);
+  };
+
+  const addNewTag = (tag: Tag) => {
+    const tagsWithNewTag = [...tags, tag];
+    onChange(tagsWithNewTag);
+
+    setInputState("");
   };
 
   const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
@@ -29,10 +47,7 @@ const TagInput: React.FC<TagInputProps> = ({ tags, onChange }) => {
       if (tags.some((tag) => tag.text.toLowerCase() === trimmedText)) {
         setInputState("");
       } else {
-        const tagsWithNewTag = [...tags, { tagId: null, text: trimmedText }];
-        onChange(tagsWithNewTag);
-
-        setInputState("");
+        addNewTag({ tagId: null, text: trimmedText });
       }
     }
   };
@@ -63,15 +78,35 @@ const TagInput: React.FC<TagInputProps> = ({ tags, onChange }) => {
           </button>
         </div>
       ))}
-      <input
-        ref={inputRef}
-        type="text"
-        value={inputState}
-        onChange={(e) => setInputState(e.target.value)}
-        onKeyDown={handleKeyDown}
-        className="flex-grow bg-transparent outline-none"
-        placeholder="Add tag..."
-      />
+      <div>
+        <input
+          ref={inputRef}
+          type="text"
+          value={inputState}
+          onChange={(e) => setInputState(e.target.value)}
+          onKeyDown={handleKeyDown}
+          className="flex-grow bg-transparent outline-none"
+          placeholder="Add tag..."
+        />
+        {data && (
+          <ul className="absolute bg-white border border-gray-300 mt-1 rounded shadow-2xl">
+            <li
+              key={`tag-autofill-${data.tagId}`}
+              className="p-2 cursor-pointer hover:bg-gray-100"
+              onClick={() => {
+                if (
+                  tags.length === 0 ||
+                  tags.some((t) => t.tagId != data.tagId)
+                ) {
+                  addNewTag(data);
+                }
+              }}
+            >
+              {data.text}
+            </li>
+          </ul>
+        )}
+      </div>
     </div>
   );
 };

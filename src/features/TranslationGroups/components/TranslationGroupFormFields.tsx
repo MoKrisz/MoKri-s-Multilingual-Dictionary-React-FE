@@ -1,6 +1,7 @@
 import { Controller, useFormContext } from "react-hook-form";
 import TagInput from "../../Tags/components/TagInput";
 import { TranslationGroupFormData } from "./TranslationGroupForm";
+import FormFieldWithError from "../../../components/FormFieldWithError";
 
 const TranslationGroupFormFields: React.FC = () => {
   const {
@@ -11,18 +12,21 @@ const TranslationGroupFormFields: React.FC = () => {
 
   return (
     <>
-      <div className="flex flex-col my-2">
-        <label htmlFor="translationGroupName" className="font-bold">
-          Translation group name
-        </label>
+      <FormFieldWithError
+        extraStyle="my-2"
+        label="Translation group name"
+        htmlFor="translationGroupName"
+        error={errors.groupName?.message}
+      >
         <input id="translationGroupName" {...register("groupName")} />
-        {errors.groupName && (
-          <span className="text-red-600">{errors.groupName.message}</span>
-        )}
-      </div>
+      </FormFieldWithError>
 
-      <div className="flex flex-col my-5 h-40">
-        <label className="font-bold">Tags</label>
+      <FormFieldWithError
+        extraStyle="my-5 h-40"
+        label="Tags"
+        htmlFor="tags"
+        error={errors.tags?.message}
+      >
         <Controller
           control={control}
           name="tags"
@@ -31,8 +35,7 @@ const TranslationGroupFormFields: React.FC = () => {
             <TagInput tags={field.value ?? []} onChange={field.onChange} />
           )}
         />
-        {errors.tags && <span>{errors.tags.message}</span>}
-      </div>
+      </FormFieldWithError>
     </>
   );
 };
