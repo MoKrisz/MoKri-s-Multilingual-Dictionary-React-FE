@@ -13,7 +13,7 @@ export interface TagInputProps {
 const TagInput: React.FC<TagInputProps> = ({ tags, onChange }) => {
   const [inputState, setInputState] = useState<string>("");
   const inputRef = useRef<HTMLInputElement>(null);
-  const debouncedInput = useDebounce(inputState, 100);
+  const debouncedInput = useDebounce(inputState, 200);
 
   const { data } = useQuery({
     queryKey: ["tag", "autofill", debouncedInput],
@@ -65,6 +65,9 @@ const TagInput: React.FC<TagInputProps> = ({ tags, onChange }) => {
         <div
           key={`tag_${tag.tagId}_${tag.text}`}
           className="flex items-center px-1 rounded bg-slate-300 h-6"
+          onClick={(e) => {
+            e.stopPropagation();
+          }}
         >
           <span className="text-sm">{tag.text}</span>
           <button
@@ -94,11 +97,10 @@ const TagInput: React.FC<TagInputProps> = ({ tags, onChange }) => {
               key={`tag-autofill-${data.tagId}`}
               className="p-2 cursor-pointer hover:bg-gray-100"
               onClick={() => {
-                if (
-                  tags.length === 0 ||
-                  tags.some((t) => t.tagId != data.tagId)
-                ) {
+                if (!tags.some((t) => t.tagId === data.tagId)) {
                   addNewTag(data);
+                } else {
+                  setInputState("");
                 }
               }}
             >
