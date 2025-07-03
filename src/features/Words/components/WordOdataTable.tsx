@@ -4,7 +4,7 @@ import { getLanguageName, getWordTypeName } from "../utils";
 import { BsPencilFill } from "react-icons/bs";
 import { ColumnOrderEnum } from "../../../models/ColumnOrderEnum";
 import { Word } from "../models";
-import { ODataDisplayComponentProps } from "../../../components/ODataContainer";
+import { ODataDisplayComponentWithSortingProps } from "../../../components/ODataContainer";
 
 export type WordSorting = {
   article: ColumnOrderEnum;
@@ -16,7 +16,7 @@ export type WordSorting = {
 type WordSortingKeys = keyof WordSorting;
 
 const WordOdataTable: React.FC<
-  ODataDisplayComponentProps<Word, WordSorting>
+  ODataDisplayComponentWithSortingProps<Word, WordSorting>
 > = ({ data: words, isPending, isError, sortingState, setSortingState }) => {
   if (isPending) return <p>Getting the words...</p>;
   if (isError) return <p>Something went wrong...</p>;
