@@ -99,6 +99,19 @@ interface ODataContainerProps<
       >;
 }
 
+function isSortable<TData, TSortingState>(
+  component:
+    | ComponentType<ODataDisplayComponentWithoutSortingProps<TData>>
+    | ComponentType<
+        ODataDisplayComponentWithSortingProps<TData, TSortingState>
+      >,
+  initialSortingState: TSortingState | undefined
+): component is ComponentType<
+  ODataDisplayComponentWithSortingProps<TData, TSortingState>
+> {
+  return initialSortingState !== undefined;
+}
+
 const ODataContainer = <
   TData,
   TSearchState,
@@ -150,32 +163,21 @@ const ODataContainer = <
     setSortingState(value as React.SetStateAction<TSortingState | undefined>);
   };
 
-  const DisplayComponentWithSorting = DisplayComponent as ComponentType<
-    ODataDisplayComponentWithSortingProps<TData, TSortingState>
-  >;
-  const DisplayComponentWithoutSorting = DisplayComponent as ComponentType<
-    ODataDisplayComponentWithoutSortingProps<TData>
-  >;
+  console.log("odata container", data);
 
   return (
-    <div className="mt-5">
+    <div>
       <SearchComponent searchState={searchState} dispatch={searchDispatch} />
-      {initialSortingState !== undefined ? (
-        <DisplayComponentWithSorting
+      {isSortable(DisplayComponent, initialSortingState) ? (
+        <DisplayComponent
           data={data}
           isPending={isPending}
           isError={isError}
-          {...{
-            sortingState: sortingState as TSortingState,
-            setSortingState: handleSortingState,
-          }}
+          sortingState={sortingState!}
+          setSortingState={handleSortingState}
         />
       ) : (
-        <DisplayComponentWithoutSorting
-          data={data}
-          isPending={isPending}
-          isError={isError}
-        />
+        <DisplayComponent data={data} isPending={isPending} isError={isError} />
       )}
       <Pagination
         paginationData={paginationData}
