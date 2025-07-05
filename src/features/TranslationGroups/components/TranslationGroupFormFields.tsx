@@ -14,11 +14,15 @@ const TranslationGroupFormFields: React.FC = () => {
     <>
       <FormFieldWithError
         extraStyle="my-2"
-        label="Translation group name"
-        htmlFor="translationGroupName"
-        error={errors.groupName?.message}
+        label="Translation group description"
+        htmlFor="translationGroupDescription"
+        error={errors.description?.message}
       >
-        <input id="translationGroupName" {...register("groupName")} />
+        <input
+          className="px-2"
+          id="translationGroupDescription"
+          {...register("description")}
+        />
       </FormFieldWithError>
 
       <FormFieldWithError

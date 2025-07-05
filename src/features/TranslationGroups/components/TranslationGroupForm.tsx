@@ -4,10 +4,10 @@ import TranslationGroupFormFields from "./TranslationGroupFormFields";
 import { postTranslationGroup } from "../api";
 
 const TranslationGroupFormSchema = z.object({
-  groupName: z
+  description: z
     .string()
     .trim()
-    .min(1, "Translation group name must have value."),
+    .min(1, "Translation group description must have value."),
   tags: z
     .array(
       z.object({
@@ -29,7 +29,7 @@ const TranslationGroupForm: React.FC = () => {
       onSubmit={postTranslationGroup}
       title="Create new translation group"
       submitButtonText="Create translation group"
-      defaultValues={{ groupName: "", tags: [] }}
+      defaultValues={{ description: "", tags: [] }}
     >
       <TranslationGroupFormFields />
     </Form>
