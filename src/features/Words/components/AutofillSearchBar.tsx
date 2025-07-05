@@ -1,8 +1,7 @@
-import { useQuery } from "@tanstack/react-query";
 import { fetchWordsAutofill } from "../api";
 import { useEffect, useState } from "react";
-import { useDebounce } from "../../../hooks/useDebounce";
 import { Word } from "../models";
+import AutofillInput from "../../../components/AutofillInput";
 
 interface AutofillSearchBarProps {
   languageId: number;
@@ -13,60 +12,55 @@ export default function AutofillSearchBar({
   languageId,
   onFill,
 }: AutofillSearchBarProps) {
-  const [input, setInput] = useState("");
-  const [freezeAutofill, setFreezeAutofill] = useState(false);
-  const debouncedInput = useDebounce(input, 250);
+  const [inputState, setInputState] = useState("");
+  const [freezeListDisplay, setFreezeListDisplay] = useState(false);
 
   useEffect(() => {
-    setInput("");
+    setInputState("");
   }, [languageId]);
 
-  const { data, isLoading } = useQuery({
-    queryKey: ["autofill", debouncedInput, languageId],
-    queryFn: ({ signal }) =>
-      fetchWordsAutofill({
-        top: 5,
-        languageCode: languageId!,
-        input: debouncedInput,
-        signal,
-      }),
-    staleTime: 120000,
-    enabled: !!debouncedInput && !!languageId && !freezeAutofill,
-  });
+  const renderListItem = (word: Word) => {
+    return (
+      <li
+        key={`word-autofill-${word.wordId}`}
+        className="p-2 cursor-pointer hover:bg-gray-100"
+        onClick={() => {
+          setInputState(word.text);
+          setFreezeListDisplay(true);
+          onFill(word);
+        }}
+      >
+        {word.text}
+      </li>
+    );
+  };
+
+  const handleSetInputValue = (value: string) => {
+    setInputState(value);
+    setFreezeListDisplay(false);
+  };
 
   return (
     <div className="relative w-full">
-      <input
-        className="rounded-lg bg-lincolngreen border border-lincolngreendarker py-1 px-2 placeholder:text-black focus:bg-lincolngreenlighter disabled:opacity-30 disabled:bg-gray-200"
-        placeholder="Search word..."
-        type="text"
-        value={input}
-        onChange={(event) => {
-          setInput(event.target.value);
-          setFreezeAutofill(false);
+      <AutofillInput
+        style="rounded-lg bg-lincolngreen border border-lincolngreendarker py-1 px-2 placeholder:text-black focus:bg-lincolngreenlighter disabled:opacity-30 disabled:bg-gray-200"
+        inputValue={inputState}
+        setInputValue={handleSetInputValue}
+        queryKeys={["word", String(languageId)]}
+        getAutofillData={(values) => {
+          return fetchWordsAutofill({
+            top: 5,
+            languageCode: languageId,
+            input: values.input,
+            signal: values.signal,
+          });
         }}
+        placeholder="Search word..."
+        renderItem={renderListItem}
         disabled={!languageId}
+        extraQueryEnableLogic={!!languageId}
+        freezeListDisplay={freezeListDisplay}
       />
-      {isLoading && (
-        <div className="absolute top-full left-0 p-2 text-sm">Loading...</div>
-      )}
-      {data && data.length > 0 && !freezeAutofill && (
-        <ul className="absolute bg-white border border-gray-300 w-full mt-1 rounded shadow-2xl">
-          {data.map((word) => (
-            <li
-              key={`autofill-${word.wordId}`}
-              className="p-2 cursor-pointer hover:bg-gray-100"
-              onClick={() => {
-                setFreezeAutofill(true);
-                setInput(word.text);
-                onFill(word);
-              }}
-            >
-              {word.text}
-            </li>
-          ))}
-        </ul>
-      )}
     </div>
   );
 }
