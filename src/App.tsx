@@ -6,8 +6,8 @@ import RootLayout from "./pages/RootLayout";
 import NewWordPage from "./features/Words/pages/NewWordPage";
 import { queryClient } from "./features/Words/api";
 import WordPage from "./features/Words/pages/WordPage";
-import TranslationPage from "./features/Words/pages/TranslationPage";
 import NewTranslationGroupPage from "./features/TranslationGroups/pages/NewTranslationGroupPage";
+import TranslationPage from "./features/Translations/pages/TranslationPage";
 
 const router = createBrowserRouter([
   {

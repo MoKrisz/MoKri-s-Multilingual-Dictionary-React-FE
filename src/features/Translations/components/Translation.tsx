@@ -1,10 +1,10 @@
 import { useState } from "react";
 import Button from "../../../components/Button";
 import Dropdown from "../../../components/Dropdown";
-import AutofillSearchBar from "./AutofillSearchBar";
-import { LanguageCodeEnum, Word, WordTypeEnum } from "../models";
-import { getFormLanguageOptions } from "../utils";
-import { Option } from "./FormInput";
+import AutofillSearchBar from "../../Words/components/AutofillSearchBar";
+import { Word } from "../../Words/models";
+import { getFormLanguageOptions } from "../../Words/utils";
+import { Option } from "../../Words/components/FormInput";
 import { FaPlus } from "react-icons/fa";
 import TranslationGroupPickerModal from "../../TranslationGroups/components/TranslationGroupPickerModal";
 
