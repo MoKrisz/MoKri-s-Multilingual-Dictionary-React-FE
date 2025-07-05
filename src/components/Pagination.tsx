@@ -110,7 +110,7 @@ export default function Pagination({
   }
 
   return (
-    <div className="flex justify-between border border-red-600 w-full p-2">
+    <div className="flex justify-between w-full p-2">
       <p>∑: {paginationData.dataCount}</p>
       <div className="flex flex-row gap-0.5 mx-auto">
         <Icon

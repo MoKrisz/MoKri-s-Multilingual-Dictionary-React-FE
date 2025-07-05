@@ -13,8 +13,6 @@ const Modal: React.FC<ModalProps> = ({ children, isOpen, onClose }) => {
   const modalRef = useRef<HTMLDialogElement>(null);
   const modalDocumentElement = document.getElementById("modal");
 
-  console.log("open?", isOpen);
-
   useEffect(() => {
     const modalElement = modalRef.current;
     if (!modalElement) {
