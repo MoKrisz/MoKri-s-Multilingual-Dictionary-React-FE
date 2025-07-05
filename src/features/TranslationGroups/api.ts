@@ -1,4 +1,9 @@
+import axios from "axios";
+import { ODataFetcherParams, OdataResponse } from "../../hooks/useODataQuery";
 import { TranslationGroupFormData } from "./components/TranslationGroupForm";
+import { TranslationGroup } from "./models";
+import { SearchTranslationGroupState } from "./state/searchTranslationGroupReducer";
+import { RawOdataResponse, transformRawODataResponse } from "../../utils/api";
 
 export const postTranslationGroup = async (
   data: TranslationGroupFormData
@@ -14,10 +19,62 @@ export const postTranslationGroup = async (
   });
 
   if (!response.ok) {
-    throw new Error("Word creation failed.");
+    throw new Error("Translation group creation failed.");
   }
 
   const resJson = await response.json();
 
   return resJson;
+};
+
+export const getTranslationGroups = async ({
+  paginationData,
+  searchState,
+  signal,
+}: ODataFetcherParams<SearchTranslationGroupState, undefined>): Promise<
+  OdataResponse<TranslationGroup>
+> => {
+  try {
+    let descriptionFilter = "";
+    if (searchState.description) {
+      descriptionFilter = `contains(tolower(description), tolower('${searchState.description}'))`;
+    }
+
+    let tagsFilter = "";
+    if (searchState.tagIds.length > 0) {
+      tagsFilter = searchState.tagIds
+        .map((tagId) => `tags/any(t: t/tagid eq ${tagId})`)
+        .join(" and ");
+    }
+
+    let odataFilters = "";
+    if (descriptionFilter || tagsFilter) {
+      odataFilters = "&filter=" + [descriptionFilter, tagsFilter].join(" and ");
+    }
+
+    const skipCount =
+      (paginationData.currentPage - 1) * paginationData.dataPerPage;
+
+    const response = await axios.get<OdataResponse<TranslationGroup>>(
+      `https://localhost:7113/odata/TranslationGroupList?count=true&top=${paginationData.dataPerPage}&skip=${skipCount}${odataFilters}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        signal,
+        transformResponse: [
+          (data: string) => {
+            return JSON.parse(data);
+          },
+          (parsedData: RawOdataResponse<TranslationGroup>) => {
+            return transformRawODataResponse(parsedData);
+          },
+        ],
+      }
+    );
+
+    return response.data;
+  } catch {
+    throw new Error("Translation group list fetch failed.");
+  }
 };

@@ -2,6 +2,7 @@ import { useState } from "react";
 import Button from "../../../components/Button";
 import Modal from "../../../components/Modal";
 import TranslationGroupForm from "./TranslationGroupForm";
+import TranslationGroupOData from "./TranslationGroupOData";
 
 interface TranslationGroupPickerModal {
   isOpen: boolean;
@@ -32,7 +33,10 @@ const TranslationGroupPickerModal: React.FC<TranslationGroupPickerModal> = ({
   } else {
     modalBody = (
       <>
-        OData implementation goes here.
+        <div>
+          <h1 className="font-bold text-2xl">Translation groups</h1>
+          <TranslationGroupOData />
+        </div>
         <div className="justify-items-center">
           <p className="p-2 italic">
             If you couldn't find the translation group you're searching for,
