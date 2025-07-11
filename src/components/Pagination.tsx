@@ -152,7 +152,11 @@ export default function Pagination({
         }
       >
         {DataAmountPerPageValues.map((amount) => {
-          return <option value={amount}>{amount}</option>;
+          return (
+            <option key={`data-per-page-${amount}`} value={amount}>
+              {amount}
+            </option>
+          );
         })}
       </select>
     </div>
