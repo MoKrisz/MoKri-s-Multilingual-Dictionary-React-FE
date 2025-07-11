@@ -12,7 +12,11 @@ const TranslationGroupODataCardList: React.FC<
     content = <p>Something went wrong.</p>;
   } else if (translationGroups && translationGroups.count > 0) {
     content = translationGroups?.data.map((translationGroup) => (
-      <TranslationGroupCard translationGroup={translationGroup} selectable />
+      <TranslationGroupCard
+        key={`translation-group-card-${translationGroup.translationGroupId}`}
+        translationGroup={translationGroup}
+        selectable
+      />
     ));
   } else {
     content = <p>No translation group is available.</p>;

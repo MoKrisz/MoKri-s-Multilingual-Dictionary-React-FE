@@ -1,4 +1,10 @@
-import { createContext, useContext, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import Button from "../../../components/Button";
 import Dropdown from "../../../components/Dropdown";
 import AutofillSearchBar from "../../Words/components/AutofillSearchBar";
@@ -15,6 +21,7 @@ import { TranslationGroup } from "../../TranslationGroups/models";
 interface TranslationGroupContext {
   selectedTranslationGroups: TranslationGroup[];
   onToggleSelection: (translationGroup: TranslationGroup) => void;
+  resetSelection: () => void;
 }
 
 const TranslationGroupContext = createContext<
@@ -32,8 +39,6 @@ export const TranslationGroupProvider: React.FC<
     TranslationGroup[]
   >([]);
 
-  console.log("provider :)", selectedTranslationGroups);
-
   const onToggleSelection = (translationGroup: TranslationGroup) => {
     setSelectedTranslationGroups((prev) => {
       const isTgSelected = prev.some(
@@ -49,17 +54,33 @@ export const TranslationGroupProvider: React.FC<
     });
   };
 
+  const resetSelection = useCallback(() => {
+    setSelectedTranslationGroups([]);
+  }, []);
+
   return (
     <TranslationGroupContext.Provider
-      value={{ selectedTranslationGroups, onToggleSelection }}
+      value={{ selectedTranslationGroups, onToggleSelection, resetSelection }}
     >
       {children}
     </TranslationGroupContext.Provider>
   );
 };
 
-export const useTranslationGroupContext = () =>
+export const useOptionalTranslationGroupContext = () =>
   useContext(TranslationGroupContext);
+
+export const useTranslationGroupContext = () => {
+  const context = useContext(TranslationGroupContext);
+
+  if (context === undefined) {
+    throw new Error(
+      "Translation group context is required, but it was not provided."
+    );
+  }
+
+  return context;
+};
 
 const Translation: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -67,12 +88,9 @@ const Translation: React.FC = () => {
   const [language2Id, setLanguage2Id] = useState<number>(0);
   const [word1, setWord1] = useState<Word>();
   const [word2, setWord2] = useState<Word>();
-  const [
-    manuallySelectedTranslationGroups,
-    setManuallySelectedTranslationGroups,
-  ] = useState<TranslationGroup[]>();
-  const [selectedTranslationGroupIds, setSelectedTranslationGroupIds] =
-    useState<number[]>([]);
+  const [linkedTranslationGroups, setLinkedTranslationGroups] = useState<
+    TranslationGroup[]
+  >([]);
 
   const languageOptions1 = getFormLanguageOptions();
   let languageOptions2: Option[] = [];
@@ -107,11 +125,6 @@ const Translation: React.FC = () => {
     enabled: isTranslationGroupQueryEnabled,
   });
 
-  const allTranslationGroups = [
-    ...(data || []),
-    ...(manuallySelectedTranslationGroups || []),
-  ];
-
   let translationGroupListContent: React.ReactNode;
   if (!isTranslationGroupQueryEnabled) {
     translationGroupListContent = (
@@ -131,7 +144,10 @@ const Translation: React.FC = () => {
     translationGroupListContent = (
       <p>An error happened while fetching the translation groups.</p>
     );
-  } else if (allTranslationGroups.length === 0) {
+  } else if (
+    (!data || data.length === 0) &&
+    linkedTranslationGroups.length === 0
+  ) {
     translationGroupListContent = (
       <p>
         Looks like there are no translation groups linked to these words yet.
@@ -139,34 +155,66 @@ const Translation: React.FC = () => {
         You can add a new translation group with the button below.
       </p>
     );
-  } else if (allTranslationGroups.length > 0) {
-    translationGroupListContent = allTranslationGroups.map(
-      (translationGroup) => (
-        <TranslationGroupCard
-          translationGroup={translationGroup}
-          selectable
-          selected={selectedTranslationGroupIds.some(
-            (id) => id === translationGroup.translationGroupId
-          )}
-          onSelect={() => {
-            setSelectedTranslationGroupIds((prev) => {
-              if (
-                prev.some(
-                  (stgId) => stgId === translationGroup.translationGroupId
-                )
-              ) {
-                return prev.filter(
-                  (stgId) => stgId !== translationGroup.translationGroupId
-                );
-              } else {
-                return [...prev, translationGroup.translationGroupId];
-              }
-            });
-          }}
-        />
-      )
+  } else if ((data && data.length >= 0) || linkedTranslationGroups.length > 0) {
+    const linkedCards = linkedTranslationGroups.map((translationGroup) => (
+      <TranslationGroupCard
+        key={`translation-group-card-${translationGroup.translationGroupId}`}
+        translationGroup={translationGroup}
+        selectable
+        selected
+        onSelect={() => {
+          setLinkedTranslationGroups((prev) =>
+            prev.filter(
+              (tg) =>
+                tg.translationGroupId !== translationGroup.translationGroupId
+            )
+          );
+        }}
+      />
+    ));
+
+    const potentialCards = data ? (
+      data
+        .filter(
+          (tg) =>
+            !linkedTranslationGroups.some(
+              (ltg) => ltg.translationGroupId === tg.translationGroupId
+            )
+        )
+        .map((translationGroup) => (
+          <TranslationGroupCard
+            key={`translation-group-card-${translationGroup.translationGroupId}`}
+            translationGroup={translationGroup}
+            selectable
+            onSelect={() => {
+              setLinkedTranslationGroups((prev) => [...prev, translationGroup]);
+            }}
+          />
+        ))
+    ) : (
+      <></>
+    );
+
+    translationGroupListContent = (
+      <>
+        <h2 className="font-bold">Potential translation groups</h2>
+        {potentialCards}
+        <h2 className="font-bold">Linked translation groups</h2>
+        {linkedCards}
+      </>
     );
   }
+
+  const handleAddTranslationGroup = (translationGroups: TranslationGroup[]) => {
+    setLinkedTranslationGroups((prev) => {
+      const notYetLinkedTranslationGroups = translationGroups.filter(
+        (tg) =>
+          !prev.some((ltg) => ltg.translationGroupId === tg.translationGroupId)
+      );
+      return [...prev, ...notYetLinkedTranslationGroups];
+    });
+    setIsModalOpen(false);
+  };
 
   return (
     <>
@@ -197,11 +245,11 @@ const Translation: React.FC = () => {
         </div>
       </div>
       <div className="flex flex-col border border-red-700 w-2/3 m-5 gap-4">
-        <h2 className="font-bold">Related translation groups:</h2>
         {translationGroupListContent}
         <Button
           extraStyle="flex items-center gap-2 justify-center w-2/4"
           onClick={() => setIsModalOpen(true)}
+          isDisabled={!word1?.wordId || !word2?.wordId}
         >
           <FaPlus /> Select other translation group
         </Button>
@@ -209,14 +257,7 @@ const Translation: React.FC = () => {
           <TranslationGroupPickerModal
             isOpen={isModalOpen}
             onClose={() => setIsModalOpen(false)}
-            onAddTranslationGroup={(translationGroups) => {
-              setManuallySelectedTranslationGroups(translationGroups);
-              setIsModalOpen(false);
-              setSelectedTranslationGroupIds((prev) => [
-                ...prev,
-                ...translationGroups.map((tg) => tg.translationGroupId),
-              ]);
-            }}
+            onAddTranslationGroup={handleAddTranslationGroup}
           />
         </TranslationGroupProvider>
       </div>

@@ -18,7 +18,8 @@ const TranslationGroupPickerModal: React.FC<TranslationGroupPickerModal> = ({
   onAddTranslationGroup,
 }) => {
   const [isCreationView, setIsCreationView] = useState(false);
-  const { selectedTranslationGroups } = useTranslationGroupContext();
+  const { selectedTranslationGroups, resetSelection } =
+    useTranslationGroupContext();
 
   let modalBody: React.ReactNode;
 
@@ -38,13 +39,16 @@ const TranslationGroupPickerModal: React.FC<TranslationGroupPickerModal> = ({
   } else {
     modalBody = (
       <>
-        <div>
+        <div className="w-full">
           <h1 className="font-bold text-2xl">Translation groups</h1>
           <TranslationGroupOData />
         </div>
         <Button
           extraStyle="bg-lincolngreendarker"
-          onClick={() => onAddTranslationGroup(selectedTranslationGroups)}
+          onClick={() => {
+            onAddTranslationGroup(selectedTranslationGroups);
+            resetSelection();
+          }}
           isDisabled={selectedTranslationGroups.length === 0}
         >
           Select translation groups
@@ -60,7 +64,7 @@ const TranslationGroupPickerModal: React.FC<TranslationGroupPickerModal> = ({
             }}
             extraStyle="bg-lincolngreendarker"
           >
-            Add another word!
+            Add new Translation group
           </Button>
         </div>
       </>

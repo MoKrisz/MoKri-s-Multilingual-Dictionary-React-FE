@@ -1,4 +1,4 @@
-import { useTranslationGroupContext } from "../../Translations/components/Translation";
+import { useOptionalTranslationGroupContext } from "../../Translations/components/Translation";
 import { TranslationGroup } from "../models";
 
 export interface TranslationGroupCardProps {
@@ -14,7 +14,7 @@ const TranslationGroupCard: React.FC<TranslationGroupCardProps> = ({
   onSelect,
   selected = false,
 }) => {
-  const context = useTranslationGroupContext();
+  const context = useOptionalTranslationGroupContext();
 
   const isSelected =
     context?.selectedTranslationGroups.some(
@@ -44,7 +44,10 @@ const TranslationGroupCard: React.FC<TranslationGroupCardProps> = ({
       </div>
       <div className="flex gap-2">
         {translationGroup.tags?.map((tag) => (
-          <p className="bg-lincolngreenlighter border border-black px-2 rounded-lg italic group-hover:bg-lincolngreendarker">
+          <p
+            key={`translation-group-card-${translationGroup.translationGroupId}-tag-${tag.tagId}`}
+            className="bg-lincolngreenlighter border border-black px-2 rounded-lg italic group-hover:bg-lincolngreendarker"
+          >
             {tag.text}
           </p>
         ))}

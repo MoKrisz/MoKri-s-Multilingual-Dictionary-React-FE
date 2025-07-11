@@ -3,13 +3,21 @@ import { CgClose } from "react-icons/cg";
 import { Tag } from "../models";
 import { getClosesMatchingTag } from "../api";
 import AutofillInput from "../../../components/AutofillInput";
+import { twMerge } from "tailwind-merge";
 
 export interface TagInputProps {
   tags: Tag[];
   onChange: (tags: Tag[]) => void;
+  extraStyle?: string;
+  allowNewElements?: boolean;
 }
 
-const TagInput: React.FC<TagInputProps> = ({ tags, onChange }) => {
+const TagInput: React.FC<TagInputProps> = ({
+  tags,
+  onChange,
+  extraStyle,
+  allowNewElements = true,
+}) => {
   const [inputState, setInputState] = useState("");
   const [freezeListDisplay, setFreezeListDisplay] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -31,7 +39,7 @@ const TagInput: React.FC<TagInputProps> = ({ tags, onChange }) => {
   };
 
   const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === "Enter") {
+    if (event.key === "Enter" && allowNewElements) {
       event.preventDefault();
 
       const trimmedText = inputState.trim().toLowerCase();
@@ -101,7 +109,10 @@ const TagInput: React.FC<TagInputProps> = ({ tags, onChange }) => {
 
   return (
     <div
-      className="flex flex-wrap items-start content-start gap-2 p-1 h-full bg-slate-100 rounded-lg cursor-text overflow-y-auto"
+      className={twMerge(
+        "flex flex-wrap items-start content-start gap-2 p-1 h-full bg-slate-100 rounded-lg cursor-text overflow-y-auto",
+        extraStyle
+      )}
       onClick={handleContainerClick}
     >
       {tags.map((tag) => renderTagItem(tag))}
