@@ -6,7 +6,7 @@ interface TabsProps {
   defaultTab?: string;
 }
 
-export default function Tabs({ tabs, defaultTab }: TabsProps) {
+const Tabs: React.FC<TabsProps> = ({ tabs, defaultTab }) => {
   const [activeTab, setActiveTab] = useState(defaultTab ?? tabs[0].key);
 
   const activeTabFormat = "bg-lincolngreendarker border-b-lincolngreendarker";
@@ -17,7 +17,9 @@ export default function Tabs({ tabs, defaultTab }: TabsProps) {
       <div>
         {tabs.map((tab) => (
           <button
-            className={`-mb-px px-5 rounded-t-xl border border-black ${tab.key === activeTab ? activeTabFormat : nonActiveTabFormat}`}
+            className={`-mb-px px-5 rounded-t-xl border border-black ${
+              tab.key === activeTab ? activeTabFormat : nonActiveTabFormat
+            }`}
             key={tab.key}
             onClick={() => setActiveTab(tab.key)}
           >
@@ -30,4 +32,6 @@ export default function Tabs({ tabs, defaultTab }: TabsProps) {
       </div>
     </>
   );
-}
+};
+
+export default Tabs;
