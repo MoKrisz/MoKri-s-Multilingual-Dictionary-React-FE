@@ -35,21 +35,24 @@ export const getTranslationGroups = async ({
   OdataResponse<TranslationGroup>
 > => {
   try {
-    let descriptionFilter = "";
+    let filters: string[] = [];
     if (searchState.description) {
-      descriptionFilter = `contains(tolower(description), tolower('${searchState.description}'))`;
+      filters.push(
+        `contains(tolower(description), tolower('${searchState.description}'))`
+      );
     }
 
-    let tagsFilter = "";
     if (searchState.tagIds.length > 0) {
-      tagsFilter = searchState.tagIds
+      const tagsFilter = searchState.tagIds
         .map((tagId) => `tags/any(t: t/tagid eq ${tagId})`)
         .join(" and ");
+
+      filters.push(tagsFilter);
     }
 
     let odataFilters = "";
-    if (descriptionFilter || tagsFilter) {
-      odataFilters = "&filter=" + [descriptionFilter, tagsFilter].join(" and ");
+    if (filters.length > 0) {
+      odataFilters = "&filter=" + filters.join(" and ");
     }
 
     const skipCount =
