@@ -1,30 +1,24 @@
 import axios from "axios";
 import { ODataFetcherParams, OdataResponse } from "../../hooks/useODataQuery";
 import { TranslationGroupFormData } from "./components/TranslationGroupForm";
-import { TranslationGroup } from "./models";
+import { TranslationGroup, WordRelatedTranslationGroups } from "./models";
 import { SearchTranslationGroupState } from "./state/searchTranslationGroupReducer";
 import { RawOdataResponse, transformRawODataResponse } from "../../utils/api";
 
 export const postTranslationGroup = async (
   data: TranslationGroupFormData
-): Promise<number> => {
-  console.log(JSON.stringify(data));
+): Promise<TranslationGroup> => {
+  const response = await axios.post<TranslationGroup>(
+    "https://localhost:7113/translation-group",
+    data,
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
 
-  const response = await fetch("https://localhost:7113/translation-group", {
-    method: "POST",
-    body: JSON.stringify(data),
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-
-  if (!response.ok) {
-    throw new Error("Translation group creation failed.");
-  }
-
-  const resJson = await response.json();
-
-  return resJson;
+  return response.data;
 };
 
 export const getTranslationGroups = async ({
@@ -80,4 +74,22 @@ export const getTranslationGroups = async ({
   } catch {
     throw new Error("Translation group list fetch failed.");
   }
+};
+
+export const getWordRelatedTranslationGroups = async (
+  wordId1: number,
+  wordId2: number,
+  signal: AbortSignal
+): Promise<WordRelatedTranslationGroups> => {
+  const response = await axios.get<WordRelatedTranslationGroups>(
+    `https://localhost:7113/translation-group/word-related-groups?sourceWordId=${wordId1}&targetWordId=${wordId2}`,
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      signal,
+    }
+  );
+
+  return response.data;
 };

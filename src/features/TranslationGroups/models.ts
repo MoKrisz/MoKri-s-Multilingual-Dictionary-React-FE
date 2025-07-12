@@ -5,3 +5,8 @@ export interface TranslationGroup {
   description: string;
   tags?: Tag[];
 }
+
+export interface WordRelatedTranslationGroups {
+  potentialTranslationGroups: TranslationGroup[];
+  linkedTranslationGroups: TranslationGroup[];
+}
