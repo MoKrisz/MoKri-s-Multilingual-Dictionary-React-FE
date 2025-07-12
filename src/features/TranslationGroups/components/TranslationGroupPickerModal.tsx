@@ -33,7 +33,12 @@ const TranslationGroupPickerModal: React.FC<TranslationGroupPickerModal> = ({
         >
           Back
         </Button>
-        <TranslationGroupForm />
+        <TranslationGroupForm
+          onSuccessCallback={(translationGroup) => {
+            //TODO: invalidate odata query.
+            onAddTranslationGroup([translationGroup]);
+          }}
+        />
       </>
     );
   } else {

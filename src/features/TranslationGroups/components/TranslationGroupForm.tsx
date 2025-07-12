@@ -2,6 +2,7 @@ import { z } from "zod";
 import Form from "../../../components/Form";
 import TranslationGroupFormFields from "./TranslationGroupFormFields";
 import { postTranslationGroup } from "../api";
+import { TranslationGroup } from "../models";
 
 const TranslationGroupFormSchema = z.object({
   description: z
@@ -22,11 +23,25 @@ export type TranslationGroupFormData = z.infer<
   typeof TranslationGroupFormSchema
 >;
 
-const TranslationGroupForm: React.FC = () => {
+interface TranslationGroupFormProps {
+  onSuccessCallback?: (translationGroup: TranslationGroup) => void;
+}
+
+const TranslationGroupForm: React.FC<TranslationGroupFormProps> = ({
+  onSuccessCallback,
+}) => {
+  const handleSubmit = async (data: TranslationGroupFormData) => {
+    const newTranslationGroup = await postTranslationGroup(data);
+
+    if (onSuccessCallback) {
+      onSuccessCallback(newTranslationGroup);
+    }
+  };
+
   return (
     <Form<TranslationGroupFormData>
       schema={TranslationGroupFormSchema}
-      onSubmit={postTranslationGroup}
+      onSubmit={handleSubmit}
       title="Create new translation group"
       submitButtonText="Create translation group"
       defaultValues={{ description: "", tags: [] }}
