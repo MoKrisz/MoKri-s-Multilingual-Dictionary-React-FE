@@ -13,10 +13,11 @@ import { getFormLanguageOptions } from "../../Words/utils";
 import { Option } from "../../Words/components/FormInput";
 import { FaPlus } from "react-icons/fa";
 import TranslationGroupPickerModal from "../../TranslationGroups/components/TranslationGroupPickerModal";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getWordRelatedTranslationGroups } from "../../TranslationGroups/api";
 import TranslationGroupCard from "../../TranslationGroups/components/TranslationGroupCard";
 import { TranslationGroup } from "../../TranslationGroups/models";
+import { postTranslation } from "../api";
 
 interface TranslationGroupContext {
   selectedTranslationGroups: TranslationGroup[];
@@ -88,9 +89,8 @@ const Translation: React.FC = () => {
   const [language2Id, setLanguage2Id] = useState<number>(0);
   const [word1, setWord1] = useState<Word>();
   const [word2, setWord2] = useState<Word>();
-  const [linkedTranslationGroups, setLinkedTranslationGroups] = useState<
-    TranslationGroup[]
-  >([]);
+  const [newlyLinkedTranslationGroups, setNewlyLinkedTranslationGroups] =
+    useState<TranslationGroup[]>([]);
 
   const languageOptions1 = getFormLanguageOptions();
   let languageOptions2: Option[] = [];
@@ -145,8 +145,10 @@ const Translation: React.FC = () => {
       <p>An error happened while fetching the translation groups.</p>
     );
   } else if (
-    (!data || data.length === 0) &&
-    linkedTranslationGroups.length === 0
+    (!data ||
+      (data.potentialTranslationGroups.length === 0 &&
+        data.linkedTranslationGroups.length === 0)) &&
+    newlyLinkedTranslationGroups.length === 0
   ) {
     translationGroupListContent = (
       <p>
@@ -155,44 +157,61 @@ const Translation: React.FC = () => {
         You can add a new translation group with the button below.
       </p>
     );
-  } else if ((data && data.length >= 0) || linkedTranslationGroups.length > 0) {
-    const linkedCards = linkedTranslationGroups.map((translationGroup) => (
-      <TranslationGroupCard
-        key={`translation-group-card-${translationGroup.translationGroupId}`}
-        translationGroup={translationGroup}
-        selectable
-        selected
-        onSelect={() => {
-          setLinkedTranslationGroups((prev) =>
-            prev.filter(
-              (tg) =>
-                tg.translationGroupId !== translationGroup.translationGroupId
-            )
-          );
-        }}
-      />
-    ));
+  } else if (
+    (data &&
+      (data.potentialTranslationGroups.length > 0 ||
+        data.linkedTranslationGroups.length > 0)) ||
+    newlyLinkedTranslationGroups.length > 0
+  ) {
+    let potentialCards: React.ReactNode;
+    let linkedCards: React.ReactNode;
+    if (data) {
+      const potentialTranslationGroups = data.potentialTranslationGroups.filter(
+        (tg) =>
+          !newlyLinkedTranslationGroups.some(
+            (ltg) => ltg.translationGroupId === tg.translationGroupId
+          )
+      );
 
-    const potentialCards = data ? (
-      data
-        .filter(
-          (tg) =>
-            !linkedTranslationGroups.some(
-              (ltg) => ltg.translationGroupId === tg.translationGroupId
-            )
-        )
-        .map((translationGroup) => (
-          <TranslationGroupCard
-            key={`translation-group-card-${translationGroup.translationGroupId}`}
-            translationGroup={translationGroup}
-            selectable
-            onSelect={() => {
-              setLinkedTranslationGroups((prev) => [...prev, translationGroup]);
-            }}
-          />
-        ))
-    ) : (
-      <></>
+      potentialCards = potentialTranslationGroups.map((translationGroup) => (
+        <TranslationGroupCard
+          key={`translation-group-card-${translationGroup.translationGroupId}`}
+          translationGroup={translationGroup}
+          selectable
+          onSelect={() => {
+            setNewlyLinkedTranslationGroups((prev) => [
+              ...prev,
+              translationGroup,
+            ]);
+          }}
+        />
+      ));
+
+      linkedCards = data.linkedTranslationGroups.map((translationGroup) => (
+        <TranslationGroupCard
+          key={`translation-group-card-${translationGroup.translationGroupId}`}
+          translationGroup={translationGroup}
+        />
+      ));
+    }
+
+    const newlyLinkedCards = newlyLinkedTranslationGroups.map(
+      (translationGroup) => (
+        <TranslationGroupCard
+          key={`translation-group-card-${translationGroup.translationGroupId}`}
+          translationGroup={translationGroup}
+          selectable
+          selected
+          onSelect={() => {
+            setNewlyLinkedTranslationGroups((prev) =>
+              prev.filter(
+                (tg) =>
+                  tg.translationGroupId !== translationGroup.translationGroupId
+              )
+            );
+          }}
+        />
+      )
     );
 
     translationGroupListContent = (
@@ -201,12 +220,13 @@ const Translation: React.FC = () => {
         {potentialCards}
         <h2 className="font-bold">Linked translation groups</h2>
         {linkedCards}
+        {newlyLinkedCards}
       </>
     );
   }
 
   const handleAddTranslationGroup = (translationGroups: TranslationGroup[]) => {
-    setLinkedTranslationGroups((prev) => {
+    setNewlyLinkedTranslationGroups((prev) => {
       const notYetLinkedTranslationGroups = translationGroups.filter(
         (tg) =>
           !prev.some((ltg) => ltg.translationGroupId === tg.translationGroupId)
@@ -263,11 +283,26 @@ const Translation: React.FC = () => {
       </div>
       <Button
         extraStyle="block mx-auto my-5"
-        onClick={() => {
-          console.log("L1: ", word1?.wordId);
-          console.log("L2: ", word2?.wordId);
+        onClick={async () => {
+          await postTranslation({
+            sourceWordId: word1!.wordId,
+            targetWordId: word2!.wordId,
+            linkedTranslationGroups: newlyLinkedTranslationGroups,
+          });
+
+          setNewlyLinkedTranslationGroups([]);
+
+          useQueryClient().invalidateQueries({
+            queryKey: [
+              "word-related-translation-groups",
+              word1?.wordId,
+              word2?.wordId,
+            ],
+          });
         }}
-        isDisabled={!word1 || !word2}
+        isDisabled={
+          !word1 || !word2 || newlyLinkedTranslationGroups.length === 0
+        }
       >
         Link words
       </Button>
