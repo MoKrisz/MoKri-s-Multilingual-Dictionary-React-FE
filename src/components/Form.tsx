@@ -32,11 +32,21 @@ const Form = <T extends FieldValues>({
     defaultValues,
   });
 
+  const processForm = async (data: T) => {
+    try {
+      await onSubmit(data);
+
+      methods.reset();
+    } catch (error) {
+      throw new Error("Form submission failed.");
+    }
+  };
+
   return (
     <FormProvider {...methods}>
       <div className="justify-items-center">
         <h1 className="font-bold text-2xl m-3">{title}</h1>
-        <form className="w-2/3" onSubmit={methods.handleSubmit(onSubmit)}>
+        <form className="w-2/3" onSubmit={methods.handleSubmit(processForm)}>
           {children}
           <div className="flex justify-center my-3">
             <Button type="submit">{submitButtonText}</Button>
