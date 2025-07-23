@@ -18,6 +18,7 @@ import { getWordRelatedTranslationGroups } from "../../TranslationGroups/api";
 import TranslationGroupCard from "../../TranslationGroups/components/TranslationGroupCard";
 import { TranslationGroup } from "../../TranslationGroups/models";
 import { postTranslation } from "../api";
+import { Tooltip } from "../../../components/Tooltip";
 
 interface TranslationGroupContext {
   selectedTranslationGroups: TranslationGroup[];
@@ -218,7 +219,10 @@ const Translation: React.FC = () => {
       <>
         <h2 className="font-bold">Potential translation groups</h2>
         {potentialCards}
-        <h2 className="font-bold">Linked translation groups</h2>
+        <div className="flex gap-1">
+          <h2 className="font-bold">Linked translation groups</h2>
+          <Tooltip text="Translation groups that are already linked to the words, cannot be removed from this page, since it cannot be determined, which of the words should be removed from the translation group. To remove a word from a translation group, please use the navigational buttons on the translation group wanted to be modified." />
+        </div>
         {linkedCards}
         {newlyLinkedCards}
       </>
