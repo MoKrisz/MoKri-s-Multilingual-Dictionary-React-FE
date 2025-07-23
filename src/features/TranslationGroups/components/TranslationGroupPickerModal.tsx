@@ -5,6 +5,7 @@ import TranslationGroupForm from "./TranslationGroupForm";
 import TranslationGroupOData from "./TranslationGroupOData";
 import { useTranslationGroupContext } from "../../Translations/components/Translation";
 import { TranslationGroup } from "../models";
+import { queryClient } from "../../Words/api";
 
 interface TranslationGroupPickerModal {
   isOpen: boolean;
@@ -35,7 +36,7 @@ const TranslationGroupPickerModal: React.FC<TranslationGroupPickerModal> = ({
         </Button>
         <TranslationGroupForm
           onSuccessCallback={(translationGroup) => {
-            //TODO: invalidate odata query.
+            queryClient.invalidateQueries({ queryKey: ["translationGroup"] });
             onAddTranslationGroup([translationGroup]);
           }}
         />
