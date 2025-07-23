@@ -78,7 +78,13 @@ const TranslationGroupPickerModal: React.FC<TranslationGroupPickerModal> = ({
   }
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal
+      isOpen={isOpen}
+      onClose={() => {
+        onClose();
+        setIsCreationView(false);
+      }}
+    >
       {modalBody}
     </Modal>
   );
