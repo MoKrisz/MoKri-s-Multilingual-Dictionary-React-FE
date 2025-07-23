@@ -21,8 +21,7 @@ export default function NewWordPage() {
       </Link>
       <div className="lg:w-3/4 lg:mx-auto max-w-screen-lg">
         <Tabs
-          tabs={[{ key: "word", label: "Word", content: <WordForm mutationFunction={postWord} onSuccessFunction={onSuccess} />, length: 5 }]}
-          defaultTab="word"
+          tabs={[{ key: "word", label: "Word", content: <WordForm mutationFunction={postWord} onSuccessFunction={onSuccess} /> }]}
         />
       </div>
     </>

@@ -25,8 +25,9 @@ export default function Pagination({
   paginationFunctions,
 }: PaginationProps) {
   const maxPageIcons = 5;
-  const maxPages = Math.ceil(paginationData.dataCount / paginationData.dataPerPage);
-
+  const maxPages = Math.ceil(
+    paginationData.dataCount / paginationData.dataPerPage
+  );
   let pages;
 
   if (paginationData.currentPage < maxPageIcons - 1) {
@@ -109,9 +110,9 @@ export default function Pagination({
   }
 
   return (
-    <div className="flex justify-between border border-red-600 w-full m-1">
+    <div className="flex justify-between w-full p-2">
       <p>∑: {paginationData.dataCount}</p>
-      <nav className="flex flex-row gap-0.5 mx-auto">
+      <div className="flex flex-row gap-0.5 mx-auto">
         <Icon
           key={"page_first"}
           onClick={() => paginationFunctions.setPage(1)}
@@ -130,18 +131,18 @@ export default function Pagination({
         <Icon
           key={"page_next"}
           onClick={() => paginationFunctions.nextPage()}
-          isDisabled={paginationData.currentPage === maxPages}
+          isDisabled={paginationData.currentPage === maxPages || maxPages === 0}
         >
           <MdKeyboardArrowRight />
         </Icon>
         <Icon
           key={"page_last"}
           onClick={() => paginationFunctions.setPage(maxPages)}
-          isDisabled={paginationData.currentPage === maxPages}
+          isDisabled={paginationData.currentPage === maxPages || maxPages === 0}
         >
           <MdKeyboardDoubleArrowRight />
         </Icon>
-      </nav>
+      </div>
       <select
         defaultValue={paginationData.dataPerPage}
         onChange={(event) =>
@@ -151,7 +152,11 @@ export default function Pagination({
         }
       >
         {DataAmountPerPageValues.map((amount) => {
-          return <option value={amount}>{amount}</option>;
+          return (
+            <option key={`data-per-page-${amount}`} value={amount}>
+              {amount}
+            </option>
+          );
         })}
       </select>
     </div>

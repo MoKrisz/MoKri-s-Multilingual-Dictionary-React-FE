@@ -1,29 +1,29 @@
-import { Dispatch, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Filters,
   SearchWordsAction,
   SearchWordsState,
 } from "../state/searchWordsReducer";
 import { getFormLanguageOptions, getFormWordTypeOptions } from "../utils";
+import { ODataSearchComponentProps } from "../../../components/ODataContainer";
 
-interface SearchWordsProps {
-  state: SearchWordsState;
-  dispatch: Dispatch<SearchWordsAction>;
-}
-
-export default function WordsSearchBar({ state, dispatch }: SearchWordsProps) {
-  const [searchedWord, setSearchedWord] = useState<string>(state.word);
-  const [advancedFilters, setAdvancedFilters] = useState<Filters>(state.filters);
+const WordODataSearchBar: React.FC<
+  ODataSearchComponentProps<SearchWordsState, SearchWordsAction>
+> = ({ searchState, dispatch }) => {
+  const [searchedWord, setSearchedWord] = useState<string>(searchState.word);
+  const [advancedFilters, setAdvancedFilters] = useState<Filters>(
+    searchState.filters
+  );
 
   useEffect(() => {
-    if (!state.isAdvanced && searchedWord !== state.word) {
+    if (!searchState.isAdvanced && searchedWord !== searchState.word) {
       const handler = setTimeout(() => {
         dispatch({ type: "SET_WORD_SEARCH", word: searchedWord });
       }, 500);
 
       return () => clearTimeout(handler);
     }
-  }, [state.isAdvanced, searchedWord, state.word, dispatch]);
+  }, [searchState.isAdvanced, searchedWord, searchState.word, dispatch]);
 
   return (
     <div className="flex-col">
@@ -39,10 +39,12 @@ export default function WordsSearchBar({ state, dispatch }: SearchWordsProps) {
           className="border border-black py-1 px-2 rounded-md bg-green-900 text-white hover:bg-green-600"
           onClick={() => dispatch({ type: "TOGGLE_ADVANCED" })}
         >
-          {state.isAdvanced ? "Hide advanced search" : "Show advanced search"}
+          {searchState.isAdvanced
+            ? "Hide advanced search"
+            : "Show advanced search"}
         </button>
       </div>
-      {state.isAdvanced && (
+      {searchState.isAdvanced && (
         <div className="flex justify-center gap-20 items-end">
           <div className="flex flex-col ">
             <label>Article</label>
@@ -101,7 +103,13 @@ export default function WordsSearchBar({ state, dispatch }: SearchWordsProps) {
 
           <button
             className="border border-black px-2 py-1 rounded-md bg-green-900 text-white hover:bg-green-600"
-            onClick={() => dispatch({type: "SET_WORD_FILTERS", word: searchedWord, filters: advancedFilters})}
+            onClick={() =>
+              dispatch({
+                type: "SET_WORD_FILTERS",
+                word: searchedWord,
+                filters: advancedFilters,
+              })
+            }
           >
             Search
           </button>
@@ -109,4 +117,6 @@ export default function WordsSearchBar({ state, dispatch }: SearchWordsProps) {
       )}
     </div>
   );
-}
+};
+
+export default WordODataSearchBar;

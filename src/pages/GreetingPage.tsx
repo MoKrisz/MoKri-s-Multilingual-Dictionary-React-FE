@@ -11,7 +11,7 @@ export default function GreetingPage() {
           Multilingual Dictionary
         </h1>
         <Link to="menu">
-          <Button>Get started!</Button>
+          <Button extraStyle="font-bold">Get started!</Button>
         </Link>
       </section>
     </main>
