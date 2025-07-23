@@ -23,7 +23,7 @@ const TranslationGroupPickerModal: React.FC<TranslationGroupPickerModal> = ({
 
   let modalBody: React.ReactNode;
 
-  if (isCreationView) {
+  if (isOpen && isCreationView) {
     modalBody = (
       <>
         <Button
@@ -41,7 +41,7 @@ const TranslationGroupPickerModal: React.FC<TranslationGroupPickerModal> = ({
         />
       </>
     );
-  } else {
+  } else if (isOpen) {
     modalBody = (
       <>
         <div className="w-full">
