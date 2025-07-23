@@ -53,16 +53,14 @@ export default function WordPage() {
                     onSuccessFunction={onSuccess}
                     wordData={data}
                   />
-                ),
-                length: 5,
+                )
               },
               {
                 key: "translation",
                 label: "Translations",
                 content: (
                   <p>Here goes the translations tab content</p>
-                ),
-                length: 7,
+                )
               },
             ]}
             defaultTab="word"
