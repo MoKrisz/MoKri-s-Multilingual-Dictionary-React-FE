@@ -268,7 +268,7 @@ const Translation: React.FC = () => {
           <AutofillSearchBar languageId={language2Id} onFill={setWord2} />
         </div>
       </div>
-      <div className="flex flex-col border border-red-700 w-2/3 m-5 gap-4">
+      <div className="flex flex-col w-2/3 m-5 gap-4">
         {translationGroupListContent}
         <Button
           extraStyle="flex items-center gap-2 justify-center w-2/4"
