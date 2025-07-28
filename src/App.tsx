@@ -12,21 +12,22 @@ import TranslationPage from "./features/Translations/pages/TranslationPage";
 const router = createBrowserRouter([
   {
     path: "/",
+    element: <RootLayout />,
     children: [
       { index: true, element: <GreetingPage /> },
       {
-        path: "menu",
-        element: <RootLayout />,
+        path: "words",
+        element: <MenuPage />,
         children: [
-          { index: true, element: <MenuPage /> },
-          { path: "new-word", element: <NewWordPage /> },
-          { path: "word/:wordId", element: <WordPage /> },
-          { path: "translation", element: <TranslationPage /> },
-          {
-            path: "new-translation-group",
-            element: <NewTranslationGroupPage />,
-          },
+          { path: "new", element: <NewWordPage /> },
+          { path: ":wordId", element: <WordPage /> },
         ],
+      },
+      { path: "translation", element: <TranslationPage /> },
+      {
+        path: "translation-groups",
+        element: <MenuPage />,
+        children: [{ path: "new", element: <NewTranslationGroupPage /> }],
       },
     ],
   },
