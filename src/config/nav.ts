@@ -13,16 +13,10 @@ export interface MenuItem {
 export const menuItems: MenuItem[] = [
   {
     label: "Words",
-    height: 75,
+    height: 40,
     subItems: [
       { label: "Word List", path: "/words" },
       { label: "Create Word", path: "/words/new" },
-      { label: "Create Word2", path: "/words/new" },
-      { label: "Create Word3", path: "/words/new" },
-      { label: "Create Word4", path: "/words/new" },
-      { label: "Create Word5", path: "/words/new" },
-      { label: "Create Word6", path: "/words/new" },
-      { label: "Create Word7", path: "/words/new" },
     ],
   },
   {
@@ -36,7 +30,7 @@ export const menuItems: MenuItem[] = [
   { label: "Manage Translations", path: "/translation", height: 0 },
   {
     label: "Practice",
-    height: 35,
+    height: 40,
     subItems: [
       { label: "Guess the Article", path: "practice/guess-the-article" },
     ],

@@ -17,8 +17,8 @@ const router = createBrowserRouter([
       { index: true, element: <GreetingPage /> },
       {
         path: "words",
-        element: <MenuPage />,
         children: [
+          { index: true, element: <MenuPage /> },
           { path: "new", element: <NewWordPage /> },
           { path: ":wordId", element: <WordPage /> },
         ],
@@ -26,8 +26,10 @@ const router = createBrowserRouter([
       { path: "translation", element: <TranslationPage /> },
       {
         path: "translation-groups",
-        element: <MenuPage />,
-        children: [{ path: "new", element: <NewTranslationGroupPage /> }],
+        children: [
+          { index: true, element: <MenuPage /> },
+          { path: "new", element: <NewTranslationGroupPage /> },
+        ],
       },
     ],
   },

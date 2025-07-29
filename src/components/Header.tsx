@@ -29,13 +29,16 @@ export default function Header() {
     <>
       <div
         key="backdrop"
-        className={`transition-opacity duration-200 ${
+        className={`transition-opacity duration-200 z-40 ${
           activeMenuItem && hasSubmenuItems
             ? "opacity-100 fixed left-0 right-0 bottom-0 top-0 backdrop-blur-sm"
             : "opacity-0"
         }`}
       />
-      <header className={`flex-col relative`} onMouseLeave={handleMouseLeave}>
+      <header
+        className="flex-col relative z-50"
+        onMouseLeave={handleMouseLeave}
+      >
         <div className="p-2 flex bg-lincolngreendarker shadow-md">
           <Link
             to="/"
@@ -85,6 +88,7 @@ export default function Header() {
                         <Link
                           to={sub.path}
                           className="text-sm text-gray-800 hover:text-black hover:font-semibold px-4 transition-colors duration-200"
+                          onClick={handleMouseLeave}
                         >
                           {sub.label}
                         </Link>
