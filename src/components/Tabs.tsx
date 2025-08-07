@@ -9,15 +9,17 @@ interface TabsProps {
 const Tabs: React.FC<TabsProps> = ({ tabs, defaultTab }) => {
   const [activeTab, setActiveTab] = useState(defaultTab ?? tabs[0].key);
 
-  const activeTabFormat = "bg-lincolngreendarker border-b-lincolngreendarker";
-  const nonActiveTabFormat = "bg-lincolngreen hover:bg-lincolngreendarker";
+  const activeTabFormat =
+    "bg-background-secondary border-b-background-secondary";
+  const nonActiveTabFormat =
+    "bg-background-quaternary hover:bg-background-secondary";
 
   return (
     <>
       <div>
         {tabs.map((tab) => (
           <button
-            className={`-mb-px px-5 rounded-t-xl border border-black ${
+            className={`-mb-px px-5 rounded-t-xl border border-black transition-all duration-200 ${
               tab.key === activeTab ? activeTabFormat : nonActiveTabFormat
             }`}
             key={tab.key}
@@ -27,7 +29,7 @@ const Tabs: React.FC<TabsProps> = ({ tabs, defaultTab }) => {
           </button>
         ))}
       </div>
-      <div className="bg-lincolngreendarker rounded-e-3xl rounded-b-3xl border border-l-black border-r-black border-b-black border-t-black">
+      <div className="bg-background-secondary rounded-e-3xl rounded-b-3xl border border-l-black border-r-black border-b-black border-t-black">
         {tabs.find((t) => t.key === activeTab)?.content}
       </div>
     </>

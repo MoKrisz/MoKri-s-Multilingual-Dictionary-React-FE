@@ -50,7 +50,6 @@ const TranslationGroupPickerModal: React.FC<TranslationGroupPickerModal> = ({
           <TranslationGroupOData />
         </div>
         <Button
-          extraStyle="bg-lincolngreendarker"
           onClick={() => {
             onAddTranslationGroup(selectedTranslationGroups);
             resetSelection();
@@ -68,7 +67,6 @@ const TranslationGroupPickerModal: React.FC<TranslationGroupPickerModal> = ({
             onClick={() => {
               setIsCreationView(true);
             }}
-            extraStyle="bg-lincolngreendarker"
           >
             Add new Translation group
           </Button>

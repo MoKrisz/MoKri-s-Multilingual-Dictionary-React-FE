@@ -5,11 +5,17 @@ interface MenuItemProps {
   item: MenuItemType;
   onHoverStart: () => void;
   onHoverEnd?: () => void;
+  isActive: boolean;
 }
 
-export const MenuItem: React.FC<MenuItemProps> = ({ item, onHoverStart }) => {
-  const style =
-    "px-2 text-sm font-semibold text-gray-800 hover:text-black transition-colors duration-200";
+export const MenuItem: React.FC<MenuItemProps> = ({
+  item,
+  onHoverStart,
+  isActive,
+}) => {
+  const style = `px-2 text-text-primary text-sm font-semibold text-gray-800 transition-transform duration-200 ${
+    isActive ? "scale-110" : ""
+  }`;
 
   if (item.path) {
     return (

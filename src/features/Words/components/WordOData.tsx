@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+import Button from "../../../components/Button";
 import ODataContainer from "../../../components/ODataContainer";
 import { ColumnOrderEnum } from "../../../models/ColumnOrderEnum";
 import { fetchWords } from "../api";
@@ -22,6 +24,14 @@ const WordOData: React.FC = () => {
     return queryParams;
   };
 
+  const renderToolbarActions = () => {
+    return (
+      <Link to="new">
+        <Button extraStyle="py-1">Add new Word</Button>
+      </Link>
+    );
+  };
+
   return (
     <ODataContainer
       queryKeyName="words"
@@ -31,6 +41,7 @@ const WordOData: React.FC = () => {
       SearchComponent={WordODataSearchBar}
       DisplayComponent={WordOdataTable}
       handleQuerySearch={handleQuerySearch}
+      renderToolbarActions={renderToolbarActions}
     />
   );
 };

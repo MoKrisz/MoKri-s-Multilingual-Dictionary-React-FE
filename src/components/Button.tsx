@@ -22,7 +22,7 @@ export default function Button({
     <button
       type={type ?? "button"}
       className={twMerge(
-        "bg-lincolngreen p-2 rounded-lg border border-black hover:bg-lincolngreenlighter disabled:opacity-50 disabled:hover:bg-lincolngreen",
+        "bg-button-background text-button-text p-2 rounded-lg border border-button-border hover:bg-button-background-hover disabled:opacity-50 disabled:hover:bg-button-background transition-color duration-200 shadow-md",
         extraStyle
       )}
       onClick={onClick}

@@ -46,6 +46,7 @@ interface ODataContainerProps<
     | ComponentType<
         ODataDisplayComponentWithSortingProps<TData, TSortingState>
       >;
+  renderToolbarActions?: () => React.ReactNode;
 }
 
 function isSortable<TData, TSortingState>(
@@ -75,6 +76,7 @@ const ODataContainer = <
   handleQuerySearch,
   SearchComponent,
   DisplayComponent,
+  renderToolbarActions,
 }: ODataContainerProps<
   TData,
   TSearchState,
@@ -114,7 +116,12 @@ const ODataContainer = <
 
   return (
     <div className="w-full">
-      <SearchComponent searchState={searchState} dispatch={searchDispatch} />
+      <div className={`${renderToolbarActions ? "flex justify-between" : ""}`}>
+        <SearchComponent searchState={searchState} dispatch={searchDispatch} />
+        {renderToolbarActions && (
+          <div className="items-end">{renderToolbarActions()}</div>
+        )}
+      </div>
       {isSortable(DisplayComponent, initialSortingState) ? (
         <DisplayComponent
           data={data}

@@ -83,7 +83,7 @@ const TagInput: React.FC<TagInputProps> = ({
     return (
       <div
         key={`tag_${tag.tagId}_${tag.text}`}
-        className="flex items-center px-1 rounded bg-slate-300 h-6"
+        className="flex items-center px-1 rounded h-6 bg-complementary-background-primary text-complementary-text"
         onClick={(e) => {
           e.stopPropagation();
         }}
@@ -91,7 +91,7 @@ const TagInput: React.FC<TagInputProps> = ({
         <span className="text-sm">{tag.text}</span>
         <button
           type="button"
-          className="mx-1 p-0.5 bg-red-600 rounded-lg text-white hover:bg-red-500"
+          className="ml-2 transition-colors duration-200 hover:text-white"
           onClick={() => {
             handleDeleteTag(tag);
           }}
@@ -110,7 +110,7 @@ const TagInput: React.FC<TagInputProps> = ({
   return (
     <div
       className={twMerge(
-        "flex flex-wrap items-start content-start gap-2 p-1 h-full bg-slate-100 rounded-lg cursor-text overflow-y-auto",
+        "flex flex-wrap items-start content-start gap-2 p-1 h-full rounded-lg cursor-text overflow-y-auto bg-input-background",
         extraStyle
       )}
       onClick={handleContainerClick}

@@ -28,12 +28,13 @@ const TranslationGroupCard: React.FC<TranslationGroupCardProps> = ({
     : onSelect;
 
   const baseStyle =
-    " border border-black bg-lincolngreendarker hover:bg-lincolngreenlighter group";
-  const selectedStyle = " border-4 border-yellow-400 shadow-lg scale-[1.02]";
+    " border-2  bg-complementary-background-secondary hover:bg-complementary-background-secondary-hover group";
+  const selectedStyle =
+    " border-4 bg-complementary-background-secondary-hover shadow-lg scale-105";
 
   return (
     <div
-      className={`flex flex-col gap-2 p-2 rounded-2xl${
+      className={`flex flex-col gap-2 p-2 rounded-2xl transition-all duration-200 border-complementary-border-secondary${
         isSelected ? selectedStyle : baseStyle
       }`}
       onClick={handleSelect}
@@ -46,7 +47,7 @@ const TranslationGroupCard: React.FC<TranslationGroupCardProps> = ({
         {translationGroup.tags?.map((tag) => (
           <p
             key={`translation-group-card-${translationGroup.translationGroupId}-tag-${tag.tagId}`}
-            className="bg-lincolngreenlighter border border-black px-2 rounded-lg italic group-hover:bg-lincolngreendarker"
+            className="bg-complementary-background-primary text-complementary-text border-2 border-complementary-border-primary px-2 rounded-lg italic text-sm group-hover:bg-complementary-background-primary-hover"
           >
             {tag.text}
           </p>
