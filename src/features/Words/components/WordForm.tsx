@@ -1,5 +1,11 @@
 import FormInput, { Option } from "./FormInput";
-import { LanguageCodeEnum, Word, WordRefs, WordState, WordTypeEnum } from "../models";
+import {
+  LanguageCodeEnum,
+  Word,
+  WordRefs,
+  WordState,
+  WordTypeEnum,
+} from "../models";
 import { ReactNode, useEffect, useRef, useState } from "react";
 import {
   getArticles,
@@ -11,6 +17,7 @@ import {
 import validate from "../services/validation";
 import { useMutation } from "@tanstack/react-query";
 import { PostOrPutData } from "../api";
+import Button from "../../../components/Button";
 
 interface WordDependencyState {
   language: LanguageCodeEnum;
@@ -51,7 +58,7 @@ export default function WordForm({
 
   const { mutate, isPending } = useMutation({
     mutationFn: mutationFunction,
-    onSuccess: onSuccessFunction
+    onSuccess: onSuccessFunction,
   });
 
   useEffect(() => {
@@ -114,12 +121,12 @@ export default function WordForm({
 
     const formData = new FormData(event.currentTarget);
     if (wordData) {
-      formData.append("wordId", ""+wordData.wordId);
+      formData.append("wordId", "" + wordData.wordId);
     }
     const data = Object.fromEntries(formData);
 
     const json = JSON.stringify(data);
-    mutate({ wordId: wordData?.wordId,  data: json });
+    mutate({ wordId: wordData?.wordId, data: json });
   }
 
   let articleOptions: Option[] = [];
@@ -160,7 +167,7 @@ export default function WordForm({
           onChange={handleLanguageChange}
           reference={wordRefs.languageRef}
           className="w-32 md:col-start-2"
-          defaultValue={wordData ? ""+wordData!.languageCode : undefined}
+          defaultValue={wordData ? "" + wordData!.languageCode : undefined}
         >
           Language:
         </FormInput>
@@ -173,7 +180,7 @@ export default function WordForm({
           onChange={handleWordTypeChange}
           reference={wordRefs.typeRef}
           className="w-32 col-start-3 md:col-start-3"
-          defaultValue={wordData ? ""+wordData!.type : undefined}
+          defaultValue={wordData ? "" + wordData!.type : undefined}
         >
           Type:
         </FormInput>
@@ -229,13 +236,13 @@ export default function WordForm({
           </div>
         )}
 
-        <button
+        <Button
           type="submit"
-          className="w-32 p-1 mt-4 place-self-center row-start-7 col-start-2 col-span-2 md:row-start-5 md:col-start-3 md:col-span-1 bg-lincolngreen hover:bg-lincolngreenlighter rounded-md border border-green-900"
-          disabled={isPending}
+          extraStyle="py-1 px-4 place-self-center row-start-7 col-start-2 col-span-2 md:row-start-5 md:col-start-3 md:col-span-1"
+          isDisabled={isPending}
         >
           {isPending ? "Submitting..." : "Save"}
-        </button>
+        </Button>
       </form>
     </div>
   );

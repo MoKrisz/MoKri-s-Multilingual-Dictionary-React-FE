@@ -52,6 +52,7 @@ export default function Header() {
                 key={item.label}
                 item={item}
                 onHoverStart={() => handleMouseEnter(item.label)}
+                isActive={item.label === activeMenuItem}
               />
             ))}
           </nav>
