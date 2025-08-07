@@ -36,13 +36,13 @@ export default function Header() {
         }`}
       />
       <header
-        className="flex-col relative z-50"
+        className="flex-col relative z-50 mb-5 bg-background-secondary"
         onMouseLeave={handleMouseLeave}
       >
-        <div className="p-2 flex bg-lincolngreendarker shadow-md">
+        <div className="p-2 flex shadow-md">
           <Link
             to="/"
-            className="text-sm font-bold leading-tight whitespace-nowrap"
+            className="text-text-primary text-sm font-bold leading-tight whitespace-nowrap"
           >
             MoKri's <br /> Multilingual Dictionary
           </Link>
@@ -68,7 +68,7 @@ export default function Header() {
               }}
               exit={{ height: 0 }}
               transition={{ duration: 0.2 }}
-              className="absolute left-0 right-0 bg-lincolngreendarker overflow-hidden shadow-lg"
+              className="absolute left-0 right-0 bg-background-secondary overflow-hidden shadow-lg"
             >
               <AnimatePresence
                 mode="wait"
@@ -87,7 +87,7 @@ export default function Header() {
                       <div className="flex justify-center" key={sub.label}>
                         <Link
                           to={sub.path}
-                          className="text-sm text-gray-800 hover:text-black hover:font-semibold px-4 transition-colors duration-200"
+                          className="text-text-primary text-sm hover:font-semibold px-4 transition-transform duration-200 hover:scale-105"
                           onClick={handleMouseLeave}
                         >
                           {sub.label}

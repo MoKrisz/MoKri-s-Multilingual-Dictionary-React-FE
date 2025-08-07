@@ -32,13 +32,10 @@ const Modal: React.FC<ModalProps> = ({ children, isOpen, onClose }) => {
     <dialog
       ref={modalRef}
       onClose={onClose}
-      className="w-2/3 rounded-lg shadow-lg border border-gray-300 bg-lincolngreen backdrop:bg-black/50"
+      className="w-2/3 rounded-lg shadow-lg border border-border-secondary bg-background-secondary backdrop:bg-black/50 backdrop:backdrop-blur-sm"
     >
       <div className="flex justify-end p-1">
-        <Button
-          extraStyle="p-1 bg-lincolngreendarker hover:bg-lincolngreenlighter"
-          onClick={onClose}
-        >
+        <Button extraStyle="p-1" onClick={onClose}>
           <CgClose />
         </Button>
       </div>

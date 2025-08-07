@@ -37,8 +37,7 @@ export default function FormInput({
   useEffect(() => {
     if (disabled) {
       setValue("");
-    }
-    else if(defaultValue) {
+    } else if (defaultValue) {
       setValue(defaultValue);
     }
   }, [disabled]);
@@ -53,7 +52,7 @@ export default function FormInput({
         name={name}
         value={value}
         onChange={(e) => setValue(e.target.value)}
-        className="rounded-lg border border-black bg-cream px-3 py-1 disabled:opacity-50"
+        className="rounded-lg border border-black bg-input-background px-3 py-1 disabled:opacity-50"
         disabled={disabled}
         ref={reference as RefObject<HTMLInputElement>}
       ></input>
@@ -74,7 +73,7 @@ export default function FormInput({
       <select
         id={id}
         name={name}
-        className="rounded-lg border border-black bg-cream px-2 py-1 disabled:opacity-50"
+        className="rounded-lg border border-black bg-input-background px-2 py-1 disabled:opacity-50"
         onChange={(event) => {
           handleSelectChange(event);
         }}
@@ -83,7 +82,7 @@ export default function FormInput({
         value={value}
       >
         {options?.map((option) => (
-          <option key={option.value} value={option.value} className="bg-cream">
+          <option key={option.value} value={option.value}>
             {option.name}
           </option>
         ))}

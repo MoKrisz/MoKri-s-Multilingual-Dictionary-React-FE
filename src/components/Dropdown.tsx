@@ -20,7 +20,7 @@ const Dropdown: React.FC<DropdownProps> = ({
     <select
       id="language"
       name="languageCode"
-      className={`rounded-lg border border-black bg-cream px-2 py-1 disabled:opacity-50 ${extraStyle}`}
+      className={`rounded-lg border border-black bg-input-background px-2 py-1 disabled:opacity-50 ${extraStyle}`}
       disabled={isDisabled}
       onChange={(event) => onChange(+event.target.value)}
     >

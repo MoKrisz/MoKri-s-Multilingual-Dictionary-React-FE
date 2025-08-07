@@ -2,7 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-html, body, #root {
-    height: 100%;
-    background: theme('colors.celadon');
+html,
+body,
+#root {
+  height: 100%;
 }

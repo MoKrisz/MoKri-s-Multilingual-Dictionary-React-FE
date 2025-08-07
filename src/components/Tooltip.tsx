@@ -15,7 +15,7 @@ export const Tooltip: React.FC<TooltipProps> = ({ text }) => {
         onMouseLeave={() => setIsVisible(false)}
       />
       <div
-        className={`absolute z-10 px-3 py-1 text-sm text-center text-white bg-gray-800 rounded shadow-lg bottom-full left-1/2 -translate-x-1/2 w-screen max-w-md transition-opacity duration-200 pointer-events-none ${
+        className={`absolute z-10 px-3 py-1 text-sm text-center text-complementary-tertiary-text bg-complementary-tertiary-background rounded shadow-lg bottom-full left-1/2 -translate-x-1/2 w-screen max-w-md transition-opacity duration-200 pointer-events-none bg-opacity-95 ${
           isVisible ? "opacity-100" : "opacity-0"
         }`}
       >
