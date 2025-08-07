@@ -19,7 +19,7 @@ const TranslationGroupFormFields: React.FC = () => {
         error={errors.description?.message}
       >
         <input
-          className="px-2"
+          className="px-2 bg-input-background rounded-md"
           id="translationGroupDescription"
           {...register("description")}
         />

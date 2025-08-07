@@ -4,6 +4,7 @@ import { fetchWord, PutWord, queryClient } from "../api";
 import { useQuery } from "@tanstack/react-query";
 import { ReactNode } from "react";
 import Tabs from "../../../components/Tabs";
+import BackButton from "../../../components/BackButton";
 
 type WordParams = {
   wordId: string;
@@ -35,13 +36,8 @@ export default function WordPage() {
   } else if (data) {
     formComponent = (
       <>
-        <Link
-          to="/menu"
-          className="ml-12 inline-block py-1 px-4 bg-lincolngreen hover:bg-lincolngreenlighter rounded-md border border-green-900"
-        >
-          <button>Back</button>
-        </Link>
         <div className="lg:w-3/4 lg:mx-auto max-w-screen-lg">
+          <BackButton returnTo="/words" />
           <Tabs
             tabs={[
               {
@@ -53,14 +49,12 @@ export default function WordPage() {
                     onSuccessFunction={onSuccess}
                     wordData={data}
                   />
-                )
+                ),
               },
               {
                 key: "translation",
                 label: "Translations",
-                content: (
-                  <p>Here goes the translations tab content</p>
-                )
+                content: <p>Here goes the translations tab content</p>,
               },
             ]}
             defaultTab="word"

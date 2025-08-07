@@ -48,7 +48,7 @@ const TranslationGroupODataSearchBar: React.FC<
           label="Description"
           inputValue={descriptionState}
           setInputValue={setDescriptionState}
-          extraStyle="bg-lincolngreendarker"
+          extraStyle="bg-input-background"
         />
       </div>
       <div className="flex-col w-3/5 max-w-xl">

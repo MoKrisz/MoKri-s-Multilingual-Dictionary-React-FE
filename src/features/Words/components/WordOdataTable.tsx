@@ -5,6 +5,7 @@ import { BsPencilFill } from "react-icons/bs";
 import { ColumnOrderEnum } from "../../../models/ColumnOrderEnum";
 import { Word } from "../models";
 import { ODataDisplayComponentWithSortingProps } from "../../../components/ODataContainer";
+import Button from "../../../components/Button";
 
 export type WordSorting = {
   article: ColumnOrderEnum;
@@ -38,8 +39,8 @@ const WordOdataTable: React.FC<
   };
 
   return (
-    <table className="w-full mt-5 border border-black">
-      <thead className="bg-lincolngreen">
+    <table className="w-full mt-5 border border-border-secondary">
+      <thead className="bg-background-secondary">
         <tr>
           <th className="border border-black">
             <div className="flex items-center justify-between mx-4 my-2">
@@ -82,8 +83,15 @@ const WordOdataTable: React.FC<
       </thead>
       <tbody>
         {words &&
-          words.data.map((word) => (
-            <tr key={word.wordId} className="bg-lincolngreenlighter">
+          words.data.map((word, idx) => (
+            <tr
+              key={word.wordId}
+              className={
+                idx % 2 == 0
+                  ? "bg-background-tertiary"
+                  : "bg-background-quaternary"
+              }
+            >
               <td className="border border-black text-center">
                 {word.article}
               </td>
@@ -96,10 +104,12 @@ const WordOdataTable: React.FC<
               </td>
               <td className="border border-black p-1">
                 <Link
-                  to={`word/${word.wordId}`}
+                  to={`${word.wordId}`}
                   className="inline-block align-middle"
                 >
-                  <BsPencilFill className="p-1 h-7 w-8 border border-black rounded-lg bg-green-900 fill-white hover:bg-green-600" />
+                  <Button extraStyle="p-1">
+                    <BsPencilFill className="" />
+                  </Button>
                 </Link>
               </td>
             </tr>

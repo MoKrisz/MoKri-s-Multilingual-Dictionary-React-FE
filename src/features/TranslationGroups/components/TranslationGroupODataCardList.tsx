@@ -22,7 +22,7 @@ const TranslationGroupODataCardList: React.FC<
     content = <p>No translation group is available.</p>;
   }
 
-  return <div>{content}</div>;
+  return <div className="flex flex-col gap-2">{content}</div>;
 };
 
 export default TranslationGroupODataCardList;

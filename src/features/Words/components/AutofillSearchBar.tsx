@@ -43,7 +43,7 @@ export default function AutofillSearchBar({
   return (
     <div className="relative w-full">
       <AutofillInput
-        style="rounded-lg bg-lincolngreen border border-lincolngreendarker py-1 px-2 placeholder:text-black focus:bg-lincolngreenlighter disabled:opacity-30 disabled:bg-gray-200"
+        style="rounded-lg bg-input-background border border-black py-1 px-2 placeholder:text-black disabled:opacity-30 disabled:bg-gray-200"
         inputValue={inputState}
         setInputValue={handleSetInputValue}
         queryKeys={["word", String(languageId)]}

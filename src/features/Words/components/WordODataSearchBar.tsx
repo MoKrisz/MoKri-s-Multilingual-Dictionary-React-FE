@@ -6,6 +6,7 @@ import {
 } from "../state/searchWordsReducer";
 import { getFormLanguageOptions, getFormWordTypeOptions } from "../utils";
 import { ODataSearchComponentProps } from "../../../components/ODataContainer";
+import Button from "../../../components/Button";
 
 const WordODataSearchBar: React.FC<
   ODataSearchComponentProps<SearchWordsState, SearchWordsAction>
@@ -26,30 +27,30 @@ const WordODataSearchBar: React.FC<
   }, [searchState.isAdvanced, searchedWord, searchState.word, dispatch]);
 
   return (
-    <div className="flex-col">
-      <div className="flex justify-center gap-4">
+    <div className="flex-col w-2/3">
+      <div className="flex gap-4">
         <input
-          className="w-1/3 px-2 bg-lincolngreen focus:bg-lincolngreenlighter rounded-md placeholder:text-black"
+          className="px-2 bg-input-background rounded-md placeholder:text-black"
           type="text"
           value={searchedWord}
           onChange={(e) => setSearchedWord(e.target.value)}
           placeholder="Search word..."
         />
-        <button
-          className="border border-black py-1 px-2 rounded-md bg-green-900 text-white hover:bg-green-600"
+        <Button
+          extraStyle="py-1"
           onClick={() => dispatch({ type: "TOGGLE_ADVANCED" })}
         >
           {searchState.isAdvanced
             ? "Hide advanced search"
             : "Show advanced search"}
-        </button>
+        </Button>
       </div>
       {searchState.isAdvanced && (
-        <div className="flex justify-center gap-20 items-end">
+        <div className="flex mt-3 gap-4 items-end">
           <div className="flex flex-col ">
             <label>Article</label>
             <input
-              className="px-2 py-1 bg-lincolngreen focus:bg-lincolngreenlighter rounded-md"
+              className="px-2 py-1 bg-input-background rounded-md w-20"
               type="text"
               value={advancedFilters.article}
               onChange={(e) =>
@@ -63,7 +64,7 @@ const WordODataSearchBar: React.FC<
           <div className="flex flex-col">
             <label>Type</label>
             <select
-              className="px-2 py-1 bg-lincolngreen focus:bg-lincolngreenlighter rounded-md"
+              className="px-2 py-1 bg-input-background rounded-md"
               value={advancedFilters.type}
               onChange={(e) =>
                 setAdvancedFilters((prevstate) => ({
@@ -83,7 +84,7 @@ const WordODataSearchBar: React.FC<
           <div className="flex flex-col">
             <label>Language</label>
             <select
-              className="px-2 py-1 bg-lincolngreen focus:bg-lincolngreenlighter rounded-md"
+              className="px-2 py-1 bg-input-background focus:bg-lincolngreenlighter rounded-md"
               value={advancedFilters.languageCode}
               onChange={(e) =>
                 setAdvancedFilters((prevState) => ({
@@ -101,8 +102,8 @@ const WordODataSearchBar: React.FC<
             </select>
           </div>
 
-          <button
-            className="border border-black px-2 py-1 rounded-md bg-green-900 text-white hover:bg-green-600"
+          <Button
+            extraStyle="py-1"
             onClick={() =>
               dispatch({
                 type: "SET_WORD_FILTERS",
@@ -112,7 +113,7 @@ const WordODataSearchBar: React.FC<
             }
           >
             Search
-          </button>
+          </Button>
         </div>
       )}
     </div>

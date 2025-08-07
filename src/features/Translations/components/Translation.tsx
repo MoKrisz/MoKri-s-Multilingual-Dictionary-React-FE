@@ -246,7 +246,7 @@ const Translation: React.FC = () => {
         Add Translation
       </h1>
       <div className="flex justify-between">
-        <div className="flex flex-col ml-10 gap-3">
+        <div className="flex flex-col ml-10 gap-2">
           <h2>Word to be translated</h2>
           <Dropdown
             options={languageOptions1}
@@ -256,7 +256,7 @@ const Translation: React.FC = () => {
           />
           <AutofillSearchBar languageId={language1Id} onFill={setWord1} />
         </div>
-        <div className="flex flex-col mr-10 gap-3">
+        <div className="flex flex-col mr-10 gap-2">
           <h2>Translation</h2>
           <Dropdown
             options={languageOptions2}

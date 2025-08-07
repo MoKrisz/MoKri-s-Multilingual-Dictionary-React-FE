@@ -1,6 +1,5 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import GreetingPage from "./pages/GreetingPage";
-import MenuPage from "./pages/MenuPage";
 import { QueryClientProvider } from "@tanstack/react-query";
 import RootLayout from "./pages/RootLayout";
 import NewWordPage from "./features/Words/pages/NewWordPage";
@@ -8,6 +7,7 @@ import { queryClient } from "./features/Words/api";
 import WordPage from "./features/Words/pages/WordPage";
 import NewTranslationGroupPage from "./features/TranslationGroups/pages/NewTranslationGroupPage";
 import TranslationPage from "./features/Translations/pages/TranslationPage";
+import WordListPage from "./features/Words/pages/WordListPage";
 
 const router = createBrowserRouter([
   {
@@ -18,7 +18,7 @@ const router = createBrowserRouter([
       {
         path: "words",
         children: [
-          { index: true, element: <MenuPage /> },
+          { index: true, element: <WordListPage /> },
           { path: "new", element: <NewWordPage /> },
           { path: ":wordId", element: <WordPage /> },
         ],
@@ -27,7 +27,7 @@ const router = createBrowserRouter([
       {
         path: "translation-groups",
         children: [
-          { index: true, element: <MenuPage /> },
+          { index: true, element: <WordListPage /> },
           { path: "new", element: <NewTranslationGroupPage /> },
         ],
       },

@@ -144,6 +144,7 @@ export default function Pagination({
         </Icon>
       </div>
       <select
+        className="bg-input-background rounded-md"
         defaultValue={paginationData.dataPerPage}
         onChange={(event) =>
           paginationFunctions.setDataPerPage(
