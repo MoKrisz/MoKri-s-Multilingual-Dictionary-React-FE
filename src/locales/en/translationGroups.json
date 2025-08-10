@@ -1,0 +1,11 @@
+{
+  "translationGroup": "Translation Group",
+  "createTitle": "Create new Translation Group",
+  "createButton": "Create Translation Group",
+  "description": "Translation Group description",
+  "errors": {
+    "description": {
+      "required": "Translation Group description must have a value."
+    }
+  }
+}

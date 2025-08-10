@@ -1,0 +1,16 @@
+{
+  "article": "Article",
+  "word": "Word",
+  "type": "Type",
+  "language": "Language",
+  "plural": "Plural",
+  "conjugation": "Conjugation",
+  "searchBarPlaceholder": "Search word...",
+  "add": "Add new Word",
+  "getWords": "Getting the Words...",
+  "errorGetWords": "Something went wrong while getting the Words",
+  "getWord": "Getting the Word...",
+  "errorGetWord": "Something went wrong while getting the Word",
+  "create": "Create a new Word",
+  "translations": "Translations"
+}
