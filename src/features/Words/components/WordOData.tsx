@@ -9,6 +9,7 @@ import {
 } from "../state/searchWordsReducer";
 import WordODataSearchBar from "./WordODataSearchBar";
 import WordOdataTable, { WordSorting } from "./WordOdataTable";
+import { useTranslation } from "react-i18next";
 
 const initialSortingState: WordSorting = {
   article: ColumnOrderEnum.NoSort,
@@ -18,6 +19,7 @@ const initialSortingState: WordSorting = {
 };
 
 const WordOData: React.FC = () => {
+  const { t } = useTranslation("words");
   const handleQuerySearch = (searchState: SearchWordsState) => {
     const { isAdvanced, ...queryParams } = searchState;
 
@@ -27,7 +29,7 @@ const WordOData: React.FC = () => {
   const renderToolbarActions = () => {
     return (
       <Link to="new">
-        <Button extraStyle="py-1">Add new Word</Button>
+        <Button extraStyle="py-1">{t("add")}</Button>
       </Link>
     );
   };

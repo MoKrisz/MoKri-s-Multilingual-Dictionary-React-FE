@@ -4,6 +4,7 @@ import { Tag } from "../models";
 import { getClosesMatchingTag } from "../api";
 import AutofillInput from "../../../components/AutofillInput";
 import { twMerge } from "tailwind-merge";
+import { useTranslation } from "react-i18next";
 
 export interface TagInputProps {
   tags: Tag[];
@@ -18,6 +19,7 @@ const TagInput: React.FC<TagInputProps> = ({
   extraStyle,
   allowNewElements = true,
 }) => {
+  const { t } = useTranslation("tags");
   const [inputState, setInputState] = useState("");
   const [freezeListDisplay, setFreezeListDisplay] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -125,7 +127,7 @@ const TagInput: React.FC<TagInputProps> = ({
         getAutofillData={(values) =>
           getClosesMatchingTag(values.input, values.signal)
         }
-        placeholder="Add tag..."
+        placeholder={t("inputPlaceholder")}
         renderItem={renderListItem}
         handleKeyDown={handleKeyDown}
         freezeListDisplay={freezeListDisplay}

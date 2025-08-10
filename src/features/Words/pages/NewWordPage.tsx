@@ -3,8 +3,10 @@ import { postWord, queryClient } from "../api";
 import WordForm from "../components/WordForm";
 import Tabs from "../../../components/Tabs";
 import BackButton from "../../../components/BackButton";
+import { useTranslation } from "react-i18next";
 
 export default function NewWordPage() {
+  const { t } = useTranslation("words");
   const navigate = useNavigate();
 
   function onSuccess() {
@@ -20,7 +22,7 @@ export default function NewWordPage() {
           tabs={[
             {
               key: "word",
-              label: "Word",
+              label: t("word"),
               content: (
                 <WordForm
                   mutationFunction={postWord}

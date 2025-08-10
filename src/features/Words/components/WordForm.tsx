@@ -18,6 +18,7 @@ import validate from "../services/validation";
 import { useMutation } from "@tanstack/react-query";
 import { PostOrPutData } from "../api";
 import Button from "../../../components/Button";
+import { useTranslation } from "react-i18next";
 
 interface WordDependencyState {
   language: LanguageCodeEnum;
@@ -35,6 +36,7 @@ export default function WordForm({
   onSuccessFunction,
   wordData,
 }: WordFormParams) {
+  const { t } = useTranslation(["words", "common"]);
   const [wordDependencyState, setWordDependencyState] =
     useState<WordDependencyState>({
       language: wordData?.languageCode || LanguageCodeEnum.EN,
@@ -77,8 +79,18 @@ export default function WordForm({
     });
   }, [wordDependencyState]);
 
-  const languageOptions = getFormLanguageOptions();
-  const typeOptions = getFormWordTypeOptions();
+  const languageOptions = getFormLanguageOptions().map(
+    (opts): Option => ({
+      value: opts.value,
+      name: t(`common:languages.${opts.name}`),
+    })
+  );
+  const typeOptions = getFormWordTypeOptions().map(
+    (opts): Option => ({
+      value: opts.value,
+      name: t(`common:partsOfSpeech.${opts.name}`),
+    })
+  );
 
   function handleLanguageChange(language: number) {
     const languageEnumValue = language as LanguageCodeEnum;
@@ -153,7 +165,7 @@ export default function WordForm({
   return (
     <div>
       <h1 className="text-center font-bold text-3xl pb-10 pt-5">
-        Create a new word
+        {t("create")}
       </h1>
       <form
         onSubmit={handleSubmit}
@@ -169,7 +181,7 @@ export default function WordForm({
           className="w-32 md:col-start-2"
           defaultValue={wordData ? "" + wordData!.languageCode : undefined}
         >
-          Language:
+          {t("language")}:
         </FormInput>
 
         <FormInput
@@ -182,7 +194,7 @@ export default function WordForm({
           className="w-32 col-start-3 md:col-start-3"
           defaultValue={wordData ? "" + wordData!.type : undefined}
         >
-          Type:
+          {t("type")}:
         </FormInput>
 
         <FormInput
@@ -195,7 +207,7 @@ export default function WordForm({
           className="row-start-2 w-16 md:justify-self-end"
           defaultValue={wordData?.article}
         >
-          Article:
+          {t("article")}:
         </FormInput>
 
         <FormInput
@@ -205,7 +217,7 @@ export default function WordForm({
           className="row-start-3 col-span-4 md:row-start-2 md:col-span-2"
           defaultValue={wordData?.text}
         >
-          Text:
+          {t("word")}:
         </FormInput>
 
         <FormInput
@@ -216,7 +228,7 @@ export default function WordForm({
           className="row-start-4 col-span-4 md:row-start-2 md:col-span-2"
           defaultValue={wordData?.plural}
         >
-          Plural:
+          {t("plural")}:
         </FormInput>
 
         <FormInput
@@ -227,7 +239,7 @@ export default function WordForm({
           className=" row-start-5 col-span-4 md:row-start-3 md:col-start-2 md:col-span-3"
           defaultValue={wordData?.conjugation}
         >
-          Conjugation:
+          {t("conjugation")}:
         </FormInput>
 
         {errors && (
@@ -241,7 +253,7 @@ export default function WordForm({
           extraStyle="py-1 px-4 place-self-center row-start-7 col-start-2 col-span-2 md:row-start-5 md:col-start-3 md:col-span-1"
           isDisabled={isPending}
         >
-          {isPending ? "Submitting..." : "Save"}
+          {isPending ? t("common:submitting") : t("common:save")}
         </Button>
       </form>
     </div>

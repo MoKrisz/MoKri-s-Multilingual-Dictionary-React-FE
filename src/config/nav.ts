@@ -1,10 +1,10 @@
 export interface SubMenuItem {
-  label: string;
+  labelKey: string;
   path: string;
 }
 
 export interface MenuItem {
-  label: string;
+  labelKey: string;
   height: number;
   path?: string;
   subItems?: SubMenuItem[];
@@ -12,27 +12,33 @@ export interface MenuItem {
 
 export const menuItems: MenuItem[] = [
   {
-    label: "Words",
+    labelKey: "menu.word.base",
     height: 40,
     subItems: [
-      { label: "Word List", path: "/words" },
-      { label: "Create Word", path: "/words/new" },
+      { labelKey: "menu.word.list", path: "/words" },
+      { labelKey: "menu.word.create", path: "/words/new" },
     ],
   },
   {
-    label: "Translation Groups",
+    labelKey: "menu.translationGroups.base",
     height: 60,
     subItems: [
-      { label: "Translation Group List", path: "/translation-groups" },
-      { label: "Create Translation Group", path: "/translation-groups/new" },
+      { labelKey: "menu.translationGroups.list", path: "/translation-groups" },
+      {
+        labelKey: "menu.translationGroups.create",
+        path: "/translation-groups/new",
+      },
     ],
   },
-  { label: "Manage Translations", path: "/translation", height: 0 },
+  { labelKey: "menu.translation", path: "/translation", height: 0 },
   {
-    label: "Practice",
+    labelKey: "menu.practice.base",
     height: 40,
     subItems: [
-      { label: "Guess the Article", path: "practice/guess-the-article" },
+      {
+        labelKey: "menu.practice.articleGuess",
+        path: "practice/guess-the-article",
+      },
     ],
   },
 ];

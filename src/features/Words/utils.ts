@@ -1,25 +1,25 @@
 import { Option } from "./components/FormInput";
 import { LanguageCodeEnum, WordTypeEnum } from "./models";
 
-export function getLanguageLongName(languageEnum: LanguageCodeEnum): string {
+export function getLanguageLongNameKey(languageEnum: LanguageCodeEnum): string {
   switch (languageEnum) {
     case LanguageCodeEnum.EN:
-      return "English";
+      return "en";
     case LanguageCodeEnum.DE:
-      return "German";
+      return "de";
     case LanguageCodeEnum.HU:
-      return "Hungarian";
+      return "hu";
     default:
-      return "Unknown value.";
+      return "unknown";
   }
 }
 
 export function getLanguageName(languageEnum: LanguageCodeEnum): string {
-  return LanguageCodeEnum[languageEnum] || "Unknown value";
+  return LanguageCodeEnum[languageEnum] || "Unknown language";
 }
 
-export function getWordTypeName(typeEnum: WordTypeEnum): string {
-  return WordTypeEnum[typeEnum] || "Unknown value";
+export function getWordTypeNameKey(typeEnum: WordTypeEnum): string {
+  return WordTypeEnum[typeEnum].toLowerCase() || "unknown";
 }
 
 export function getArticles(
@@ -63,7 +63,7 @@ export function getFormLanguageOptions(): Option[] {
     .map(
       (enumValue): Option => ({
         value: enumValue,
-        name: getLanguageLongName(enumValue),
+        name: getLanguageLongNameKey(enumValue),
       })
     );
 
@@ -79,7 +79,7 @@ export function getFormWordTypeOptions(): Option[] {
     .map(
       (enumValue): Option => ({
         value: enumValue,
-        name: getWordTypeName(enumValue),
+        name: getWordTypeNameKey(enumValue),
       })
     );
 
