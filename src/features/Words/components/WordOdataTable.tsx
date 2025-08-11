@@ -1,11 +1,12 @@
 import { Link } from "react-router-dom";
 import ColumnOrderIcon from "../../../components/ColumnOrderIcon";
-import { getLanguageName, getWordTypeName } from "../utils";
+import { getLanguageName, getWordTypeNameKey } from "../utils";
 import { BsPencilFill } from "react-icons/bs";
 import { ColumnOrderEnum } from "../../../models/ColumnOrderEnum";
 import { Word } from "../models";
 import { ODataDisplayComponentWithSortingProps } from "../../../components/ODataContainer";
 import Button from "../../../components/Button";
+import { useTranslation } from "react-i18next";
 
 export type WordSorting = {
   article: ColumnOrderEnum;
@@ -19,8 +20,9 @@ type WordSortingKeys = keyof WordSorting;
 const WordOdataTable: React.FC<
   ODataDisplayComponentWithSortingProps<Word, WordSorting>
 > = ({ data: words, isPending, isError, sortingState, setSortingState }) => {
-  if (isPending) return <p>Getting the words...</p>;
-  if (isError) return <p>Something went wrong...</p>;
+  const { t } = useTranslation(["common", "words"]);
+  if (isPending) return <p>{t("words:getWords")}</p>;
+  if (isError) return <p>{t("words:errorGetWords")}</p>;
 
   const changeSorting = (column: WordSortingKeys) => {
     setSortingState((prevSort) => {
@@ -44,7 +46,7 @@ const WordOdataTable: React.FC<
         <tr>
           <th className="border border-black">
             <div className="flex items-center justify-between mx-4 my-2">
-              <span>Article</span>
+              <span>{t("words:article")}</span>
               <ColumnOrderIcon
                 sortingState={sortingState["article"]}
                 clickHandler={() => changeSorting("article")}
@@ -53,7 +55,7 @@ const WordOdataTable: React.FC<
           </th>
           <th className="border border-black">
             <div className="flex items-center justify-between mx-4 my-2">
-              <span>Word</span>
+              <span>{t("words:word")}</span>
               <ColumnOrderIcon
                 sortingState={sortingState["text"]}
                 clickHandler={() => changeSorting("text")}
@@ -62,7 +64,7 @@ const WordOdataTable: React.FC<
           </th>
           <th className="border border-black">
             <div className="flex items-center justify-between mx-4 my-2">
-              <span>Type</span>
+              <span>{t("words:type")}</span>
               <ColumnOrderIcon
                 sortingState={sortingState["type"]}
                 clickHandler={() => changeSorting("type")}
@@ -71,7 +73,7 @@ const WordOdataTable: React.FC<
           </th>
           <th className="border border-black">
             <div className="flex items-center justify-between mx-4 my-2">
-              <span>Language</span>
+              <span>{t("words:language")}</span>
               <ColumnOrderIcon
                 sortingState={sortingState["languageCode"]}
                 clickHandler={() => changeSorting("languageCode")}
@@ -97,7 +99,7 @@ const WordOdataTable: React.FC<
               </td>
               <td className="border border-black text-center">{word.text}</td>
               <td className="border border-black text-center">
-                {getWordTypeName(word.type)}
+                {t(`partsOfSpeech.${getWordTypeNameKey(word.type)}`)}
               </td>
               <td className="border border-black text-center">
                 {getLanguageName(word.languageCode)}

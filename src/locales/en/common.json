@@ -1,0 +1,40 @@
+{
+  "appTitle": "MoKri's <1/> Multilingual Dictionary",
+  "menu": {
+    "word": {
+      "base": "Words",
+      "list": "Word List",
+      "create": "Create Word"
+    },
+    "translationGroups": {
+      "base": "Translation Groups",
+      "list": "Translation Group List",
+      "create": "Create Translation Group"
+    },
+    "translation": "Manage Translations",
+    "practice": {
+      "base": "Practice",
+      "articleGuess": "Guess the Article"
+    }
+  },
+  "languages": {
+    "en": "English",
+    "hu": "Hungarian",
+    "de": "German",
+    "es": "Spanish",
+    "unknown": "Unknown language"
+  },
+  "partsOfSpeech": {
+    "noun": "Noun",
+    "verb": "Verb",
+    "adjective": "Adjective"
+  },
+  "advancedSearch": {
+    "show": "Show advanced search",
+    "hide": "Hide advanced search"
+  },
+  "search": "Search",
+  "save": "Save",
+  "submitting": "Submitting...",
+  "back": "Back"
+}

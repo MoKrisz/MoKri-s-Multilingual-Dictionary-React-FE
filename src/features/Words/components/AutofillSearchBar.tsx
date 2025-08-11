@@ -2,6 +2,7 @@ import { fetchWordsAutofill } from "../api";
 import { useEffect, useState } from "react";
 import { Word } from "../models";
 import AutofillInput from "../../../components/AutofillInput";
+import { useTranslation } from "react-i18next";
 
 interface AutofillSearchBarProps {
   languageId: number;
@@ -12,6 +13,7 @@ export default function AutofillSearchBar({
   languageId,
   onFill,
 }: AutofillSearchBarProps) {
+  const { t } = useTranslation("words");
   const [inputState, setInputState] = useState("");
   const [freezeListDisplay, setFreezeListDisplay] = useState(false);
 
@@ -55,7 +57,7 @@ export default function AutofillSearchBar({
             signal: values.signal,
           });
         }}
-        placeholder="Search word..."
+        placeholder={t("searchBarPlaceholder")}
         renderItem={renderListItem}
         disabled={!languageId}
         extraQueryEnableLogic={!!languageId}

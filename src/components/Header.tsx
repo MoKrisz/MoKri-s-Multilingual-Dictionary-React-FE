@@ -3,12 +3,14 @@ import { menuItems } from "../config/nav";
 import { MenuItem } from "./MenuItem";
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { Trans, useTranslation } from "react-i18next";
 
 export default function Header() {
+  const { t } = useTranslation();
   const [activeMenuItem, setActiveMenuItem] = useState<string | null>(null);
   const [exitingMenuItem, setExitingMenuItem] = useState<string | null>(null);
 
-  const currentSubmenu = menuItems.find((mi) => mi.label === activeMenuItem);
+  const currentSubmenu = menuItems.find((mi) => mi.labelKey === activeMenuItem);
 
   const hasSubmenuItems =
     activeMenuItem !== null &&
@@ -44,15 +46,19 @@ export default function Header() {
             to="/"
             className="text-text-primary text-sm font-bold leading-tight whitespace-nowrap"
           >
-            MoKri's <br /> Multilingual Dictionary
+            <Trans i18nKey="app-title">
+              MoKri's
+              <br />
+              Multilingual Dictionary
+            </Trans>
           </Link>
           <nav className="flex items-end justify-evenly w-full">
             {menuItems.map((item) => (
               <MenuItem
-                key={item.label}
+                key={item.labelKey}
                 item={item}
-                onHoverStart={() => handleMouseEnter(item.label)}
-                isActive={item.label === activeMenuItem}
+                onHoverStart={() => handleMouseEnter(item.labelKey)}
+                isActive={item.labelKey === activeMenuItem}
               />
             ))}
           </nav>
@@ -85,13 +91,13 @@ export default function Header() {
                     className="mx-auto max-w-screen-sm grid grid-cols-4 gap-4 pt-3"
                   >
                     {currentSubmenu.subItems?.map((sub) => (
-                      <div className="flex justify-center" key={sub.label}>
+                      <div className="flex justify-center" key={sub.labelKey}>
                         <Link
                           to={sub.path}
                           className="text-text-primary text-sm hover:font-semibold px-4 transition-transform duration-200 hover:scale-105"
                           onClick={handleMouseLeave}
                         >
-                          {sub.label}
+                          {t(sub.labelKey)}
                         </Link>
                       </div>
                     ))}

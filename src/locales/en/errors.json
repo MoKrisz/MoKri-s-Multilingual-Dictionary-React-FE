@@ -1,0 +1,4 @@
+{
+  "required": "must have a value.",
+  "mustBeEmpty": "must not have a value."
+}

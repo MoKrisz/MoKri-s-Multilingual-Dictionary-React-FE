@@ -7,10 +7,12 @@ import {
 import { getFormLanguageOptions, getFormWordTypeOptions } from "../utils";
 import { ODataSearchComponentProps } from "../../../components/ODataContainer";
 import Button from "../../../components/Button";
+import { useTranslation } from "react-i18next";
 
 const WordODataSearchBar: React.FC<
   ODataSearchComponentProps<SearchWordsState, SearchWordsAction>
 > = ({ searchState, dispatch }) => {
+  const { t } = useTranslation(["common", "words"]);
   const [searchedWord, setSearchedWord] = useState<string>(searchState.word);
   const [advancedFilters, setAdvancedFilters] = useState<Filters>(
     searchState.filters
@@ -34,21 +36,21 @@ const WordODataSearchBar: React.FC<
           type="text"
           value={searchedWord}
           onChange={(e) => setSearchedWord(e.target.value)}
-          placeholder="Search word..."
+          placeholder={t("words:searchBarPlaceholder")}
         />
         <Button
           extraStyle="py-1"
           onClick={() => dispatch({ type: "TOGGLE_ADVANCED" })}
         >
           {searchState.isAdvanced
-            ? "Hide advanced search"
-            : "Show advanced search"}
+            ? t("advancedSearch.hide")
+            : t("advancedSearch.show")}
         </Button>
       </div>
       {searchState.isAdvanced && (
         <div className="flex mt-3 gap-4 items-end">
           <div className="flex flex-col ">
-            <label>Article</label>
+            <label>{t("fields:article")}</label>
             <input
               className="px-2 py-1 bg-input-background rounded-md w-20"
               type="text"
@@ -62,7 +64,7 @@ const WordODataSearchBar: React.FC<
             />
           </div>
           <div className="flex flex-col">
-            <label>Type</label>
+            <label>{t("fields:type")}</label>
             <select
               className="px-2 py-1 bg-input-background rounded-md"
               value={advancedFilters.type}
@@ -73,16 +75,16 @@ const WordODataSearchBar: React.FC<
                 }))
               }
             >
-              <option key="language_none" value="0"></option>
+              <option key="type_none" value="0"></option>
               {getFormWordTypeOptions().map((option) => (
                 <option key={option.value} value={option.value}>
-                  {option.name}
+                  {t(`partsOfSpeech.${option.name}`)}
                 </option>
               ))}
             </select>
           </div>
           <div className="flex flex-col">
-            <label>Language</label>
+            <label>{t("fields:language")}</label>
             <select
               className="px-2 py-1 bg-input-background focus:bg-lincolngreenlighter rounded-md"
               value={advancedFilters.languageCode}
@@ -96,7 +98,7 @@ const WordODataSearchBar: React.FC<
               <option key="language_none" value="0"></option>
               {getFormLanguageOptions().map((option) => (
                 <option key={option.value} value={option.value}>
-                  {option.name}
+                  {t(`languages.${option.name}`)}
                 </option>
               ))}
             </select>
@@ -112,7 +114,7 @@ const WordODataSearchBar: React.FC<
               })
             }
           >
-            Search
+            {t("search")}
           </Button>
         </div>
       )}

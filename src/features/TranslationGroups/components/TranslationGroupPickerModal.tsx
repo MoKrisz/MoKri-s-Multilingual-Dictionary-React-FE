@@ -6,6 +6,7 @@ import TranslationGroupOData from "./TranslationGroupOData";
 import { useTranslationGroupContext } from "../../Translations/components/Translation";
 import { TranslationGroup } from "../models";
 import { queryClient } from "../../Words/api";
+import { useTranslation } from "react-i18next";
 
 interface TranslationGroupPickerModal {
   isOpen: boolean;
@@ -18,6 +19,7 @@ const TranslationGroupPickerModal: React.FC<TranslationGroupPickerModal> = ({
   onClose,
   onAddTranslationGroup,
 }) => {
+  const { t } = useTranslation("translationGroups");
   const [isCreationView, setIsCreationView] = useState(false);
   const { selectedTranslationGroups, resetSelection } =
     useTranslationGroupContext();
@@ -32,7 +34,7 @@ const TranslationGroupPickerModal: React.FC<TranslationGroupPickerModal> = ({
             setIsCreationView(false);
           }}
         >
-          Back
+          {t("common:back")}
         </Button>
         <TranslationGroupForm
           onSuccessCallback={(translationGroup) => {
@@ -46,7 +48,7 @@ const TranslationGroupPickerModal: React.FC<TranslationGroupPickerModal> = ({
     modalBody = (
       <>
         <div className="w-full">
-          <h1 className="font-bold text-2xl">Translation groups</h1>
+          <h1 className="font-bold text-2xl">{t("list")}</h1>
           <TranslationGroupOData />
         </div>
         <Button
@@ -56,19 +58,18 @@ const TranslationGroupPickerModal: React.FC<TranslationGroupPickerModal> = ({
           }}
           isDisabled={selectedTranslationGroups.length === 0}
         >
-          Select translation groups
+          {t("select")}
         </Button>
         <div className="justify-items-center">
           <p className="p-2 italic">
-            If you couldn't find the translation group you're searching for,
-            maybe it doesn't exist yet.
+            {t("translationGroupNotFoundSuggestion")}
           </p>
           <Button
             onClick={() => {
               setIsCreationView(true);
             }}
           >
-            Add new Translation group
+            {t("createTitle")}
           </Button>
         </div>
       </>

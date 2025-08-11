@@ -1,0 +1,14 @@
+{
+  "addTitle": "Add Translation",
+  "addButton": "Link words",
+  "source": "Source word",
+  "translation": "Translation",
+  "translationGroupListPlaceholder": "Once the words are selected, all of the related translation groups will show up here.",
+  "addTranslationGroupButton": "Select other translation groups",
+  "getRelatedTranslationGroups": "Trying to fetch translation groups that are related to the selected words...",
+  "errorGetRelatedTranslationGroups": "An error happened while fetching the translation groups.",
+  "noLinkedTranslationGroups": "Looks like there are no translation groups linked to these words yet. <1 /> You can add a new translation group with the button below.",
+  "potentialTranslationGroups": "Potential translation groups",
+  "linkedTranslationGroups": "Linked translation groups",
+  "linkedTranslationGroupTooltip": "Translation groups that are already linked to the words, cannot be removed from this page, since it cannot be determined, which of the words should be removed from the translation group. To remove a word from a translation group, please use the navigational buttons on the translation group wanted to be modified."
+}

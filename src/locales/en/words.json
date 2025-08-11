@@ -1,0 +1,39 @@
+{
+  "article": "Article",
+  "word": "Word",
+  "type": "Type",
+  "language": "Language",
+  "plural": "Plural",
+  "conjugation": "Conjugation",
+  "searchBarPlaceholder": "Search word...",
+  "add": "Add new Word",
+  "getWords": "Getting the Words...",
+  "errorGetWords": "Something went wrong while getting the Words",
+  "getWord": "Getting the Word...",
+  "errorGetWord": "Something went wrong while getting the Word",
+  "create": "Create a new Word",
+  "translations": "Translations",
+  "errors": {
+    "article": {
+      "required": "$t(words:article) $t(errors:required)",
+      "mustBeEmpty": "$t(words:article) $t(errors:mustBeEmpty)"
+    },
+    "plural": {
+      "required": "$t(words:plural) $t(errors:required)",
+      "mustBeEmpty": "$t(words:plural) $t(errors:mustBeEmpty)"
+    },
+    "conjugation": {
+      "required": "$t(words:conjugation) $t(errors:required)",
+      "mustBeEmpty": "$t(words:conjugation) $t(errors:mustBeEmpty)"
+    },
+    "language": {
+      "required": "$t(words:language) $t(errors:required)"
+    },
+    "type": {
+      "required": "$t(words:type) $t(errors:required)"
+    },
+    "wordText": {
+      "required": "Word text $t(errors:required)"
+    }
+  }
+}
