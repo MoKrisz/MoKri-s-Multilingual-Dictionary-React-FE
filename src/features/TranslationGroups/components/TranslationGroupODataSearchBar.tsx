@@ -9,6 +9,7 @@ import {
 import { Tag } from "../../Tags/models";
 import { useDebounce } from "../../../hooks/useDebounce";
 import { useTranslationGroupContext } from "../../Translations/components/Translation";
+import { useTranslation } from "react-i18next";
 
 const TranslationGroupODataSearchBar: React.FC<
   ODataSearchComponentProps<
@@ -16,6 +17,7 @@ const TranslationGroupODataSearchBar: React.FC<
     SearchTranslationGroupAction
   >
 > = ({ dispatch }) => {
+  const { t } = useTranslation("translationGroups");
   const [descriptionState, setDescriptionState] = useState<string>("");
   const [tags, setTags] = useState<Tag[]>([]);
 
@@ -45,14 +47,14 @@ const TranslationGroupODataSearchBar: React.FC<
     <div className="flex gap-10 mb-5 justify-center w-full">
       <div className="flex flex-col">
         <TextInput
-          label="Description"
+          label={t("description")}
           inputValue={descriptionState}
           setInputValue={setDescriptionState}
           extraStyle="bg-input-background"
         />
       </div>
       <div className="flex-col w-3/5 max-w-xl">
-        <p>Tags</p>
+        <p>{t("tags:tags")}</p>
         <TagInput
           tags={tags}
           onChange={setTags}

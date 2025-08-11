@@ -1,0 +1,9 @@
+{
+  "tags": "Tags",
+  "inputPlaceholder": "Add tag...",
+  "errors": {
+    "text": {
+      "required": "Tag text must have a value."
+    }
+  }
+}

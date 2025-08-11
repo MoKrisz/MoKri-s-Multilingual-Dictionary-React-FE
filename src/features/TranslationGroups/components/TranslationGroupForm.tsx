@@ -3,17 +3,18 @@ import Form from "../../../components/Form";
 import TranslationGroupFormFields from "./TranslationGroupFormFields";
 import { postTranslationGroup } from "../api";
 import { TranslationGroup } from "../models";
+import { useTranslation } from "react-i18next";
 
 const TranslationGroupFormSchema = z.object({
   description: z
     .string()
     .trim()
-    .min(1, "Translation group description must have value."),
+    .min(1, "translationGroups:errors.description.required"),
   tags: z
     .array(
       z.object({
         tagId: z.number().nullable(),
-        text: z.string().trim().min(1, "Tag cannot be empty."),
+        text: z.string().trim().min(1),
       })
     )
     .optional(),
@@ -30,6 +31,7 @@ interface TranslationGroupFormProps {
 const TranslationGroupForm: React.FC<TranslationGroupFormProps> = ({
   onSuccessCallback,
 }) => {
+  const { t } = useTranslation("translationGroups");
   const handleSubmit = async (data: TranslationGroupFormData) => {
     const newTranslationGroup = await postTranslationGroup(data);
 
@@ -42,8 +44,8 @@ const TranslationGroupForm: React.FC<TranslationGroupFormProps> = ({
     <Form<TranslationGroupFormData>
       schema={TranslationGroupFormSchema}
       onSubmit={handleSubmit}
-      title="Create new translation group"
-      submitButtonText="Create translation group"
+      title={t("createTitle")}
+      submitButtonText={t("createButton")}
       defaultValues={{ description: "", tags: [] }}
     >
       <TranslationGroupFormFields />

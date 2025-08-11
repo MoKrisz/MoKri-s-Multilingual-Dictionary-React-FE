@@ -12,44 +12,44 @@ export default function validate({
   const errors: ErrorState[] = [];
 
   if (!wordState.articles && wordRefs.articleRef.current?.value) {
-    errors.push({ name: "article", error: "Article must not have a value." });
+    errors.push({ name: "article", error: "words:errors.article.mustBeEmpty" });
   }
   if (
     wordState.articles &&
     (!wordRefs.articleRef.current?.value ||
       wordRefs.articleRef.current.disabled)
   ) {
-    errors.push({ name: "article", error: "Article must have a value." });
+    errors.push({ name: "article", error: "words:errors.article.required" });
   }
   if (!wordState.hasPluralForm && wordRefs.pluralRef.current?.value) {
-    errors.push({ name: "plural", error: "Plural must not have a value." });
+    errors.push({ name: "plural", error: "words:errors.plural.mustBeEmpty" });
   }
   if (wordState.hasPluralForm && !wordRefs.pluralRef.current?.value) {
-    errors.push({ name: "plural", error: "Plural must have a value." });
+    errors.push({ name: "plural", error: "words:errors.plural.required" });
   }
   if (!wordState.hasConjugation && wordRefs.conjugationRef.current?.value) {
     errors.push({
       name: "conjugation",
-      error: "Conjugation must not have a value.",
+      error: "words:errors.conjugation.mustBeEmpty",
     });
   }
   if (wordState.hasConjugation && !wordRefs.conjugationRef.current?.value) {
     errors.push({
       name: "conjugation",
-      error: "Conjugation must have a value.",
+      error: "words:errors.conjugation.required",
     });
   }
   if (
     !wordRefs.languageRef.current?.value ||
     wordRefs.languageRef.current.disabled
   ) {
-    errors.push({ name: "language", error: "Language must have a value." });
+    errors.push({ name: "language", error: "words:errors.language.required" });
   }
   if (!wordRefs.typeRef.current?.value || wordRefs.typeRef.current.disabled) {
-    errors.push({ name: "type", error: "Type must have a value." });
+    errors.push({ name: "type", error: "words:errors.type.required" });
   }
   if (!wordRefs.wordTextRef.current?.value) {
-    errors.push({ name: "wordText", error: "Word text must have a value." });
+    errors.push({ name: "wordText", error: "words:errors.wordText.required" });
   }
 
   return errors;

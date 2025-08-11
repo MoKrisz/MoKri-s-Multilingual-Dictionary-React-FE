@@ -5,12 +5,14 @@ import { useQuery } from "@tanstack/react-query";
 import { ReactNode } from "react";
 import Tabs from "../../../components/Tabs";
 import BackButton from "../../../components/BackButton";
+import { useTranslation } from "react-i18next";
 
 type WordParams = {
   wordId: string;
 };
 
 export default function WordPage() {
+  const { t } = useTranslation("words");
   const param = useParams<WordParams>();
 
   if (!param.wordId) {
@@ -29,10 +31,10 @@ export default function WordPage() {
   }
   let formComponent: ReactNode;
   if (isPending) {
-    formComponent = <p>Getting the word...</p>;
+    formComponent = <p>{t("getWord")}</p>;
   } else if (isError) {
     console.log(error);
-    formComponent = <p>Something went wrong...</p>;
+    formComponent = <p>{t("errorGetWord")}</p>;
   } else if (data) {
     formComponent = (
       <>
@@ -42,7 +44,7 @@ export default function WordPage() {
             tabs={[
               {
                 key: "word",
-                label: "Word",
+                label: t("word"),
                 content: (
                   <WordForm
                     mutationFunction={PutWord}
@@ -53,7 +55,7 @@ export default function WordPage() {
               },
               {
                 key: "translation",
-                label: "Translations",
+                label: t("translations"),
                 content: <p>Here goes the translations tab content</p>,
               },
             ]}

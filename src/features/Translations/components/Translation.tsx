@@ -1,10 +1,4 @@
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import { createContext, useCallback, useContext, useState } from "react";
 import Button from "../../../components/Button";
 import Dropdown from "../../../components/Dropdown";
 import AutofillSearchBar from "../../Words/components/AutofillSearchBar";
@@ -19,6 +13,7 @@ import TranslationGroupCard from "../../TranslationGroups/components/Translation
 import { TranslationGroup } from "../../TranslationGroups/models";
 import { postTranslation } from "../api";
 import { Tooltip } from "../../../components/Tooltip";
+import { Trans, useTranslation } from "react-i18next";
 
 interface TranslationGroupContext {
   selectedTranslationGroups: TranslationGroup[];
@@ -85,6 +80,8 @@ export const useTranslationGroupContext = () => {
 };
 
 const Translation: React.FC = () => {
+  const { t } = useTranslation("translation");
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [language1Id, setLanguage1Id] = useState<number>(0);
   const [language2Id, setLanguage2Id] = useState<number>(0);
@@ -93,7 +90,12 @@ const Translation: React.FC = () => {
   const [newlyLinkedTranslationGroups, setNewlyLinkedTranslationGroups] =
     useState<TranslationGroup[]>([]);
 
-  const languageOptions1 = getFormLanguageOptions();
+  const languageOptions1 = getFormLanguageOptions().map(
+    (opts): Option => ({
+      value: opts.value,
+      name: t(`common:languages.${opts.name}`),
+    })
+  );
   let languageOptions2: Option[] = [];
 
   if (language1Id) {
@@ -128,22 +130,12 @@ const Translation: React.FC = () => {
 
   let translationGroupListContent: React.ReactNode;
   if (!isTranslationGroupQueryEnabled) {
-    translationGroupListContent = (
-      <p>
-        Once the words are selected, all of the related translation groups will
-        show up here.
-      </p>
-    );
+    translationGroupListContent = <p>{t("translationGroupListPlaceholder")}</p>;
   } else if (isPending) {
-    translationGroupListContent = (
-      <p>
-        Trying to fetch translation groups that are related to the selected
-        words...
-      </p>
-    );
+    translationGroupListContent = <p>{t("getRelatedTranslationGroups")}</p>;
   } else if (isError) {
     translationGroupListContent = (
-      <p>An error happened while fetching the translation groups.</p>
+      <p>{t("errorGetRelatedTranslationGroups")}</p>
     );
   } else if (
     (!data ||
@@ -153,9 +145,11 @@ const Translation: React.FC = () => {
   ) {
     translationGroupListContent = (
       <p>
-        Looks like there are no translation groups linked to these words yet.
-        <br />
-        You can add a new translation group with the button below.
+        <Trans i18nKey="translation:noLinkedTranslationGroups">
+          Looks like there are no translation groups linked to these words yet.
+          <br />
+          You can add a new translation group with the button below.
+        </Trans>
       </p>
     );
   } else if (
@@ -217,11 +211,11 @@ const Translation: React.FC = () => {
 
     translationGroupListContent = (
       <>
-        <h2 className="font-bold">Potential translation groups</h2>
+        <h2 className="font-bold">{t("potentialTranslationGroups")}</h2>
         {potentialCards}
         <div className="flex gap-1">
-          <h2 className="font-bold">Linked translation groups</h2>
-          <Tooltip text="Translation groups that are already linked to the words, cannot be removed from this page, since it cannot be determined, which of the words should be removed from the translation group. To remove a word from a translation group, please use the navigational buttons on the translation group wanted to be modified." />
+          <h2 className="font-bold">{t("linkedTranslationGroups")}</h2>
+          <Tooltip text={t("linkedTranslationGroupTooltip")} />
         </div>
         {linkedCards}
         {newlyLinkedCards}
@@ -243,11 +237,11 @@ const Translation: React.FC = () => {
   return (
     <>
       <h1 className="text-center font-bold text-3xl pb-10 pt-5">
-        Add Translation
+        {t("addTitle")}
       </h1>
       <div className="flex justify-between">
         <div className="flex flex-col ml-10 gap-2">
-          <h2>Word to be translated</h2>
+          <h2>{t("source")}</h2>
           <Dropdown
             options={languageOptions1}
             hasEmptyElement={true}
@@ -257,7 +251,7 @@ const Translation: React.FC = () => {
           <AutofillSearchBar languageId={language1Id} onFill={setWord1} />
         </div>
         <div className="flex flex-col mr-10 gap-2">
-          <h2>Translation</h2>
+          <h2>{t("translation")}</h2>
           <Dropdown
             options={languageOptions2}
             hasEmptyElement={true}
@@ -275,7 +269,7 @@ const Translation: React.FC = () => {
           onClick={() => setIsModalOpen(true)}
           isDisabled={!word1?.wordId || !word2?.wordId}
         >
-          <FaPlus /> Select other translation group
+          <FaPlus /> {t("addTranslationGroupButton")}
         </Button>
         <TranslationGroupProvider>
           <TranslationGroupPickerModal
@@ -308,7 +302,7 @@ const Translation: React.FC = () => {
           !word1 || !word2 || newlyLinkedTranslationGroups.length === 0
         }
       >
-        Link words
+        {t("addButton")}
       </Button>
     </>
   );
