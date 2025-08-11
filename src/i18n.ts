@@ -6,6 +6,8 @@ import enCommon from "./locales/en/common.json";
 import enWords from "./locales/en/words.json";
 import enTranslationGroups from "./locales/en/translationGroups.json";
 import enTags from "./locales/en/tags.json";
+import enErrors from "./locales/en/errors.json";
+import enTranslation from "./locales/en/translation.json";
 
 i18n
   .use(LanguageDetector)
@@ -17,9 +19,18 @@ i18n
         words: enWords,
         translationGroups: enTranslationGroups,
         tags: enTags,
+        errors: enErrors,
+        translation: enTranslation,
       },
     },
-    ns: ["common", "words", "translationGroups", "tags"],
+    ns: [
+      "common",
+      "words",
+      "translationGroups",
+      "tags",
+      "errors",
+      "translation",
+    ],
     fallbackLng: "en",
     defaultNS: "common",
     interpolation: {

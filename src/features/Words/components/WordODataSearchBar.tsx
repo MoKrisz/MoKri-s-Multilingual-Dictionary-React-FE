@@ -50,7 +50,7 @@ const WordODataSearchBar: React.FC<
       {searchState.isAdvanced && (
         <div className="flex mt-3 gap-4 items-end">
           <div className="flex flex-col ">
-            <label>{t("words:article")}</label>
+            <label>{t("fields:article")}</label>
             <input
               className="px-2 py-1 bg-input-background rounded-md w-20"
               type="text"
@@ -64,7 +64,7 @@ const WordODataSearchBar: React.FC<
             />
           </div>
           <div className="flex flex-col">
-            <label>{t("words:type")}</label>
+            <label>{t("fields:type")}</label>
             <select
               className="px-2 py-1 bg-input-background rounded-md"
               value={advancedFilters.type}
@@ -84,7 +84,7 @@ const WordODataSearchBar: React.FC<
             </select>
           </div>
           <div className="flex flex-col">
-            <label>{t("words:language")}</label>
+            <label>{t("fields:language")}</label>
             <select
               className="px-2 py-1 bg-input-background focus:bg-lincolngreenlighter rounded-md"
               value={advancedFilters.languageCode}

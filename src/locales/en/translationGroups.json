@@ -1,11 +1,14 @@
 {
   "translationGroup": "Translation Group",
+  "list": "Translation Group list",
   "createTitle": "Create new Translation Group",
   "createButton": "Create Translation Group",
   "description": "Translation Group description",
   "errors": {
     "description": {
-      "required": "Translation Group description must have a value."
+      "required": "$t(translationGroups:description) $t(errors:required)"
     }
-  }
+  },
+  "select": "Select translation groups",
+  "translationGroupNotFoundSuggestion": "If you couldn't find the translation group you're searching for, maybe it doesn't exist yet."
 }

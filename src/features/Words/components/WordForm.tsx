@@ -155,7 +155,7 @@ export default function WordForm({
   if (wordState.errors) {
     errors = wordState.errors.map((error) => (
       <p key={`${error.name}_error`} className="text-red-700">
-        {error.error}
+        {t(error.error, { name: error.name })}
       </p>
     ));
   }
