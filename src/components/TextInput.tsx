@@ -15,7 +15,7 @@ const TextInput: React.FC<TextInputProps> = ({
 }) => {
   return (
     <>
-      {label && <label>{label}</label>}
+      {label && <label className="whitespace-nowrap">{label}</label>}
       <input
         className={twMerge(
           "px-2 py-1 bg-lincolngreen focus:bg-lincolngreenlighter rounded-md",

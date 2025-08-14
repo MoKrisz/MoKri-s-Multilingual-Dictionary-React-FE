@@ -47,9 +47,9 @@ const TranslationGroupPickerModal: React.FC<TranslationGroupPickerModal> = ({
   } else if (isOpen) {
     modalBody = (
       <>
-        <div className="w-full">
+        <div>
           <h1 className="font-bold text-2xl">{t("list")}</h1>
-          <TranslationGroupOData />
+          <TranslationGroupOData shouldDisplayCheckbox={true} />
         </div>
         <Button
           onClick={() => {
@@ -83,6 +83,7 @@ const TranslationGroupPickerModal: React.FC<TranslationGroupPickerModal> = ({
         onClose();
         setIsCreationView(false);
       }}
+      extraStyle="w-2/3 max-w-3xl"
     >
       {modalBody}
     </Modal>

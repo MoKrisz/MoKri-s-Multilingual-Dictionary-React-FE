@@ -9,7 +9,7 @@ const NewTranslationGroupPage: React.FC = () => {
   return (
     <>
       <div className="lg:w-3/4 lg:mx-auto max-w-screen-lg">
-        <BackButton returnTo="" />
+        <BackButton returnTo="/translation-groups" />
         <Tabs
           tabs={[
             {

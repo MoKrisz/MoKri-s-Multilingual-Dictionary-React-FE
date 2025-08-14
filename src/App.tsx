@@ -8,6 +8,7 @@ import WordPage from "./features/Words/pages/WordPage";
 import NewTranslationGroupPage from "./features/TranslationGroups/pages/NewTranslationGroupPage";
 import TranslationPage from "./features/Translations/pages/TranslationPage";
 import WordListPage from "./features/Words/pages/WordListPage";
+import TranslationGroupListPage from "./features/TranslationGroups/pages/TranslationGroupListPage";
 
 const router = createBrowserRouter([
   {
@@ -27,7 +28,7 @@ const router = createBrowserRouter([
       {
         path: "translation-groups",
         children: [
-          { index: true, element: <WordListPage /> },
+          { index: true, element: <TranslationGroupListPage /> },
           { path: "new", element: <NewTranslationGroupPage /> },
         ],
       },
