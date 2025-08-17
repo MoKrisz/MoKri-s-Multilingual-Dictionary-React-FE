@@ -35,8 +35,6 @@ interface TranslationGroupODataGridProviderProps {
 export const TranslationGroupODataGridProvider: React.FC<
   TranslationGroupODataGridProviderProps
 > = ({ shouldUseGridLayout, shouldDisplayCheckbox, children }) => {
-  console.log(shouldUseGridLayout, shouldDisplayCheckbox);
-
   return (
     <TranslationGroupODataGridContext.Provider
       value={{

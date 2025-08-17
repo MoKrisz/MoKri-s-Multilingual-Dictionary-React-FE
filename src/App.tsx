@@ -5,7 +5,7 @@ import RootLayout from "./pages/RootLayout";
 import NewWordPage from "./features/Words/pages/NewWordPage";
 import { queryClient } from "./features/Words/api";
 import WordPage from "./features/Words/pages/WordPage";
-import NewTranslationGroupPage from "./features/TranslationGroups/pages/NewTranslationGroupPage";
+import ManageTranslationGroupPage from "./features/TranslationGroups/pages/ManageTranslationGroupPage";
 import TranslationPage from "./features/Translations/pages/TranslationPage";
 import WordListPage from "./features/Words/pages/WordListPage";
 import TranslationGroupListPage from "./features/TranslationGroups/pages/TranslationGroupListPage";
@@ -29,7 +29,11 @@ const router = createBrowserRouter([
         path: "translation-groups",
         children: [
           { index: true, element: <TranslationGroupListPage /> },
-          { path: "new", element: <NewTranslationGroupPage /> },
+          { path: "new", element: <ManageTranslationGroupPage /> },
+          {
+            path: ":translationGroupId",
+            element: <ManageTranslationGroupPage />,
+          },
         ],
       },
     ],

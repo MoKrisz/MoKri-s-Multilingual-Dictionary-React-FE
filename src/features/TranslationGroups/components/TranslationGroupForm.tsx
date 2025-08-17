@@ -25,28 +25,32 @@ export type TranslationGroupFormData = z.infer<
 >;
 
 interface TranslationGroupFormProps {
-  onSuccessCallback?: (translationGroup: TranslationGroup) => void;
+  translationGroup?: TranslationGroup;
+  onSubmit: (data: TranslationGroupFormData) => Promise<void>;
+  isSubmitting: boolean;
 }
 
 const TranslationGroupForm: React.FC<TranslationGroupFormProps> = ({
-  onSuccessCallback,
+  translationGroup,
+  onSubmit,
+  isSubmitting,
 }) => {
   const { t } = useTranslation("translationGroups");
-  const handleSubmit = async (data: TranslationGroupFormData) => {
-    const newTranslationGroup = await postTranslationGroup(data);
+  const isEditing = !!translationGroup;
 
-    if (onSuccessCallback) {
-      onSuccessCallback(newTranslationGroup);
-    }
+  const defaultValue: TranslationGroupFormData = {
+    description: translationGroup?.description ?? "",
+    tags: translationGroup?.tags ?? [],
   };
 
   return (
     <Form<TranslationGroupFormData>
       schema={TranslationGroupFormSchema}
-      onSubmit={handleSubmit}
-      title={t("createTitle")}
-      submitButtonText={t("createButton")}
-      defaultValues={{ description: "", tags: [] }}
+      onSubmit={onSubmit}
+      title={isEditing ? t("translationGroup") : t("createTitle")}
+      submitButtonText={isEditing ? t("editButton") : t("createButton")}
+      defaultValues={defaultValue}
+      isSubmitting={isSubmitting}
     >
       <TranslationGroupFormFields />
     </Form>

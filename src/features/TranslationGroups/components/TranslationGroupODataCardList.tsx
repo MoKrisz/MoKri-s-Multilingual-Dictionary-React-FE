@@ -1,14 +1,16 @@
+import { useTranslation } from "react-i18next";
 import { ODataDisplayComponentWithoutSortingProps } from "../../../components/ODataContainer";
 import { TranslationGroup } from "../models";
 import TranslationGroupCard from "./TranslationGroupCard";
 import { useTranslationGroupODataGridContext } from "./TranslationGroupOData";
+import { useNavigate } from "react-router-dom";
 
 const TranslationGroupODataCardList: React.FC<
   ODataDisplayComponentWithoutSortingProps<TranslationGroup>
 > = ({ data: translationGroups, isPending, isError }) => {
+  const { t } = useTranslation("errors");
+  const navigate = useNavigate();
   const gridContext = useTranslationGroupODataGridContext();
-
-  console.log(gridContext);
 
   let content: React.ReactNode;
   if (isPending) {
@@ -21,10 +23,17 @@ const TranslationGroupODataCardList: React.FC<
         key={`translation-group-card-${translationGroup.translationGroupId}`}
         translationGroup={translationGroup}
         selectable={gridContext.shouldDisplayCheckbox}
+        onSelect={() => {
+          navigate(
+            `/translation-groups/${translationGroup.translationGroupId}`
+          );
+        }}
       />
     ));
   } else {
-    content = <p>No translation group is available.</p>;
+    content = (
+      <p>{t("noData", { entity: t("translationGroups:translationGroup") })}</p>
+    );
   }
 
   return (

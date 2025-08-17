@@ -36,7 +36,6 @@ const TranslationGroupFormFields: React.FC = () => {
         <Controller
           control={control}
           name="tags"
-          defaultValue={[]}
           render={({ field }) => (
             <TagInput tags={field.value ?? []} onChange={field.onChange} />
           )}
