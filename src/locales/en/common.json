@@ -37,5 +37,6 @@
   "save": "Save",
   "submitting": "Submitting...",
   "back": "Back",
-  "createNew": "Create new"
+  "createNew": "Create new",
+  "loading": "Loading..."
 }

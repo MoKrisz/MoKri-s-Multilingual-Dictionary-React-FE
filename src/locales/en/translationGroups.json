@@ -3,6 +3,7 @@
   "list": "Translation Group list",
   "createTitle": "Create new Translation Group",
   "createButton": "Create Translation Group",
+  "editButton": "Update Translation Group",
   "description": "Translation Group description",
   "errors": {
     "description": {
