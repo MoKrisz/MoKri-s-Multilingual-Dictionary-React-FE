@@ -6,8 +6,12 @@ import TranslationGroupForm, {
 import BackButton from "../../../components/BackButton";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
-import { getTranslationGroup, postTranslationGroup } from "../api";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  getTranslationGroup,
+  postTranslationGroup,
+  putTranslationGroup,
+} from "../api";
 
 type TranslationGroupPageParam = {
   translationGroupId?: string;
@@ -17,6 +21,7 @@ const ManageTranslationGroupPage: React.FC = () => {
   const { t } = useTranslation("translationGroups");
   const { translationGroupId } = useParams<TranslationGroupPageParam>();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const isEditing = !!translationGroupId;
 
@@ -32,12 +37,35 @@ const ManageTranslationGroupPage: React.FC = () => {
     enabled: isEditing,
   });
 
+  const { mutate: createGroup, isPending: isCreating } = useMutation({
+    mutationFn: postTranslationGroup,
+    onSuccess: (data) => {
+      navigate(`/translation-groups/${data.translationGroupId}`);
+    },
+    onError: (error) => {
+      //TODO: nice error handling.
+      throw new Error("Translation group creation failed.");
+    },
+  });
+
+  const { mutate: updateGroup, isPending: isUpdating } = useMutation({
+    mutationFn: (formData: TranslationGroupFormData) =>
+      putTranslationGroup(parseInt(translationGroupId!), formData),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["translationGroup", translationGroupId],
+      });
+    },
+    onError: (error) => {
+      throw new Error("Translation group update failed.");
+    },
+  });
+
   const handleSubmit = async (data: TranslationGroupFormData) => {
     if (!isEditing) {
-      const { translationGroupId } = await postTranslationGroup(data);
-      navigate(`/translation-groups/${translationGroupId}`);
+      createGroup(data);
     } else {
-      //TODO: call PUT endpoint.
+      updateGroup(data);
     }
   };
 
@@ -50,13 +78,16 @@ const ManageTranslationGroupPage: React.FC = () => {
             {
               key: "translation-group",
               label: t("translationGroup"),
-              content: (!isGetPending || !isEditing) && (
-                <TranslationGroupForm
-                  translationGroup={data}
-                  onSubmit={handleSubmit}
-                  isSubmitting={false}
-                />
-              ),
+              content:
+                isGetPending && isEditing ? (
+                  <div>Loading...</div>
+                ) : (
+                  <TranslationGroupForm
+                    translationGroup={data}
+                    onSubmit={handleSubmit}
+                    isSubmitting={isCreating || isUpdating}
+                  />
+                ),
             },
           ]}
         />

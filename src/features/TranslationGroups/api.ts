@@ -24,9 +24,35 @@ export const getTranslationGroup = async (
 export const postTranslationGroup = async (
   data: TranslationGroupFormData
 ): Promise<TranslationGroup> => {
+  const dto: TranslationGroup = {
+    ...data,
+  };
+
   const response = await axios.post<TranslationGroup>(
     "https://localhost:7113/translation-group",
-    data,
+    dto,
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+
+  return response.data;
+};
+
+export const putTranslationGroup = async (
+  translationGroupId: number,
+  data: TranslationGroupFormData
+): Promise<TranslationGroup> => {
+  const dto: TranslationGroup = {
+    translationGroupId: translationGroupId,
+    ...data,
+  };
+
+  const response = await axios.put<TranslationGroup>(
+    "https://localhost:7113/translation-group",
+    dto,
     {
       headers: {
         "Content-Type": "application/json",

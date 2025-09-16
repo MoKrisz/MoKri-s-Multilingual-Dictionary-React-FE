@@ -37,8 +37,6 @@ const Form = <T extends FieldValues>({
   const processForm = async (data: T) => {
     try {
       await onSubmit(data);
-
-      methods.reset();
     } catch (error) {
       throw new Error("Form submission failed.");
     }
