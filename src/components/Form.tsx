@@ -17,6 +17,7 @@ interface FormProps<T extends FieldValues> {
   children: React.ReactNode;
   title: string;
   submitButtonText: string;
+  isSubmitting: boolean;
 }
 
 const Form = <T extends FieldValues>({
@@ -26,6 +27,7 @@ const Form = <T extends FieldValues>({
   children,
   title,
   submitButtonText,
+  isSubmitting,
 }: FormProps<T>) => {
   const methods = useForm<T>({
     resolver: zodResolver(schema),
@@ -35,8 +37,6 @@ const Form = <T extends FieldValues>({
   const processForm = async (data: T) => {
     try {
       await onSubmit(data);
-
-      methods.reset();
     } catch (error) {
       throw new Error("Form submission failed.");
     }
@@ -49,7 +49,9 @@ const Form = <T extends FieldValues>({
         <form className="w-2/3" onSubmit={methods.handleSubmit(processForm)}>
           {children}
           <div className="flex justify-center my-3">
-            <Button type="submit">{submitButtonText}</Button>
+            <Button type="submit" isDisabled={isSubmitting}>
+              {submitButtonText}
+            </Button>
           </div>
         </form>
       </div>

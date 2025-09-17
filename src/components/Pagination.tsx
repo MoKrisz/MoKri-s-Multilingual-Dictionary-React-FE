@@ -46,7 +46,7 @@ export default function Pagination({
               onClick={() => paginationFunctions.setPage(pageCnt)}
               isSelected={pageCnt === paginationData.currentPage}
             >
-              <p>{pageCnt}</p>
+              {pageCnt}
             </Icon>
           );
         })}
@@ -74,7 +74,7 @@ export default function Pagination({
               onClick={() => paginationFunctions.setPage(pageCnt)}
               isSelected={pageCnt === paginationData.currentPage}
             >
-              <p>{pageCnt}</p>
+              {pageCnt}
             </Icon>
           );
         })}
@@ -100,7 +100,7 @@ export default function Pagination({
               onClick={() => paginationFunctions.setPage(pageCnt)}
               isSelected={pageCnt === paginationData.currentPage}
             >
-              <p>{pageCnt}</p>
+              {pageCnt}
             </Icon>
           );
         })}

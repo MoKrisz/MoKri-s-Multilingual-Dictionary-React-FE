@@ -19,7 +19,7 @@ const initialSortingState: WordSorting = {
 };
 
 const WordOData: React.FC = () => {
-  const { t } = useTranslation("words");
+  const { t } = useTranslation();
   const handleQuerySearch = (searchState: SearchWordsState) => {
     const { isAdvanced, ...queryParams } = searchState;
 
@@ -29,7 +29,7 @@ const WordOData: React.FC = () => {
   const renderToolbarActions = () => {
     return (
       <Link to="new">
-        <Button extraStyle="py-1">{t("add")}</Button>
+        <Button extraStyle="py-1">{t("createNew")}</Button>
       </Link>
     );
   };

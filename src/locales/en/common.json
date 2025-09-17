@@ -36,5 +36,7 @@
   "search": "Search",
   "save": "Save",
   "submitting": "Submitting...",
-  "back": "Back"
+  "back": "Back",
+  "createNew": "Create new",
+  "loading": "Loading..."
 }

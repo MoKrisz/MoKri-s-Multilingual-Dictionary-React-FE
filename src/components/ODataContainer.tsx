@@ -116,7 +116,10 @@ const ODataContainer = <
 
   return (
     <div className="w-full">
-      <div className={`${renderToolbarActions ? "flex justify-between" : ""}`}>
+      <div
+        className={`flex items-center gap-4
+        ${renderToolbarActions ? "justify-between" : ""}`}
+      >
         <SearchComponent searchState={searchState} dispatch={searchDispatch} />
         {renderToolbarActions && (
           <div className="items-end">{renderToolbarActions()}</div>

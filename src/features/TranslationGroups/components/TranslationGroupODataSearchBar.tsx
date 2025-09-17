@@ -8,7 +8,7 @@ import {
 } from "../state/searchTranslationGroupReducer";
 import { Tag } from "../../Tags/models";
 import { useDebounce } from "../../../hooks/useDebounce";
-import { useTranslationGroupContext } from "../../Translations/components/Translation";
+import { useOptionalTranslationGroupContext } from "../../Translations/components/Translation";
 import { useTranslation } from "react-i18next";
 
 const TranslationGroupODataSearchBar: React.FC<
@@ -28,23 +28,29 @@ const TranslationGroupODataSearchBar: React.FC<
   const debouneDescriptionState = useDebounce(descriptionState, 300);
   const debounceTagIds = useDebounce(tagIds, 300);
 
-  const { resetSelection } = useTranslationGroupContext();
+  const context = useOptionalTranslationGroupContext();
+
+  const resetFunc = context?.resetSelection;
 
   useEffect(() => {
-    resetSelection();
+    if (resetFunc) {
+      resetFunc();
+    }
     dispatch({
       type: "SET_DESCRIPTION_SEARCH",
       description: debouneDescriptionState,
     });
-  }, [debouneDescriptionState, dispatch, resetSelection]);
+  }, [debouneDescriptionState, dispatch, resetFunc]);
 
   useEffect(() => {
-    resetSelection();
+    if (resetFunc) {
+      resetFunc();
+    }
     dispatch({ type: "SET_TAGS_SEARCH", tagIds: debounceTagIds });
-  }, [debounceTagIds, dispatch, resetSelection]);
+  }, [debounceTagIds, dispatch, resetFunc]);
 
   return (
-    <div className="flex gap-10 mb-5 justify-center w-full">
+    <div className="flex gap-10 mb-5 w-full">
       <div className="flex flex-col">
         <TextInput
           label={t("description")}
@@ -53,7 +59,7 @@ const TranslationGroupODataSearchBar: React.FC<
           extraStyle="bg-input-background"
         />
       </div>
-      <div className="flex-col w-3/5 max-w-xl">
+      <div className="flex-col w-3/5 max-w-lg">
         <p>{t("tags:tags")}</p>
         <TagInput
           tags={tags}
