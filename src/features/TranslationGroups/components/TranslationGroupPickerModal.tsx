@@ -1,12 +1,15 @@
 import { useState } from "react";
 import Button from "../../../components/Button";
 import Modal from "../../../components/Modal";
-import TranslationGroupForm from "./TranslationGroupForm";
+import TranslationGroupForm, {
+  TranslationGroupFormKeys,
+} from "./TranslationGroupForm";
 import TranslationGroupOData from "./TranslationGroupOData";
 import { useTranslationGroupContext } from "../../Translations/components/Translation";
 import { TranslationGroup } from "../models";
 import { queryClient } from "../../Words/api";
 import { useTranslation } from "react-i18next";
+import { postTranslationGroup } from "../api";
 
 interface TranslationGroupPickerModal {
   isOpen: boolean;
@@ -19,6 +22,7 @@ const TranslationGroupPickerModal: React.FC<TranslationGroupPickerModal> = ({
   onClose,
   onAddTranslationGroup,
 }) => {
+  const [formKey, setFormKey] = useState<TranslationGroupFormKeys>("tgf-A");
   const { t } = useTranslation("translationGroups");
   const [isCreationView, setIsCreationView] = useState(false);
   const { selectedTranslationGroups, resetSelection } =
@@ -37,10 +41,19 @@ const TranslationGroupPickerModal: React.FC<TranslationGroupPickerModal> = ({
           {t("common:back")}
         </Button>
         <TranslationGroupForm
-          onSuccessCallback={(translationGroup) => {
+          key={formKey}
+          onSubmit={async (data) => {
+            const newTranslationGroup = await postTranslationGroup(data);
             queryClient.invalidateQueries({ queryKey: ["translationGroup"] });
-            onAddTranslationGroup([translationGroup]);
+            onAddTranslationGroup([newTranslationGroup]);
+            setFormKey((prev) => {
+              const newValue: TranslationGroupFormKeys =
+                prev === "tgf-A" ? "tgf-B" : "tgf-A";
+
+              return newValue;
+            });
           }}
+          isSubmitting={false}
         />
       </>
     );

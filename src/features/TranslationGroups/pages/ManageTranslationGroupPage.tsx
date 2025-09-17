@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Tabs from "../../../components/Tabs";
 import TranslationGroupForm, {
   TranslationGroupFormData,
+  TranslationGroupFormKeys,
 } from "../components/TranslationGroupForm";
 import BackButton from "../../../components/BackButton";
 import { useTranslation } from "react-i18next";
@@ -18,10 +19,20 @@ type TranslationGroupPageParam = {
 };
 
 const ManageTranslationGroupPage: React.FC = () => {
+  const [formKey, setFormKey] = useState<TranslationGroupFormKeys>("tgf-A");
   const { t } = useTranslation("translationGroups");
   const { translationGroupId } = useParams<TranslationGroupPageParam>();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+
+  useEffect(() => {
+    setFormKey((prev) => {
+      const newValue: TranslationGroupFormKeys =
+        prev === "tgf-A" ? "tgf-B" : "tgf-A";
+
+      return newValue;
+    });
+  }, [translationGroupId]);
 
   const isEditing = !!translationGroupId;
 
@@ -83,6 +94,7 @@ const ManageTranslationGroupPage: React.FC = () => {
                   <div>Loading...</div>
                 ) : (
                   <TranslationGroupForm
+                    key={formKey}
                     translationGroup={data}
                     onSubmit={handleSubmit}
                     isSubmitting={isCreating || isUpdating}

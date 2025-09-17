@@ -1,9 +1,10 @@
 import { z } from "zod";
 import Form from "../../../components/Form";
 import TranslationGroupFormFields from "./TranslationGroupFormFields";
-import { postTranslationGroup } from "../api";
 import { TranslationGroup } from "../models";
 import { useTranslation } from "react-i18next";
+
+export type TranslationGroupFormKeys = "tgf-A" | "tgf-B";
 
 const TranslationGroupFormSchema = z.object({
   description: z
