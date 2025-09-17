@@ -1,4 +1,5 @@
 {
   "required": "must have a value.",
-  "mustBeEmpty": "must not have a value."
+  "mustBeEmpty": "must not have a value.",
+  "noData": "No data available for {{entity}}."
 }

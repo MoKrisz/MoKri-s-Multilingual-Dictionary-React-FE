@@ -1,7 +1,7 @@
 import { Tag } from "../Tags/models";
 
 export interface TranslationGroup {
-  translationGroupId: number;
+  translationGroupId?: number;
   description: string;
   tags?: Tag[];
 }

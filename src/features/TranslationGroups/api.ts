@@ -5,12 +5,54 @@ import { TranslationGroup, WordRelatedTranslationGroups } from "./models";
 import { SearchTranslationGroupState } from "./state/searchTranslationGroupReducer";
 import { RawOdataResponse, transformRawODataResponse } from "../../utils/api";
 
+export const getTranslationGroup = async (
+  translationGroupId: string,
+  signal: AbortSignal
+): Promise<TranslationGroup> => {
+  const response = await axios.get<TranslationGroup>(
+    "https://localhost:7113/translation-group",
+    {
+      headers: { "Content-Type": "application/json" },
+      params: { translationGroupId },
+      signal,
+    }
+  );
+
+  return response.data;
+};
+
 export const postTranslationGroup = async (
   data: TranslationGroupFormData
 ): Promise<TranslationGroup> => {
+  const dto: TranslationGroup = {
+    ...data,
+  };
+
   const response = await axios.post<TranslationGroup>(
     "https://localhost:7113/translation-group",
-    data,
+    dto,
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+
+  return response.data;
+};
+
+export const putTranslationGroup = async (
+  translationGroupId: number,
+  data: TranslationGroupFormData
+): Promise<TranslationGroup> => {
+  const dto: TranslationGroup = {
+    translationGroupId: translationGroupId,
+    ...data,
+  };
+
+  const response = await axios.put<TranslationGroup>(
+    "https://localhost:7113/translation-group",
+    dto,
     {
       headers: {
         "Content-Type": "application/json",

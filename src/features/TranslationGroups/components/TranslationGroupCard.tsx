@@ -34,7 +34,7 @@ const TranslationGroupCard: React.FC<TranslationGroupCardProps> = ({
 
   return (
     <div
-      className={`flex flex-col gap-2 p-2 rounded-2xl transition-all duration-200 border-complementary-border-secondary${
+      className={`flex flex-col gap-2 p-2 rounded-2xl transition-all duration-200 border-complementary-border-secondary max-w-xl w-full h-full${
         isSelected ? selectedStyle : baseStyle
       }`}
       onClick={handleSelect}
@@ -43,7 +43,7 @@ const TranslationGroupCard: React.FC<TranslationGroupCardProps> = ({
         <p className="font-bold italic">{translationGroup.description}</p>
         {selectable && <input type="checkbox" checked={isSelected} readOnly />}
       </div>
-      <div className="flex gap-2">
+      <div className="flex gap-2 flex-wrap w-full">
         {translationGroup.tags?.map((tag) => (
           <p
             key={`translation-group-card-${translationGroup.translationGroupId}-tag-${tag.tagId}`}
