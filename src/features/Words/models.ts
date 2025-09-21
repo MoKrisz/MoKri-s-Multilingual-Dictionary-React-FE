@@ -1,9 +1,4 @@
-export enum LanguageCodeEnum {
-  None = 0,
-  EN = 1,
-  DE = 2,
-  HU = 3,
-}
+import { LanguageCodeEnum } from "../../utils/types";
 
 export enum WordTypeEnum {
   None = 0,

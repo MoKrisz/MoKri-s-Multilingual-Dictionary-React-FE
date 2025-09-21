@@ -1,10 +1,11 @@
 import { QueryClient } from "@tanstack/react-query";
-import { LanguageCodeEnum, Word, WordDto, WordTypeEnum } from "./models";
+import { Word, WordDto, WordTypeEnum } from "./models";
 import { PaginationData } from "../../components/Pagination";
 import { SearchWordsState } from "./state/searchWordsReducer";
 import { WordSorting } from "./components/WordOdataTable";
 import { ColumnOrderEnum } from "../../models/ColumnOrderEnum";
 import { ODataFetcherParams, OdataResponse } from "../../hooks/useODataQuery";
+import { LanguageCodeEnum } from "../../utils/types";
 
 export const queryClient = new QueryClient();
 
