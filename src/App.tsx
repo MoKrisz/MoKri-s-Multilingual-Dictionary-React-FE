@@ -9,6 +9,7 @@ import ManageTranslationGroupPage from "./features/TranslationGroups/pages/Manag
 import TranslationPage from "./features/Translations/pages/TranslationPage";
 import WordListPage from "./features/Words/pages/WordListPage";
 import TranslationGroupListPage from "./features/TranslationGroups/pages/TranslationGroupListPage";
+import GuessArticleLanguageChoosePage from "./features/Practices/GuessTheArticle/pages/GuessArticleLanguageChoosePage";
 
 const router = createBrowserRouter([
   {
@@ -33,6 +34,15 @@ const router = createBrowserRouter([
           {
             path: ":translationGroupId",
             element: <ManageTranslationGroupPage />,
+          },
+        ],
+      },
+      {
+        path: "practice",
+        children: [
+          {
+            path: "guess-the-article",
+            element: <GuessArticleLanguageChoosePage />,
           },
         ],
       },

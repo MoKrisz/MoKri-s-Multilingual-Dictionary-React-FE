@@ -8,6 +8,7 @@ import enTranslationGroups from "./locales/en/translationGroups.json";
 import enTags from "./locales/en/tags.json";
 import enErrors from "./locales/en/errors.json";
 import enTranslation from "./locales/en/translation.json";
+import enPractices from "./locales/en/practices.json";
 
 i18n
   .use(LanguageDetector)
@@ -21,6 +22,7 @@ i18n
         tags: enTags,
         errors: enErrors,
         translation: enTranslation,
+        practices: enPractices,
       },
     },
     ns: [
@@ -30,6 +32,7 @@ i18n
       "tags",
       "errors",
       "translation",
+      "practices",
     ],
     fallbackLng: "en",
     defaultNS: "common",
