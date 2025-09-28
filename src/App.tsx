@@ -10,6 +10,8 @@ import TranslationPage from "./features/Translations/pages/TranslationPage";
 import WordListPage from "./features/Words/pages/WordListPage";
 import TranslationGroupListPage from "./features/TranslationGroups/pages/TranslationGroupListPage";
 import GuessArticleLanguageChoosePage from "./features/Practices/GuessTheArticle/pages/GuessArticleLanguageChoosePage";
+import GuessArticlePage from "./features/Practices/GuessTheArticle/pages/GuessArticlePage";
+import GuessArticleLayout from "./features/Practices/GuessTheArticle/pages/GuessArticleLayout";
 
 const router = createBrowserRouter([
   {
@@ -42,7 +44,11 @@ const router = createBrowserRouter([
         children: [
           {
             path: "guess-the-article",
-            element: <GuessArticleLanguageChoosePage />,
+            element: <GuessArticleLayout />,
+            children: [
+              { index: true, element: <GuessArticleLanguageChoosePage /> },
+              { path: ":languageCode", element: <GuessArticlePage /> },
+            ],
           },
         ],
       },

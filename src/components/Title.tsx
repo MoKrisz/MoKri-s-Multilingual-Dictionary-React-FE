@@ -1,12 +1,17 @@
 import { useTranslation } from "react-i18next";
+import { twMerge } from "tailwind-merge";
 
 interface TitleProps {
   localeTitleKey: string;
+  extraStyle?: string;
 }
 
-const Title: React.FC<TitleProps> = ({ localeTitleKey }) => {
+export default function Title({ localeTitleKey, extraStyle }: TitleProps) {
   const { t } = useTranslation();
-  return <h1 className="font-bold text-2xl m-3 mb-8">{t(localeTitleKey)}</h1>;
-};
 
-export default Title;
+  return (
+    <h1 className={twMerge("font-bold text-2xl m-3 mb-8", extraStyle)}>
+      {t(localeTitleKey)}
+    </h1>
+  );
+}

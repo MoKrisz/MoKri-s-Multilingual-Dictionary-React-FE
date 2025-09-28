@@ -29,3 +29,19 @@ export function getFormLanguageOptions(): Option[] {
 export function getLanguagesWithMoreThanOneArticle(): Language[] {
   return LANGUAGES.filter((lang) => lang.articles.length > 1);
 }
+
+export function getLanguageCodeEnum(
+  codeString: string | undefined
+): LanguageCodeEnum | undefined {
+  if (codeString === undefined) {
+    return undefined;
+  }
+
+  const codeNumber = Number(codeString);
+
+  if (isNaN(codeNumber) || !(codeNumber in LanguageCodeEnum)) {
+    return undefined;
+  }
+
+  return codeNumber as LanguageCodeEnum;
+}

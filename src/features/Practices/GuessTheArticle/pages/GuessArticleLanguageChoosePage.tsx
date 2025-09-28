@@ -3,7 +3,7 @@ import { getLanguagesWithMoreThanOneArticle } from "../../../../utils/languageUt
 import LanguageCard from "../components/LanguageCard";
 import { useTranslation } from "react-i18next";
 import Title from "../../../../components/Title";
-import SearchBar from "../../../../components/Searchbar";
+import SearchBar from "../../../../components/SearchBar";
 
 const GuessArticleLanguageChoosePage: React.FC = () => {
   const { t } = useTranslation();
@@ -20,15 +20,18 @@ const GuessArticleLanguageChoosePage: React.FC = () => {
   }
 
   return (
-    <div className="w-3/4 mx-auto text-center max-w-screen-xl">
-      <Title localeTitleKey="practices:guessArticle" />
+    <>
       <SearchBar inputValue={search} setInputValue={setSearch} />
       <div className="grid grid-cols-2 md:grid-cols-4 gap-12">
         {languages.map((lang) => (
-          <LanguageCard key={`lc-${lang.code}`} language={lang} />
+          <LanguageCard
+            key={`lc-${lang.code}`}
+            language={lang}
+            to={lang.code.toString()}
+          />
         ))}
       </div>
-    </div>
+    </>
   );
 };
 
