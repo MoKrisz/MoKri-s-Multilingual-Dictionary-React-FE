@@ -16,7 +16,11 @@ export default function GuessArticleCountSelector({
     <div>
       <h2 className="mb-8">{t("guessArticleCountSelector")}</h2>
       {countSelectorOptions.map((c) => (
-        <Button onClick={() => onClick(c)} extraStyle="px-5 py-3 mx-3 text-2xl">
+        <Button
+          key={`guess-article-count-${c}`}
+          onClick={() => onClick(c)}
+          extraStyle="px-5 py-3 mx-3 text-2xl"
+        >
           {c}
         </Button>
       ))}
