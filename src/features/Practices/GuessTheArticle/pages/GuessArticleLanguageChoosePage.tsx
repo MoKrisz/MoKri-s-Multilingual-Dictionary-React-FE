@@ -27,7 +27,7 @@ const GuessArticleLanguageChoosePage: React.FC = () => {
           <LanguageCard
             key={`lc-${lang.code}`}
             language={lang}
-            to={lang.code.toString()}
+            to={lang.nameKey}
           />
         ))}
       </div>

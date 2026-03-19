@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Title from "../../../../components/Title";
-import { LANGUAGE_DATA } from "../../../../config/languageConfig";
-import { LanguageCodeEnum } from "../../../../utils/types";
-import { getLanguageCodeEnum } from "../../../../utils/languageUtils";
+import { LANGUAGES } from "../../../../config/languageConfig";
 import Flag from "../../../../components/Flag";
 import GuessArticleCountSelector from "../components/GuessArticleCountSelector";
 import { useQuery } from "@tanstack/react-query";
@@ -18,18 +16,18 @@ type PracticeStatus =
   | "RESULTS";
 
 type GuessArticleParam = {
-  languageCode: string;
+  languageNameKey: string;
 };
 
 export default function GuessArticlePage() {
-  const { languageCode } = useParams<GuessArticleParam>();
-  const enumValue = getLanguageCodeEnum(languageCode);
+  const { languageNameKey } = useParams<GuessArticleParam>();
 
-  if (enumValue === undefined) {
-    //TODO: handle error.
+  const language = LANGUAGES.find(l => l.nameKey === languageNameKey);
+
+  if (!language)
+  {
+    //TODO: error handling
   }
-
-  const language = LANGUAGE_DATA[enumValue!];
 
   const [status, setStatus] = useState<PracticeStatus>("CONFIGURING");
   const [wordCount, setWordCount] = useState<number>();
@@ -38,9 +36,9 @@ export default function GuessArticlePage() {
   const [results, setResults] = useState<string[]>([]);
 
   const { data: practiceData, isSuccess: isGetPracticeSuccess } = useQuery({
-    queryKey: ["guess-practice", language.code],
+    queryKey: ["guess-practice", language!.code],
     queryFn: ({ signal }) =>
-      getRandomWordsForArticlePractice(language.code, wordCount!, signal),
+      getRandomWordsForArticlePractice(language!.code, wordCount!, signal),
     enabled: status === "LOADING" && !!wordCount,
   });
 
@@ -65,7 +63,7 @@ export default function GuessArticlePage() {
       case "PRACTICING":
         return (
           <PracticeInterface
-            language={language}
+            language={language!}
             practiceWords={practiceData!.practiceWords}
           />
         );
@@ -77,9 +75,9 @@ export default function GuessArticlePage() {
   return (
     <>
       <div className="flex justify-center items-center gap-4 mb-8">
-        <Flag flagCode={language.flagCode} />
+        <Flag flagCode={language!.flagCode} />
         <Title
-          localeTitleKey={`languages.${language.nameKey}`}
+          localeTitleKey={`languages.${language!.nameKey}`}
           extraStyle="m-0"
         />
       </div>

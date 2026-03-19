@@ -47,7 +47,7 @@ const router = createBrowserRouter([
             element: <GuessArticleLayout />,
             children: [
               { index: true, element: <GuessArticleLanguageChoosePage /> },
-              { path: ":languageCode", element: <GuessArticlePage /> },
+              { path: ":languageNameKey", element: <GuessArticlePage /> },
             ],
           },
         ],
