@@ -5,7 +5,7 @@ interface FlagProps {
 }
 
 const Flag: React.FC<FlagProps> = ({ flagCode }) => {
-  return <span className={`fi fi-${flagCode}`} />;
+  return <span className={`fi fi-${flagCode} rounded-sm`} />;
 };
 
 export default Flag;
