@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { getLanguagesWithMoreThanOneArticle } from "../../../../utils/languageUtils";
 import LanguageCard from "../components/LanguageCard";
 import { useTranslation } from "react-i18next";
-import Title from "../../../../components/Title";
 import SearchBar from "../../../../components/SearchBar";
 
 const GuessArticleLanguageChoosePage: React.FC = () => {

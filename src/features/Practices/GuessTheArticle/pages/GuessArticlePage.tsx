@@ -1,19 +1,12 @@
-import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Title from "../../../../components/Title";
 import { LANGUAGES } from "../../../../config/languageConfig";
 import Flag from "../../../../components/Flag";
 import GuessArticleCountSelector from "../components/GuessArticleCountSelector";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { getRandomWordsForArticlePractice } from "../api";
 import PracticeInterface from "../components/PracticeInterface";
-
-type PracticeStatus =
-  | "CONFIGURING"
-  | "LOADING"
-  | "PRACTICING"
-  | "SUBMITTING"
-  | "RESULTS";
+import { useGuessArticleReducer } from "../state/guessArticleReducer";
 
 type GuessArticleParam = {
   languageNameKey: string;
@@ -29,42 +22,33 @@ export default function GuessArticlePage() {
     //TODO: error handling
   }
 
-  const [status, setStatus] = useState<PracticeStatus>("CONFIGURING");
-  const [wordCount, setWordCount] = useState<number>();
-  const [words, setWords] = useState<string[]>([]);
-  const [answers, setAnswers] = useState<string[]>([]);
-  const [results, setResults] = useState<string[]>([]);
+  const [state, dispatch] = useGuessArticleReducer();
 
-  const { data: practiceData, isSuccess: isGetPracticeSuccess } = useQuery({
-    queryKey: ["guess-practice", language!.code],
-    queryFn: ({ signal }) =>
-      getRandomWordsForArticlePractice(language!.code, wordCount!, signal),
-    enabled: status === "LOADING" && !!wordCount,
+  const loadPracticeWords = useMutation({
+    mutationFn: (count: number) => getRandomWordsForArticlePractice(language?.code!, count),
+    onSuccess: data => dispatch({type: "LOAD_DATA_SUCCESS", words: data}),
+    onError: error => dispatch({type: "LOAD_DATA_ERROR", message: error.message})
   });
 
-  useEffect(() => {
-    if (isGetPracticeSuccess) {
-      setStatus("PRACTICING");
-    }
-  }, [isGetPracticeSuccess]);
-
-  const handleCountSelect = (count: number) => {
-    setWordCount(count);
-    setStatus("LOADING");
-  };
-
   const renderContent = () => {
-    switch (status) {
+    switch (state.step) {
       case "CONFIGURING":
-        return <GuessArticleCountSelector onClick={handleCountSelect} />;
-      case "LOADING":
-      case "SUBMITTING":
-        return <div>Loading...</div>;
-      case "PRACTICING":
+        return <GuessArticleCountSelector onClick={
+          count => {
+            dispatch({type: "WORD_COUNT_SELECTED", count: count});
+            loadPracticeWords.mutate(count);
+          }} />;
+      case "LOADING_DATA":
+        return <p>Loading data...</p>
+      case "PRACTICE":
         return (
           <PracticeInterface
             language={language!}
-            practiceWords={practiceData!.practiceWords}
+            wordCount={state.wordCount}
+            currentWordIdx={state.currentIdx}
+            practiceWords={state.words}
+            answers={state.answers}
+            setCurrentWordIdx={(idx) => dispatch({type: "WORD_INDEX_REQUESTED", index: idx})}
           />
         );
       case "RESULTS":
