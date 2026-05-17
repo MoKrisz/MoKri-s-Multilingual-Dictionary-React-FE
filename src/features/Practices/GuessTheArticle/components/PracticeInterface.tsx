@@ -12,6 +12,7 @@ interface PracticeInterfaceProps {
   practiceWords: GuessArticleWord[];
   answers: Record<number, string | undefined>;
   setCurrentWordIdx: (idx: number) => void;
+  onAnswerSelect: (article: string) => void;
 }
 
 export default function PracticeInterface({
@@ -21,20 +22,25 @@ export default function PracticeInterface({
   practiceWords,
   answers,
   setCurrentWordIdx,
+  onAnswerSelect,
 }: PracticeInterfaceProps) {
   const articles = language.articles;
+  const wordId = practiceWords[currentWordIdx].wordId;
 
   return (
     <div className="flex flex-col gap-5">
       <div className="mx-auto flex overflow-hidden rounded-full">
-        {practiceWords.map((_, idx) => (
+        {practiceWords.map((word, idx) => (
           <Button
             key={`practice_navigation_${idx}`}
-            extraStyle="py-0 px-8 rounded-none"
+            extraStyle="py-0 px-6 rounded-none"
             isActive={currentWordIdx === idx}
             onClick={() => setCurrentWordIdx(idx)}
           >
-            {idx + 1}
+            <span className="flex gap-1 items-center">
+              {idx + 1}
+              {answers[word.wordId] && <span>✓</span>}
+            </span>
           </Button>
         ))}
       </div>
@@ -50,7 +56,14 @@ export default function PracticeInterface({
             {practiceWords[currentWordIdx].text}
           </p>
           {articles.map((article) => (
-            <Button key={`guess_article_${article}`} extraStyle="m-3 py-4 px-8 text-2xl">{article}</Button>
+            <Button
+              key={`guess_article_${article}`}
+              extraStyle="m-3 py-4 px-8 text-2xl"
+              isActive={answers[wordId] === article}
+              onClick={() => onAnswerSelect(article)}
+            >
+              {article}
+            </Button>
           ))}
         </div>
         <Button

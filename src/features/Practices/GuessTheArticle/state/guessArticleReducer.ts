@@ -58,10 +58,13 @@ const guessArticleReducer = (
       if (state.step !== "PRACTICE") return state;
 
       const currentWord = state.words[state.currentIdx];
+      const nextIndex = state.currentIdx < state.words.length - 1 
+        ? state.currentIdx + 1
+        : state.currentIdx;
 
       return {
         ...state,
-        //TODO: Should it also go to the next element after an answer?
+        currentIdx: nextIndex,
         answers: {
             ...state.answers,
             [currentWord.wordId]: action.answer

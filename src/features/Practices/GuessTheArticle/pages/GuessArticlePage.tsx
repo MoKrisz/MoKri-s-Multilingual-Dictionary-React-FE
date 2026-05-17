@@ -49,6 +49,7 @@ export default function GuessArticlePage() {
             practiceWords={state.words}
             answers={state.answers}
             setCurrentWordIdx={(idx) => dispatch({type: "WORD_INDEX_REQUESTED", index: idx})}
+            onAnswerSelect={(article) => dispatch({type: "SET_ANSWER", answer: article})}
           />
         );
       case "RESULTS":
