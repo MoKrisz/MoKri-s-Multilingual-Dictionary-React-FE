@@ -44,7 +44,6 @@ export default function GuessArticlePage() {
         return (
           <PracticeInterface
             language={language!}
-            wordCount={state.wordCount}
             currentWordIdx={state.currentIdx}
             practiceWords={state.words}
             answers={state.answers}

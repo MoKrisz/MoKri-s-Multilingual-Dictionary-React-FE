@@ -1,4 +1,3 @@
-import { useState } from "react";
 import Button from "../../../../components/Button";
 import { Language } from "../../../../utils/types";
 import { GuessArticleWord } from "../models";
@@ -7,7 +6,6 @@ import { IoIosArrowForward } from "react-icons/io";
 
 interface PracticeInterfaceProps {
   language: Language;
-  wordCount: number;
   currentWordIdx: number;
   practiceWords: GuessArticleWord[];
   answers: Record<number, string | undefined>;
@@ -17,7 +15,6 @@ interface PracticeInterfaceProps {
 
 export default function PracticeInterface({
   language,
-  wordCount,
   currentWordIdx,
   practiceWords,
   answers,
