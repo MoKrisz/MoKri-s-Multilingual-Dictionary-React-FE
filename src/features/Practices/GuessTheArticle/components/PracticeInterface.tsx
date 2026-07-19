@@ -11,6 +11,9 @@ interface PracticeInterfaceProps {
   answers: Record<number, string | undefined>;
   setCurrentWordIdx: (idx: number) => void;
   onAnswerSelect: (article: string) => void;
+  onSubmit: () => void;
+  canSubmit: boolean;
+  isSubmitting: boolean;
 }
 
 export default function PracticeInterface({
@@ -20,6 +23,9 @@ export default function PracticeInterface({
   answers,
   setCurrentWordIdx,
   onAnswerSelect,
+  onSubmit,
+  canSubmit,
+  isSubmitting
 }: PracticeInterfaceProps) {
   const articles = language.articles;
   const wordId = practiceWords[currentWordIdx].wordId;
@@ -70,6 +76,13 @@ export default function PracticeInterface({
           <IoIosArrowForward />
         </Button>
       </div>
+      <div className="font-bold"></div>
+      <Button 
+        extraStyle="mx-auto px-6 mt-8 text-xl font-bold"
+        isDisabled={!canSubmit}
+        onClick={onSubmit}>
+        {isSubmitting ? "Checking..." : "Check answers"}
+      </Button>
     </div>
   );
 }

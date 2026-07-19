@@ -1,21 +1,36 @@
 import { apiClient } from "../../../utils/apiClient";
-import { GuessArticleWord } from "./models";
+import { EvaluateGuessArticleRequest, EvaluateGuessArticleResponseItem, GuessArticleWord } from "./models";
 
 export const getRandomWordsForArticlePractice = async (
   languageCode: number,
   amount: number,
-  signal?: AbortSignal
+  signal?: AbortSignal,
 ): Promise<GuessArticleWord[]> => {
-    const response = await apiClient.get<GuessArticleWord[]>(
-      "/practice/guess-article-random-words",
-      {
-        params: {
-          language: languageCode,
-          amount
-        },
-        signal
-      }
-    );
+  const response = await apiClient.get<GuessArticleWord[]>(
+    "/practice/guess-article-random-words",
+    {
+      params: {
+        languageCode,
+        amount,
+      },
+      signal,
+    },
+  );
 
-    return response.data;
+  return response.data;
+};
+
+export const postGuessArticleEvaluation = async(
+  request: EvaluateGuessArticleRequest,
+  signal?: AbortSignal
+): Promise<EvaluateGuessArticleResponseItem[]> => {
+  const response = await apiClient.post<EvaluateGuessArticleResponseItem[]>(
+    "/practice/guess-article-evaluation",
+    request,
+    {
+      signal
+    }
+  )
+
+  return response.data;
 };

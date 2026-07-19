@@ -1,17 +1,19 @@
 import { useReducer } from "react";
-import { GuessArticleWord } from "../models";
+import { EvaluateGuessArticleResponseItem, GuessArticleWord } from "../models";
+
+type PracticeData = {
+  wordCount: number;
+  currentIdx: number;
+  words: GuessArticleWord[];
+  answers: Record<number, string | undefined>;
+};
 
 type GuessArticleState =
   | { step: "CONFIGURING" }
   | { step: "LOADING_DATA"; wordCount: number }
-  | {
-      step: "PRACTICE";
-      wordCount: number;
-      currentIdx: number;
-      words: GuessArticleWord[];
-      answers: Record<number, string | undefined>;
-    }
-  | { step: "RESULTS"; wordCount: number; answers: string[] };
+  | ({ step: "PRACTICE" } & PracticeData)
+  | ({ step: "WAITING_FOR_RESULTS" } & PracticeData)
+  | { step: "RESULTS"; results: EvaluateGuessArticleResponseItem[] };
 
 type GuessArticleAction =
   | { type: "WORD_COUNT_SELECTED"; count: number }
@@ -20,7 +22,7 @@ type GuessArticleAction =
   | { type: "WORD_INDEX_REQUESTED"; index: number }
   | { type: "SET_ANSWER"; answer: string }
   | { type: "SUBMIT" }
-  | { type: "SUBMIT_SUCCESS"; results: string }
+  | { type: "SUBMIT_SUCCESS"; results: EvaluateGuessArticleResponseItem[] }
   | { type: "SUBMIT_ERROR"; message: string };
 
 const guessArticleReducer = (
@@ -58,18 +60,37 @@ const guessArticleReducer = (
       if (state.step !== "PRACTICE") return state;
 
       const currentWord = state.words[state.currentIdx];
-      const nextIndex = state.currentIdx < state.words.length - 1 
-        ? state.currentIdx + 1
-        : state.currentIdx;
+      const nextIndex =
+        state.currentIdx < state.words.length - 1
+          ? state.currentIdx + 1
+          : state.currentIdx;
 
       return {
         ...state,
         currentIdx: nextIndex,
         answers: {
-            ...state.answers,
-            [currentWord.wordId]: action.answer
-        }
-       }
+          ...state.answers,
+          [currentWord.wordId]: action.answer,
+        },
+      };
+    case "SUBMIT":
+      if (state.step !== "PRACTICE") return state;
+
+      return { ...state, step: "WAITING_FOR_RESULTS" };
+    case "SUBMIT_SUCCESS":
+      if (state.step !== "WAITING_FOR_RESULTS") return state;
+
+      return {
+        step: "RESULTS",
+        results: action.results
+      }
+    case "SUBMIT_ERROR":
+      //TODO:
+      console.log(
+        "An error happened at LOAD_DATA_ERROR in guessArticleReducer",
+      );
+
+      return state;
     default:
       return state;
   }
