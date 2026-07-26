@@ -1,7 +1,7 @@
 import { LANGUAGE_DATA, LANGUAGES } from "../config/languageConfig";
 import { Option } from "../features/Words/components/FormInput";
 import { WordTypeEnum } from "../features/Words/models";
-import { LanguageCodeEnum } from "./types";
+import { Language, LanguageCodeEnum } from "./types";
 
 export function getLanguageName(languageEnum: LanguageCodeEnum): string {
   return LanguageCodeEnum[languageEnum] || "Unknown language";
@@ -24,4 +24,24 @@ export function getFormLanguageOptions(): Option[] {
     value: language.code,
     name: language.nameKey,
   }));
+}
+
+export function getLanguagesWithMoreThanOneArticle(): Language[] {
+  return LANGUAGES.filter((lang) => lang.articles.length > 1);
+}
+
+export function getLanguageCodeEnum(
+  codeString: string | undefined
+): LanguageCodeEnum | undefined {
+  if (codeString === undefined) {
+    return undefined;
+  }
+
+  const codeNumber = Number(codeString);
+
+  if (isNaN(codeNumber) || !(codeNumber in LanguageCodeEnum)) {
+    return undefined;
+  }
+
+  return codeNumber as LanguageCodeEnum;
 }

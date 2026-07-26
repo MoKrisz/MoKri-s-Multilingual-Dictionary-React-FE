@@ -71,6 +71,8 @@ export default {
         "complementary-text": "#000000",
         "complementary-tertiary-background": "#235789",
         "complementary-tertiary-text": "#FFFFFF",
+        "correct-answer": "#008000",
+        "wrong-answer": "#FF0000"
       },
     },
   },

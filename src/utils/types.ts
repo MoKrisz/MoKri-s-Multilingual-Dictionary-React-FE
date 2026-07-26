@@ -9,4 +9,5 @@ export interface Language {
   code: LanguageCodeEnum;
   nameKey: string;
   articles: string[];
+  flagCode: string;
 }

@@ -9,6 +9,7 @@ interface ButtonProps {
   onClick?: () => void;
   extraStyle?: string;
   isDisabled?: boolean;
+  isActive?: boolean;
 }
 
 export default function Button({
@@ -17,12 +18,13 @@ export default function Button({
   onClick,
   extraStyle,
   isDisabled = false,
+  isActive = false
 }: ButtonProps) {
   return (
     <button
       type={type ?? "button"}
       className={twMerge(
-        "bg-button-background text-button-text p-2 rounded-lg border border-button-border hover:bg-button-background-hover disabled:opacity-50 disabled:hover:bg-button-background transition-color duration-200 shadow-md",
+        `${isActive ? "bg-button-background-hover" : "bg-button-background"} text-button-text p-2 rounded-lg border border-button-border hover:bg-button-background-hover disabled:opacity-50 disabled:hover:bg-button-background transition-color duration-200 shadow-md`,
         extraStyle
       )}
       onClick={onClick}
