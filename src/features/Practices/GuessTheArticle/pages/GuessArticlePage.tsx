@@ -98,8 +98,12 @@ export default function GuessArticlePage() {
           />
         );
       case "RESULTS":
-        return <ResultInterface results={state.results} />;
-      //return <div>{state.results.map(result => (<p>{result.text} : {result.answer}, {result.isCorrect}, {result.correctArticle}</p>))}</div>;
+        return (
+          <ResultInterface
+            results={state.results}
+            restart={() => dispatch({ type: "RESTART" })}
+          />
+        );
     }
   };
 

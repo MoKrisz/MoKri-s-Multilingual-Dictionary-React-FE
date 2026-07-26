@@ -23,7 +23,8 @@ type GuessArticleAction =
   | { type: "SET_ANSWER"; answer: string }
   | { type: "SUBMIT" }
   | { type: "SUBMIT_SUCCESS"; results: EvaluateGuessArticleResponseItem[] }
-  | { type: "SUBMIT_ERROR"; message: string };
+  | { type: "SUBMIT_ERROR"; message: string }
+  | { type: "RESTART" };
 
 const guessArticleReducer = (
   state: GuessArticleState,
@@ -91,6 +92,10 @@ const guessArticleReducer = (
       );
 
       return state;
+    case "RESTART":
+      if (state.step !== "RESULTS") return state;
+
+      return { step: "CONFIGURING" }
     default:
       return state;
   }

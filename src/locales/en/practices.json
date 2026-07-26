@@ -1,4 +1,10 @@
 {
   "guessArticle": "Guess the article",
-  "guessArticleCountSelector": "How many words would you like to practice with?"
+  "guessArticleCountSelector": "How many words would you like to practice with?",
+  "answerCorrect": "Correct",
+  "answerIncorrect": "Incorrect",
+  "userAnswer": "Your answer:",
+  "correctAnswerCount": "Correct answers:",
+  "startAgain": "Start again",
+  "leavePractice": "Leave practice"
 }
