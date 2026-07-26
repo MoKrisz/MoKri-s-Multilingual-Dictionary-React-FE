@@ -1,12 +1,13 @@
 import { Link } from "react-router-dom";
 import ColumnOrderIcon from "../../../components/ColumnOrderIcon";
-import { getLanguageName, getWordTypeNameKey } from "../utils";
+import { getWordTypeNameKey } from "../utils";
 import { BsPencilFill } from "react-icons/bs";
 import { ColumnOrderEnum } from "../../../models/ColumnOrderEnum";
 import { Word } from "../models";
 import { ODataDisplayComponentWithSortingProps } from "../../../components/ODataContainer";
 import Button from "../../../components/Button";
 import { useTranslation } from "react-i18next";
+import { getLanguageName } from "../../../utils/languageUtils";
 
 export type WordSorting = {
   article: ColumnOrderEnum;

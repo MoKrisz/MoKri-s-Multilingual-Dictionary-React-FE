@@ -1,15 +1,7 @@
 import FormInput, { Option } from "./FormInput";
-import {
-  LanguageCodeEnum,
-  Word,
-  WordRefs,
-  WordState,
-  WordTypeEnum,
-} from "../models";
+import { Word, WordRefs, WordState, WordTypeEnum } from "../models";
 import { ReactNode, useEffect, useRef, useState } from "react";
 import {
-  getArticles,
-  getFormLanguageOptions,
   getFormWordTypeOptions,
   hasConjugation,
   hasPluralForm,
@@ -19,6 +11,11 @@ import { useMutation } from "@tanstack/react-query";
 import { PostOrPutData } from "../api";
 import Button from "../../../components/Button";
 import { useTranslation } from "react-i18next";
+import { LanguageCodeEnum } from "../../../utils/types";
+import {
+  getArticles,
+  getFormLanguageOptions,
+} from "../../../utils/languageUtils";
 
 interface WordDependencyState {
   language: LanguageCodeEnum;

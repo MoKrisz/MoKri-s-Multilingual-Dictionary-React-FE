@@ -4,10 +4,11 @@ import {
   SearchWordsAction,
   SearchWordsState,
 } from "../state/searchWordsReducer";
-import { getFormLanguageOptions, getFormWordTypeOptions } from "../utils";
+import { getFormWordTypeOptions } from "../utils";
 import { ODataSearchComponentProps } from "../../../components/ODataContainer";
 import Button from "../../../components/Button";
 import { useTranslation } from "react-i18next";
+import { getFormLanguageOptions } from "../../../utils/languageUtils";
 
 const WordODataSearchBar: React.FC<
   ODataSearchComponentProps<SearchWordsState, SearchWordsAction>

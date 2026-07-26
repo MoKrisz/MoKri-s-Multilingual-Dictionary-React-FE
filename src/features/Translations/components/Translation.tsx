@@ -3,7 +3,6 @@ import Button from "../../../components/Button";
 import Dropdown from "../../../components/Dropdown";
 import AutofillSearchBar from "../../Words/components/AutofillSearchBar";
 import { Word } from "../../Words/models";
-import { getFormLanguageOptions } from "../../Words/utils";
 import { Option } from "../../Words/components/FormInput";
 import { FaPlus } from "react-icons/fa";
 import TranslationGroupPickerModal from "../../TranslationGroups/components/TranslationGroupPickerModal";
@@ -14,6 +13,7 @@ import { TranslationGroup } from "../../TranslationGroups/models";
 import { postTranslation } from "../api";
 import { Tooltip } from "../../../components/Tooltip";
 import { Trans, useTranslation } from "react-i18next";
+import { getFormLanguageOptions } from "../../../utils/languageUtils";
 
 interface TranslationGroupContext {
   selectedTranslationGroups: TranslationGroup[];
